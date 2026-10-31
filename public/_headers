@@ -1,0 +1,12 @@
+/i/*
+  Cache-Control: public, max-age=31536000, immutable
+/a/*
+  Cache-Control: public, max-age=31536000, immutable
+/p/*
+  Cache-Control: public, max-age=604800
+/v/*
+  Cache-Control: public, max-age=604800
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
