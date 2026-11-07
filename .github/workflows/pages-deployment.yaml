@@ -1,0 +1,33 @@
+# Publishes public/ to the existing Cloudflare Pages project on every push to main.
+# Needs, in GitHub > Settings > Secrets and variables > Actions:
+#   secret   CLOUDFLARE_API_TOKEN   (custom token: Account > Cloudflare Pages > Edit)
+#   secret   CLOUDFLARE_ACCOUNT_ID
+#   variable CF_PAGES_PROJECT       (the Pages project name, as shown in the Cloudflare dashboard)
+# Until these are set the deploy step is skipped, so pushes do not fail.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Deploy to Cloudflare Pages
+    env:
+      READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' && vars.CF_PAGES_PROJECT != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Deploy
+        if: env.READY == 'true'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=${{ vars.CF_PAGES_PROJECT }} --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Not set up yet
+        if: env.READY != 'true'
+        run: echo "Cloudflare secrets or CF_PAGES_PROJECT variable missing; skipped deploy."
