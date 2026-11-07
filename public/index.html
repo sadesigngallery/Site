@@ -272,7 +272,7 @@ html[lang="en"] .pt{font-family:var(--latin)}
 .colpage .row2{margin-top:16px}
 .sellist{list-style:none;padding:0;margin:10px 0 20px;display:grid;gap:0}
 .sellist li{display:grid;grid-template-columns:84px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--hair)}
-.sellist .th img{width:84px;height:84px;object-fit:contain;background:var(--print)}
+.sellist .th img,.sellist .th canvas{display:block;width:84px;height:84px;object-fit:contain;background:var(--print)}
 .sellist b{font-family:var(--latin);font-weight:500}.sellist small{display:block;color:var(--graphite);font-size:.78rem}
 .ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px;font-size:.78rem;color:var(--graphite)}
 .ctl select{font:inherit;color:var(--ink);border:1px solid var(--hair);background:transparent;padding:3px 6px;margin-inline-start:4px}
@@ -733,7 +733,7 @@ html.introon,html.introon body{overflow:hidden}
 .lovr{color:#B01A16;font-weight:500}
 /* selection list: one line per piece */
 .sellist li{grid-template-columns:44px minmax(0,1fr) auto!important;gap:8px!important;padding:6px 0!important;align-items:center!important}
-.sellist .th img{width:44px!important;height:44px!important}
+.sellist .th img,.sellist .th canvas{width:44px!important;height:44px!important}
 .sellist .meta{display:flex;align-items:center;gap:8px;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
 .sellist .meta::-webkit-scrollbar{display:none}
 .sellist .meta b{font-size:.86rem}.sellist .meta>small{display:inline!important;font-size:.72rem}
@@ -3335,7 +3335,7 @@ function paintAll(root){(root||document).querySelectorAll("canvas.dcv").forEach(
 function renderSel(){
   onIndex=false; const T_=t();
   view.innerHTML=`<main class="page selpage"><h1 class="pt">${T_.sel}</h1>
-   ${SEL.length?`<ul class="sellist">${SEL.map((s,k)=>{const x=byId(s.id);return `<li><a href="#/p/${s.id}" class="th"><img src="${thumb(s.id)}" alt=""></a><div class="meta"><b>${esc(x.en)}</b><small>${x.fa}${s.size?` · ${T_.size} ${n(s.size)}`:""}</small>
+   ${SEL.length?`<ul class="sellist">${SEL.map((s,k)=>{const x=byId(s.id);return `<li><a href="#/p/${s.id}" class="th"><canvas class="selcv" data-k="${k}" width="10" height="10"></canvas></a><div class="meta"><b>${esc(x.en)}</b><small>${x.fa}${s.size?` · ${T_.size} ${n(s.size)}`:""}</small>
       <div class="ctl"><label>${T_.colour}<select data-k="${k}" class="csel"><option value="black"${s.color==="black"?" selected":""}>${T_.cBlack}</option><option value="white"${s.color==="white"?" selected":""}>${T_.cWhite}</option><option value="custom"${s.color==="custom"?" selected":""}>${T_.cCustom}</option></select></label>
       ${s.color==="custom"&&s.hex?`<a class="seldome" href="#/color/${s.id}/${k}">${domeHTML(s,34)}<small>${s.code||s.hex}</small></a>`:""}
       <div class="qty"><button type="button" data-k="${k}" data-d="-1">−</button><span>${n(s.qty)}</span><button type="button" data-k="${k}" data-d="1">+</button></div></div></div>
@@ -3350,6 +3350,9 @@ function renderSel(){
   view.querySelectorAll(".rm").forEach(b=>b.onclick=()=>{SEL.splice(+b.dataset.k,1);saveSel();renderSel()});
   view.querySelectorAll(".csel").forEach(sl=>sl.onchange=()=>{const k=+sl.dataset.k,s=SEL[k];if(sl.value==="custom"){s.color="custom";saveSel();location.hash="#/color/"+s.id+"/"+k;return}s.color=sl.value;saveSel();renderSel()});
   paintAll(view);
+  /* list thumbnails show each piece in its chosen colour: black, white or the custom colour */
+  view.querySelectorAll("canvas.selcv").forEach(cv=>{const q=SEL[+cv.dataset.k];if(!q)return;const ts=TS[q.id]||[1,1],a=ts[0]/ts[1];cv.width=a>=1?240:Math.round(240*a);cv.height=a>=1?Math.round(240/a):240;
+    const hx=q.color==="white"?((PRESETS.find(z=>z[0]==="SA-02")||[0,"#F0EEE6"])[1]):COLHEX(q);tintPiece(cv,AL[q.id]||thumb(q.id),hx,SHM[q.id])});
   view.querySelectorAll(".miniix button").forEach(b=>b.onclick=()=>{const y=scrollY;addSel(b.dataset.id,{color:"black"});renderSel();scrollTo(0,y)});
   const listText=()=>[T_.sel+" — SA Design",...SEL.map((s,i)=>{const x=byId(s.id);return `${i+1}. ${x.en} / ${x.fa}${s.size?" — "+T_.size+" "+s.size:""} — ${T_.colour}: ${colourLabel(s)} — ${T_.qty}: ${s.qty}`})].join("\n");
   if($("#sendSel")){
