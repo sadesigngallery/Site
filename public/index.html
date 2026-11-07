@@ -1941,6 +1941,13 @@ html[lang="fa"] .edhd p,html[lang="ar"] .edhd p,html[lang="fa"] .edgrp h2,html[l
 .edpage .edso{text-shadow:0 1px 8px rgba(0,0,0,.85)}
 .edpage .edc.out .edn{color:#e6b3b6!important}
 .ov.menu .mlist>*{translate:0 var(--mk,0px);transition:translate .6s cubic-bezier(.2,.9,.25,1)}
+/* v159: SA green text now black, a little bolder to stand apart */
+:root{--sag:#000}
+body:not(.dark) :is(.enq .crow a:not(.tel),.enq>a,.addbtn,.qbtns button,.ednc,.cta,.btn,.epclr,.certout .addbtn){font-weight:500!important}
+body:not(.dark) :is(.addbtn,.qbtns button,.ednc,.cta,.btn,.epclr,.certout .addbtn){border-color:rgba(0,0,0,.45)!important}
+body:not(.dark) :is(.addbtn.on,.btn.on),body:not(.dark) :is(.addbtn,.qbtns button,.ednc,.cta,.btn):active{background:rgba(0,0,0,.05)!important}
+.cwt{-webkit-text-fill-color:#000!important;color:#000!important;font-weight:500!important;font-size:min(.95rem,3.25vw)!important}
+.ffg{color:#000!important;font-weight:600!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,#phil.pa .pw{opacity:1!important;transform:none!important;filter:none!important}}
 .v3d{position:relative;margin:0 0 4px;background:linear-gradient(to bottom,#FFFFFF 0%,#F6F6F5 62%,#EDEDEB 100%)}
 .v3d canvas{display:block;width:100%;aspect-ratio:1/1;max-height:78vh;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .9s ease}
