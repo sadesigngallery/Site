@@ -3342,7 +3342,7 @@ function renderSel(){
       <button type="button" class="rm" data-k="${k}" aria-label="${T_.remove}">✕</button></li>`}).join("")}</ul>
       <div class="row2"><button type="button" class="solid" id="sendSel">${T_.send}</button><button type="button" id="imgSel">${T_.saveImg}</button></div>
       <a id="mailSel" hidden></a>
-      <section class="board"><p class="gcap">${T_.board}</p><div class="stage" id="stage"></div><div class="envbar" id="envbar"></div><div class="palette" id="pal" hidden></div><div class="planw" id="planw"></div><div class="selmini" id="selmini"></div></section>`:`<p class="selempty">${T_.empty}</p>`}
+`:`<p class="selempty">${T_.empty}</p>`}
    <section class="miniixw"><h2 class="sub">${T_.addMore}</h2><div class="miniix">${CATS.filter(c=>c[0]!=="mirror").map(c=>`<div class="mrow mrow-${c[0]}"><p>${catName(c)}</p><div>${P.filter(x=>x.cat===c[0]).map(x=>`<button type="button" data-id="${x.id}" class="${SEL.some(q=>q.id===x.id)?"on":""}">${tbox(x.id,44,38,"",MSC[x.id])}<small>${esc(x.en)}</small></button>`).join("")}</div></div>`).join("")}</div></section>
    </main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
@@ -3356,8 +3356,7 @@ function renderSel(){
     $("#sendSel").onclick=()=>open(`https://wa.me/${WA_IR}?text=${encodeURIComponent(listText())}`,"_blank");
     $("#mailSel").href=`mailto:${MAIL}?subject=${encodeURIComponent("SA Design — "+T_.sel)}&body=${encodeURIComponent(listText())}`;
     $("#imgSel").onclick=()=>exportImage(listText);
-    initBoard();
-    if(BOARDJUMP){BOARDJUMP=false;setTimeout(()=>{const b=view.querySelector(".board");if(b)scrollTo({top:b.getBoundingClientRect().top+scrollY-70,behavior:"smooth"})},380)}
+    BOARDJUMP=false;
   }
 }
 const COLHEX=s=>s.color==="black"?"#151515":s.color==="custom"&&s.hex?s.hex:null;
@@ -4373,4 +4372,5 @@ renderChrome(); route();
    if(BL[s]){go(BL[s]);return}fetch(s).then(r=>r.blob()).then(b=>{BL[s]=URL.createObjectURL(b);go(BL[s])}).catch(()=>{})};
  new MutationObserver(ms=>ms.forEach(m=>{if(m.type==="attributes"&&m.target.tagName==="VIDEO")toBlob(m.target);else m.addedNodes&&m.addedNodes.forEach(n=>{if(n.nodeType!==1)return;if(n.tagName==="VIDEO")toBlob(n);else n.querySelectorAll&&n.querySelectorAll("video").forEach(toBlob)})})).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["src"]});
  setTimeout(()=>document.querySelectorAll("video").forEach(toBlob),300)})();
-</script></body></html>
+</script>
+</body></html>
