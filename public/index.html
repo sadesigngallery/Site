@@ -2155,6 +2155,8 @@ body.a3 .ov.menu .mlist>.dz,body.a3 .ov.menu .mlist>a,body.a3 .ov.menu .mlist>a 
 #foot{background:#fff}
 /* v212 home: only the film, nothing to scroll until the index is opened */
 html.noscroll,html.noscroll body{overflow:hidden!important;height:100%;overscroll-behavior:none}
+html.noscroll #idx>.hvid.hvtop{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:auto!important;margin:0!important;z-index:0}
+html.noscroll #idx>.hvid.hvtop video.vmain{height:100%!important}
 body.idxhide #foot{display:none!important}
 body{background-color:#fff}
 /* v210: words, logo and icons on the home film follow the film's light */
@@ -2175,7 +2177,7 @@ html body.home.ontop .bar .logo,html body.home.ontop .bar .mark span,html body.h
 .hvtop .intro.onfilm .tagl2{white-space:nowrap!important;max-width:none!important;letter-spacing:.12em!important;overflow:visible}
 html[lang="fa"] .hvtop .intro.onfilm .tagl2,html[lang="ar"] .hvtop .intro.onfilm .tagl2{letter-spacing:0!important}
 .hvtop .intro.onfilm{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 62px + var(--tb,0px))!important}
-#idx>.hvid.hvtop.vland .hvmenu,#idx>.hvid.hvtop .hvmenu{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 14px + var(--tb,0px))!important}
+#idx>.hvid.hvtop.vland .hvmenu,#idx>.hvid.hvtop .hvmenu{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 64px + var(--tb,0px))!important}
 .bar .mark span,#menuB2,#searchB2,#bag,#selcount2{transition:color 1.2s ease}
 .cghead span{color:#000}
 .ov.menu .mlist>a>i.ar s{opacity:0!important}
@@ -2209,7 +2211,7 @@ html[lang="fa"] .hvtop .intro.onfilm .tagl2,html[lang="ar"] .hvtop .intro.onfilm
 .sellist .ctl .qty{grid-column:3;justify-self:start}
 .sellist .rm{align-self:start;justify-self:end}
 /* v214 film words: higher, a line of air between each, menu readable on dark film */
-.hvtop .intro.onfilm{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 200px + var(--tb,0px))!important}
+.hvtop .intro.onfilm{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 250px + var(--tb,0px))!important}
 .hvtop .intro.onfilm .discv{margin:1.5em 0 0!important}
 .hvtop .intro.onfilm .tagl2{margin-top:2.2em!important;display:block;width:max-content;max-width:none!important;margin-left:auto!important;margin-right:auto!important;letter-spacing:.12em!important}
 @media (min-width:700px){html:not([lang="fa"]):not([lang="ar"]) #idx .phil{font-weight:100!important}html[lang="fa"] #idx .phil,html[lang="ar"] #idx .phil{font-weight:100!important}}
@@ -2975,13 +2977,14 @@ function fitTag(){const p=document.querySelector(".hvtop .intro.onfilm .tagl2"),
   if(!tw)tw=p.clientWidth;const nat=()=>{const r=document.createRange();r.selectNodeContents(p);return r.getBoundingClientRect().width};
   let fs=parseFloat(getComputedStyle(p).fontSize),w=nat();if(!w)return;for(let i=0;i<6;i++){fs=fs*tw/w;p.style.setProperty("font-size",fs.toFixed(2)+"px","important");w=nat();if(Math.abs(w-tw)<1)break}}
 addEventListener("load",()=>setTimeout(fitTag,300));if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>setTimeout(fitTag,50));
-function fitFilm(){fitTag();const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));const H=vis;
-  hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb",Math.max(0,H-vis)+"px");
-  if(scrollY<4){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
+function fitFilm(){fitTag();const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));
+  if(document.documentElement.classList.contains("noscroll")){hv.style.removeProperty("height");hv.style.removeProperty("margin-top");const rh=hv.getBoundingClientRect().height,vt=vv?vv.offsetTop:0;hv.style.setProperty("--tb",Math.max(0,Math.round(rh-vis-vt))+"px")}
+  else{const H=vis;hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb","0px");}
+  if(scrollY<4&&!document.documentElement.classList.contains("noscroll")){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
   const vd=hv.querySelector("video.vmain");if(vd){const po=vd.getAttribute("poster");if(po){hv.style.backgroundImage=`url("${po}")`;vd.removeAttribute("poster")}
     if(vd.paused){const p=vd.play&&vd.play();if(p&&p.catch)p.catch(()=>{})}}}
 /* Safari tints its top and bottom bars from the page: give them the film's colour while the film is on screen */
-let TINT="";function setTint(c){if(c===TINT)return;TINT=c;const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",c);document.documentElement.style.backgroundColor=c==="#FFFFFF"?"":c}
+let TINT="";let TINTB="";function setTint(c,cb){if(c===TINT&&(cb||c)===TINTB)return;TINT=c;TINTB=cb||c;const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",c);document.documentElement.style.backgroundColor=TINTB==="#FFFFFF"?"":TINTB}
 /* the film is read a few times a second: Safari's bars take its top colour; the logo, icons and the words on the film turn dark on a light film and white on a dark one */
 const TCV=document.createElement("canvas");TCV.width=12;TCV.height=24;
 function filmTint(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv.querySelector("video.vmain"),B=document.body;
@@ -2991,8 +2994,8 @@ function filmTint(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv.que
   try{const vw=vd.videoWidth,vh=vd.videoHeight,W=hv.clientWidth,H=hv.clientHeight,sc=Math.max(W/vw,H/vh)*1.16,cw=Math.min(vw,W/sc),ch=Math.min(vh,H/sc),cx=(vw-cw)/2,cy=Math.max(0,Math.min(vh-ch,(vh-ch)*.42));
     const g=TCV.getContext("2d",{willReadFrequently:true});g.drawImage(vd,cx,cy,cw,ch,0,0,12,24);const d=g.getImageData(0,0,12,24).data;
     const avg=(y0,y1,x0,x1)=>{let r=0,gg=0,b=0,n=0;for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const k=(y*12+x)*4;r+=d[k];gg+=d[k+1];b+=d[k+2];n++}return [r/n,gg/n,b/n]},lu=c=>(c[0]*.3+c[1]*.59+c[2]*.11)/255;
-    const top=avg(0,1,0,12),hd=lu(avg(0,4,0,12)),tx=lu(avg(14,22,1,11));
-    const h=v=>Math.round(v).toString(16).padStart(2,"0");setTint(("#"+h(top[0])+h(top[1])+h(top[2])).toUpperCase());
+    const top=avg(0,1,0,12),bot=avg(23,24,0,12),hd=lu(avg(0,4,0,12)),tx=lu(avg(14,22,1,11));
+    const h=v=>Math.round(v).toString(16).padStart(2,"0");setTint(("#"+h(top[0])+h(top[1])+h(top[2])).toUpperCase(),("#"+h(bot[0])+h(bot[1])+h(bot[2])).toUpperCase());
     const hl=B.classList.contains("fhl");if(hd<(hl?.55:.45)){B.classList.add("fhl");B.classList.remove("fhd")}else{B.classList.add("fhd");B.classList.remove("fhl")}
     const td=hv.classList.contains("ftd");hv.classList.toggle("ftd",tx>(td?.5:.6))}catch(_){}}
 setInterval(filmTint,400);addEventListener("scroll",()=>{if(TINT!=="#FFFFFF"&&onIndex)filmTint()},{passive:true});addEventListener("hashchange",()=>setTimeout(filmTint,60));
@@ -3006,7 +3009,7 @@ setInterval(filmTint,400);addEventListener("scroll",()=>{if(TINT!=="#FFFFFF"&&on
 /* contact rows: their dots beat one after another */
 setInterval(()=>{document.querySelectorAll(".enq,.sendopts").forEach(g=>{if(!g.offsetParent)return;const ds=[...g.querySelectorAll(".enq .crow>a:first-child,.enq>a[href^='mailto'],.sendopts>a")].filter(a=>a.closest(".enq,.sendopts")===g);if(!ds.length)return;const i=((+g.dataset.bi||0)+1)%ds.length;g.dataset.bi=i;ds.forEach((a,k)=>a.classList.toggle("beat",k===i))})},900);
 let IDXOPEN=0;
-function openIdx(){IDXOPEN=1;document.documentElement.classList.remove("noscroll");if(!document.body.classList.contains("idxhide"))return;document.body.classList.remove("idxhide");try{layoutGrids()}catch(_){}try{dispatchEvent(new Event("resize"))}catch(_){}}
+function openIdx(){IDXOPEN=1;document.documentElement.classList.remove("noscroll");try{fitFilm()}catch(_){}if(!document.body.classList.contains("idxhide"))return;document.body.classList.remove("idxhide");try{layoutGrids()}catch(_){}try{dispatchEvent(new Event("resize"))}catch(_){}}
 addEventListener("click",e=>{if(e.target.closest&&e.target.closest(".bar .logo,.bar .mark"))IDXOPEN=0},true);
 const WA_IR="989397133918", WA_CA="14039229905", MAIL="Sadesigngallery@gmail.com", IG="https://www.instagram.com/sa_editions_/";
 
