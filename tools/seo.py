@@ -78,6 +78,9 @@ main{max-width:860px;margin:0 auto;padding:0 18px 40px}h1{font-weight:500;font-s
 .cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0}.cta a{border:1px solid rgba(0,0,0,.5);border-radius:999px;padding:10px 18px;text-decoration:none;font-weight:500;font-size:.9rem}.cta a.p{background:#000;color:#fff;border-color:#000}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 16px;margin:16px 0}.grid a{text-decoration:none;text-align:center}.grid img{width:100%;height:120px;object-fit:contain;display:block}.grid b{display:block;font-weight:500;margin-top:6px}.grid small{color:#555;font-size:.76rem}
 h2{font-weight:500;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;margin:34px 0 8px;border-top:1px solid #eee;padding-top:18px}
+h2.ch{text-align:center;border:0;font-weight:300;font-size:1rem;letter-spacing:.04em;margin:44px 0 14px;padding:0}h2.ch b{font-weight:600}
+.eq{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:22px 26px;margin:16px 0}.eq a{text-decoration:none;text-align:center}
+.eq .eb{position:relative;display:block;height:96px;margin:0 auto}.eq .eb img{position:absolute;max-width:none}.eq b{display:block;font-weight:500;margin-top:6px}.eq small{color:#555;font-size:.76rem}
 .bio{display:grid;grid-template-columns:120px 1fr;gap:16px;margin:18px 0}.bio img{width:120px;height:auto}
 footer{border-top:1px solid #e6e6e6;max-width:860px;margin:10px auto 0;padding:20px 16px 40px;text-align:center}footer nav{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;font-size:.84rem}footer nav a{text-decoration:none}footer p{color:#555;font-size:.74rem;margin:14px 0 0}
 .crumb{font-size:.8rem;color:#555;margin:0 0 4px}.crumb a{text-decoration:none}"""
@@ -95,7 +98,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
 <header class="sb"><a href="/" aria-label="Sa Design"><img src="/sa-logo.png" alt="Sa Design logo" width="120" height="46"></a><span>DESIGN</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sadesign_gallery/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="https://wa.me/989397133918" rel="noopener">WhatsApp</a><a href="/pieces/">All pieces</a></nav>
+<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="https://wa.me/989397133918" rel="noopener">WhatsApp</a><a href="/pieces/">All pieces</a></nav>
 <p>Copyright © 2026 Sa Inc. All rights reserved</p></footer></body></html>"""
 
 
@@ -114,7 +117,7 @@ def build(out_dir, tools_dir, site, assets):
     org = {"@context": "https://schema.org", "@type": "Organization", "name": "Sa Design", "alternateName": ["Sa", "SA Design House", "Sa Editions"],
            "url": site.rstrip("/") + "/", "logo": absu(site, "sa-logo.png"), "foundingDate": "2010",
            "founder": [{"@type": "Person", "name": "Alireza Emtiaz"}, {"@type": "Person", "name": "Saqar Khakdan"}],
-           "email": "Sadesigngallery@gmail.com", "sameAs": ["https://www.instagram.com/sadesign_gallery/"],
+           "email": "Sadesigngallery@gmail.com", "sameAs": ["https://www.instagram.com/sa_editions_/"],
            "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "telephone": "+98-939-713-3918", "areaServed": "IR"},
                             {"@type": "ContactPoint", "contactType": "sales", "telephone": "+1-403-922-9905", "areaServed": "CA"}]}
     urls = [("/", [absu(site, "og/home.jpg")]), ("/pieces/", []), ("/about/", [])]
@@ -153,10 +156,25 @@ def build(out_dir, tools_dir, site, assets):
     # all pieces
     groups = {}
     for x in pieces: groups.setdefault(x["cat"], []).append(x)
-    body = "<main><h1>All pieces</h1>" + "".join(
-        f"<h2>{E(c)}</h2><div class='grid'>" + "".join(
+
+    def eqtile(x):
+        # dining tables: every table drawn at the same body height
+        b, ts = x.get("tbb"), x.get("ts")
+        if not (b and ts and x.get("thumb")):
+            return None
+        a = ts[0] / ts[1]; bh = 80; ih = bh / (b[3] - b[1]); iw = ih * a; bw = iw * (b[2] - b[0])
+        left = bw / 2 + 2 - iw * (b[0] + b[2]) / 2; bot = 4 - ih * (1 - b[3])
+        return (f'<a href="/p/{E(x["id"])}/"><span class="eb" style="width:{bw + 4:.0f}px"><img src="/{E(x["thumb"])}" alt="{E(x["name"])} by Sa Design" loading="lazy" '
+                f'style="height:{ih:.1f}px;width:{iw:.1f}px;left:{left:.1f}px;bottom:{bot:.1f}px"></span><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>')
+
+    def block(c, xs):
+        g = xs[0].get("grp") or ["", c.upper()]
+        head = f"<h2 class='ch'><b>{E(g[0])} /</b> {E(g[1])}</h2>"
+        if xs[0].get("catId") == "dining" and all(eqtile(x) for x in xs):
+            return head + "<div class='eq'>" + "".join(eqtile(x) for x in xs) + "</div>"
+        return head + "<div class='grid'>" + "".join(
             f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by Sa Design" loading="lazy"><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>' for x in xs) + "</div>"
-        for c, xs in groups.items()) + "</main>"
+    body = "<main><h1>All pieces</h1>" + "".join(block(c, xs) for c, xs in groups.items()) + "</main>"
     os.makedirs(os.path.join(out_dir, "pieces"), exist_ok=True)
     with open(os.path.join(out_dir, "pieces", "index.html"), "w", encoding="utf-8") as f:
         f.write(page(site, "/pieces/", "All pieces — sculptural furniture, pianos and lighting | Sa Design",
