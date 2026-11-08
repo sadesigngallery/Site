@@ -2145,7 +2145,7 @@ html[lang="fa"] .dwgr p{text-transform:none;letter-spacing:0}
 @keyframes pdr{0%,100%{transform:scale(1)}50%{transform:scale(1.7)}}
 @keyframes pdw{0%,100%{transform:scale(1)}50%{transform:scale(1.7)}}
 .ov.menu .mlist>.dz,.ov.menu .mlist>.dz .dzl,.ov.menu .mlist>a,.ov.menu .mlist>a span{font-size:19.52px!important;line-height:31.232px!important;font-weight:300!important;color:var(--ink,#000)!important;opacity:1!important}
-.ov.menu .mlist>.dz .dzl{font-weight:600!important}
+.ov.menu .mlist>.dz .dzl{font-weight:450!important}
 body.a3 .ov.menu .mlist>.dz,body.a3 .ov.menu .mlist>a,body.a3 .ov.menu .mlist>a span{color:#f2f2f2!important}
 .ov.menu .mlist>a:not(.mmain):not(.a3m){position:relative;padding:6px 0 6px 25.5px!important}
 .ov.menu .mlist>a.mdisc>i.ar s{opacity:0!important}
@@ -2153,9 +2153,24 @@ body.a3 .ov.menu .mlist>.dz,body.a3 .ov.menu .mlist>a,body.a3 .ov.menu .mlist>a 
 .hvid.hvtop .hvmenu a.hvt::before{animation:none!important}
 .ov.menu .mlist>a.mdisc span::after{display:none!important}
 #foot{background:#fff}
+/* v216 Collection: the page takes the light grey of its photographs; names larger and centred */
+body.setsp{--paper:#F1F1F1;background:#F1F1F1!important}
+body.setsp .bar,body.setsp #homebar,body.setsp #foot,body.setsp main.page{background:#F1F1F1!important}
+body.setsp .setcard{text-align:center;display:block}
+body.setsp .setcard b{font-size:1.45rem!important;margin-top:14px!important;letter-spacing:.01em}
+body.setsp .setcard small{display:block;font-size:.86rem!important;margin-top:4px;line-height:1.6}
+body.setsp .setpage .setT,body.setsp .setpage .lead2,body.setsp .setnav p{text-align:center}
+body.setsp .setnav a span{font-size:.95rem}
+body.setsp .setgrid{gap:44px!important}
+body.setsp main.page>h1.pt,body.setsp main.page>.lead2{text-align:center!important;margin-left:auto!important;margin-right:auto!important}
+/* phones: the words sit lower on the film than on tablets and monitors */
+@media (max-width:700px){
+ html body .hvtop .intro.onfilm{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 118px + var(--tb,0px))!important}
+ html body #idx>.hvid.hvtop.vland .hvmenu,html body #idx>.hvid.hvtop .hvmenu{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 34px + var(--tb,0px))!important}
+}
 /* v212 home: only the film, nothing to scroll until the index is opened */
 html.noscroll,html.noscroll body{overflow:hidden!important;height:100%;overscroll-behavior:none}
-html.noscroll #idx>.hvid.hvtop{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:auto!important;margin:0!important;z-index:0}
+html.noscroll #idx>.hvid.hvtop{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;height:100vh!important;height:100lvh!important;min-height:100%!important;margin:0!important;z-index:0}
 html.noscroll #idx>.hvid.hvtop video.vmain{height:100%!important}
 body.idxhide #foot{display:none!important}
 body{background-color:#fff}
@@ -2988,7 +3003,7 @@ let TINT="";let TINTB="";function setTint(c,cb){if(c===TINT&&(cb||c)===TINTB)ret
 /* the film is read a few times a second: Safari's bars take its top colour; the logo, icons and the words on the film turn dark on a light film and white on a dark one */
 const TCV=document.createElement("canvas");TCV.width=12;TCV.height=24;
 function filmTint(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv.querySelector("video.vmain"),B=document.body;
-  if(!hv||!onIndex||hv.getBoundingClientRect().bottom<innerHeight*.5){setTint("#FFFFFF");B.classList.remove("fhl","fhd");const om=document.querySelector(".ov.menu");if(om)om.classList.remove("mdark");return}
+  if(!hv||!onIndex||hv.getBoundingClientRect().bottom<innerHeight*.5){setTint(B.classList.contains("setsp")?"#F1F1F1":"#FFFFFF");B.classList.remove("fhl","fhd");const om=document.querySelector(".ov.menu");if(om)om.classList.remove("mdark");return}
   if(!vd||!vd.videoWidth||vd.readyState<2)return;
   {const om=document.querySelector(".ov.menu");if(om)om.classList.toggle("mdark",B.classList.contains("fhl")&&B.classList.contains("ontop"))}
   try{const vw=vd.videoWidth,vh=vd.videoHeight,W=hv.clientWidth,H=hv.clientHeight,sc=Math.max(W/vw,H/vh)*1.16,cw=Math.min(vw,W/sc),ch=Math.min(vh,H/sc),cx=(vw-cw)/2,cy=Math.max(0,Math.min(vh-ch,(vh-ch)*.42));
@@ -4164,13 +4179,13 @@ async function exportImage(){
 
 /* ---------- mix & match ---------- */
 function renderSets(){
-  onIndex=false; const T_=t();
+  onIndex=false; const T_=t(); document.body.classList.add("setsp");
   view.innerHTML=`<main class="page"><h1 class="pt">${t().mix}</h1><p class="lead2">${T_.setLead}</p>
    <div class="setgrid">${SETS.map(s=>`<a class="setcard" href="#/set/${s.id}"><img src="${IMG[s.imgs[1]]}" alt="" loading="lazy"><b>${sN(s)}</b><small>${s.pieces.map(id=>byId(id).en).join(" · ")}</small></a>`).join("")}</div></main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
 }
 function renderSet(sid){
-  onIndex=false; const T_=t(); const s=SETS.find(q=>q.id==sid); if(!s){location.hash="#/sets";return}
+  onIndex=false; const T_=t(); document.body.classList.add("setsp"); const s=SETS.find(q=>q.id==sid); if(!s){location.hash="#/sets";return}
   const imgs=s.imgs.map(k=>IMG[k]);
   view.innerHTML=`<main class="page setpage"><div class="setcover"><img src="${IMG[s.imgs[0]]}" alt=""></div><div class="setbar"><p class="crumb"><a href="#/sets">← ${t().mix}</a></p><span class="collab" dir="ltr">Sa Editions × Lotfi House</span></div>
    <h1 class="pt setT">${sN(s)}</h1><p class="lead2">${L==="fa"?s.f:((TX()&&TX().sets[s.id])||s.en)}</p>
@@ -4775,7 +4790,7 @@ function route(){
   const tr_=$("#tray"); if(tr_) tr_.classList.remove("on");
   const h=location.hash.replace(/^#\/?/,"").split("/");
   if(ov.classList.contains("ss")||ov.classList.contains("menu")) closeOv();
-  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp");
+  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp","setsp");
   if(APP===3)document.body.classList.add("dark","a3");
   if(APP===3&&!["jewellery","sculpture","love","care","about","contact"].includes(h[0])){renderApp3Home();scrollTo(0,0);activeCat=null;return}
   if(APP!==3&&["jewellery","sculpture","love"].includes(h[0])){location.replace("#/");return}
