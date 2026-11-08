@@ -2167,6 +2167,23 @@ html:root body.home.ontop.fhl.fhl:not(.zz1):not(.zz2):not(.zz3) .bar .mark span,
 html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) .bar .logo{background:#111!important}
 html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) .bar .mark span,html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) .homebar .iconbtn,html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) #searchB2,html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) #bag,html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) #selcount2,html:root body.home.ontop.fhd.fhd:not(.zz1):not(.zz2):not(.zz3) .homebar .iconbtn span{color:#111!important}
 html body.home.ontop .bar .logo,html body.home.ontop .bar .mark span,html body.home.ontop .homebar .iconbtn{transition:color 1.2s ease,background-color 1.2s ease}
+/* v211 */
+.hvtop .intro.onfilm .discv{margin:0 0 18px!important}
+.hvtop .intro.onfilm .tagl2{white-space:nowrap!important;max-width:none!important;letter-spacing:.12em!important;overflow:visible}
+html[lang="fa"] .hvtop .intro.onfilm .tagl2,html[lang="ar"] .hvtop .intro.onfilm .tagl2{letter-spacing:0!important}
+.hvtop .intro.onfilm{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 62px + var(--tb,0px))!important}
+#idx>.hvid.hvtop.vland .hvmenu,#idx>.hvid.hvtop .hvmenu{bottom:calc(env(safe-area-inset-bottom,0px)*.6 + 14px + var(--tb,0px))!important}
+.bar .mark span,#menuB2,#searchB2,#bag,#selcount2{transition:color 1.2s ease}
+.cghead span{color:#000}
+.ov.menu .mlist>a>i.ar s{opacity:0!important}
+.ov.menu .mlist>a>i.ar::after{content:"";display:block;position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:currentColor}
+.ov.menu .mlist>a.mdisc>i.ar::after{width:7px;height:7px;margin:-3.5px 0 0 -3.5px;animation:pdr 2.2s ease-in-out infinite}
+.ov.menu .mlang button.lx{display:none!important}
+.ov.menu .mlang.open button.lx{display:inline-flex!important;animation:mfade .4s ease both}
+.ov.menu .mlang.open button.lmore{display:none!important}
+.ov.menu .menuwrap>.mlang{justify-content:flex-start!important;gap:12px!important;overflow-x:auto!important;scrollbar-width:none}
+.ov.menu .menuwrap>.mlang::-webkit-scrollbar{display:none}
+.ov.menu .mlang button.lmore{letter-spacing:.1em;font-weight:600}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,#phil.pa .pw{opacity:1!important;transform:none!important;filter:none!important}}
 .v3d{position:relative;margin:0 0 4px;background:linear-gradient(to bottom,#FFFFFF 0%,#F6F6F5 62%,#EDEDEB 100%)}
 .v3d canvas{display:block;width:100%;aspect-ratio:1/1;max-height:78vh;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .9s ease}
@@ -2910,7 +2927,10 @@ function renderCatalogue(k){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en;if(!Q.ca
 }
 /* v208: the home film always fills the phone screen (iPhone: real visible height, starts at the very top, still frame covers if autoplay is blocked) */
 let LVH=0;function lvh(){const d=document.createElement("div");d.style.cssText="position:fixed;left:0;top:0;width:1px;height:100vh;height:100lvh;visibility:hidden;pointer-events:none";document.body.appendChild(d);const h=d.offsetHeight;d.remove();return h}
-function fitFilm(){const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));LVH=Math.max(LVH,lvh());const H=Math.max(vis,LVH);
+function syncMark(){const l=document.querySelector(".bar .logo");if(!l)return;const c=getComputedStyle(l).backgroundColor;document.querySelectorAll(".bar .mark span,#menuB2,#searchB2,#bag,#bag0,#selcount2,.bar .back,#left .back").forEach(e=>e.style.setProperty("color",c,"important"))}
+setInterval(syncMark,250);addEventListener("hashchange",()=>setTimeout(syncMark,30));addEventListener("scroll",()=>requestAnimationFrame(syncMark),{passive:true});
+function fitTag(){const p=document.querySelector(".hvtop .intro.onfilm .tagl2");if(!p)return;p.style.removeProperty("font-size");let fs=parseFloat(getComputedStyle(p).fontSize),i=0;while(p.scrollWidth>p.clientWidth+1&&fs>6&&i++<40){fs-=.25;p.style.setProperty("font-size",fs+"px","important")}}
+function fitFilm(){fitTag();const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));LVH=Math.max(LVH,lvh());const H=Math.max(vis,LVH);
   hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb",Math.max(0,H-vis)+"px");
   if(scrollY<4){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
   const vd=hv.querySelector("video.vmain");if(vd){const po=vd.getAttribute("poster");if(po){hv.style.backgroundImage=`url("${po}")`;vd.removeAttribute("poster")}
@@ -2990,7 +3010,7 @@ function renderIndex(){
   const T_=t();
   const tools=`<div class="tools"><label><span>${T_.sort}</span><select id="sortSel">${[["cat",T_.sCat],["az",T_.sAZ],["new",T_.sNew],["old",T_.sOld],["ed",EDTN[L]||EDTN.en]].map(([v,l])=>`<option value="${v}"${v===sortMode?" selected":""}>${l}</option>`).join("")}</select></label>
     <label><span>${T_.family}</span><select id="famSel"><option value="all">${T_.all}</option>${Object.keys(FAMILY).map(f=>`<option value="${f}"${f===famFilter?" selected":""}>${L==="fa"?FAMNAME[f][0]:FAMNAME[f][1]}</option>`).join("")}<option value="outdoor"${famFilter==="outdoor"?" selected":""}>${OUTN[L]||OUTN.en}</option></select></label></div>`;
-  const h=[`<main id="idx" class="${sortMode==="cat"&&famFilter==="all"?"focus":""}">${VID?filmTop(VID,0):""}<section class="intro"><p class="phil" id="phil">${T_.lead}</p><p class="tagl2">${TAGL[L]||TAGL.en}</p><a class="discv cta-d" href="#/discover">${DISC[L]||DISC.en}</a></section>${tools}`];
+  const h=[`<main id="idx" class="${sortMode==="cat"&&famFilter==="all"?"focus":""}">${VID?filmTop(VID,0):""}<section class="intro"><a class="discv cta-d" href="#/discover">${DISC[L]||DISC.en}</a><p class="phil" id="phil">${T_.lead}</p><p class="tagl2">${TAGL[L]||TAGL.en}</p></section>${tools}`];
   if(sortMode==="cat"&&famFilter==="all"){
     CATS.filter(c=>c[0]!=="mirror"&&(!GROUP||GROUPS[GROUP].includes(c[0]))).forEach(c=>{
       const items=P.filter(x=>x.cat===c[0]);
@@ -4065,7 +4085,7 @@ async function exportImage(){
   g.fillStyle="#fff";g.fillRect(0,0,W,H);
   const load=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
   const logo=await load(LOGO);if(logo)g.drawImage(logo,60,60,150,82);
-  g.fillStyle="#6b6b6b";g.font="300 26px Jost, Arial";g.fillText("EDITIONS",220,138);
+  g.fillStyle="#000";g.font="300 26px Jost, Arial";g.fillText("EDITIONS",220,138);
   g.fillStyle="#000";g.font="400 34px Jost, Arial";g.fillText((SLM[L]||SLM.en).t+"   ·   "+selRef(),60,210);{const W_=whoGet();if(W_){g.fillStyle="#6b6b6b";g.font="300 26px Jost, Vazirmatn, Arial";g.fillText(whoLine(W_),60,250)}}
   for(let k=0;k<SEL.length;k++){const s=SEL[k],x=byId(s.id),y=290+k*row;
     const im=await load(AL[s.id]||thumb(s.id));if(im){const f_=Math.min(160/im.width,160/im.height),w_=im.width*f_,h_=im.height*f_;g.drawImage(im,60+(160-w_)/2,y+(160-h_)/2,w_,h_)}
@@ -4627,7 +4647,7 @@ function dotsTo(svg,to,ms){if(!svg)return;const cs=svg.querySelectorAll("circle"
   const st=()=>{const k=ms?Math.min(1,(performance.now()-t0)/ms):1,e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;cs[0].setAttribute("cy",(a0+(a1-a0)*e).toFixed(2));cs[2].setAttribute("cy",(b0+(b1-b0)*e).toFixed(2));if(k<1)requestAnimationFrame(st)};st()}
 function openMenu(){
   const T_=t();
-  ov.className="ov menu on menuin"; ov.innerHTML=`<div class="menuwrap">   <div class="mlang">${LANGS.map(([k,l])=>`<button type="button" data-l="${k}" class="${k===L?"on":""}">${l}</button>`).join("")}<button type="button" data-l="other">${L==="fa"?T_.other+" …":"…"}</button></div>
+  ov.className="ov menu on menuin"; ov.innerHTML=`<div class="menuwrap">   <div class="mlang">${LANGS.filter(([k])=>k===L||k==="fa"||k==="en").map(([k,l])=>`<button type="button" data-l="${k}" class="${k===L?"on":""}">${l}</button>`).join("")}<button type="button" data-l="more" class="lmore" aria-expanded="false">…</button>${LANGS.filter(([k])=>!(k===L||k==="fa"||k==="en")).map(([k,l])=>`<button type="button" class="lx" data-l="${k}">${l}</button>`).join("")}<button type="button" class="lx" data-l="other">${L==="fa"?T_.other+" …":(T_.other||"Other")+" …"}</button></div>
    <div class="mtop mtop3"><button type="button" class="mhome menuicon" id="mx" aria-label="Home"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button></div>
    <nav class="mlist">
    ${APP===3?"":`<a class="mmain mallt" href="${window.SA_SITE?'/pieces/':'#/all'}" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{if(window.SA_SITE){location.href='/pieces/';return}try{closeOv()}catch(_){}sortMode='cat';famFilter='all';GROUP=null;if(location.hash!=='#/all')location.hash='#/all';else{route()}},1350)"><i class="pm"><s></s><s></s></i><span>${ALLW[L]||ALLW.en}</span></a>`}
@@ -4653,7 +4673,7 @@ function openMenu(){
     /* v70: the category name opens its place in the index; the + still opens the list */
     
     const now=Date.now();if(now-lastTg<500)return;lastTg=now;const o=!b.classList.contains("open");[...b.parentElement.children].filter(q=>q.classList.contains("dz")&&q!==b&&q.classList.contains("open")).forEach(q=>{q.classList.remove("open");setSub(q.nextElementSibling,false)});b.classList.toggle("open",o);setSub(b.nextElementSibling,o)});
-  ov.querySelectorAll(".mlang button").forEach(b=>b.onclick=()=>{if(b.dataset.l==="other"){otherLangs();return}setLang(b.dataset.l);closeOv()});
+  ov.querySelectorAll(".mlang button").forEach(b=>b.onclick=()=>{if(b.dataset.l==="more"){const m2=b.parentElement,o=!m2.classList.contains("open");m2.classList.toggle("open",o);b.setAttribute("aria-expanded",String(o));return}if(b.dataset.l==="other"){otherLangs();return}setLang(b.dataset.l);closeOv()});
 }
 function openSearch(){
   const T_=t();
