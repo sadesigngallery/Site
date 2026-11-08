@@ -214,7 +214,7 @@ def home_head(site, org, pieces):
     desc = "Sa Editions: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": "Sa Editions", "alternateName": ["Sa", "SA Editions"], "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
-    head = (f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
+    head = (f'<title>Sa</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}">'
             f'<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(site.rstrip("/") + "/")}"><meta property="og:image" content="{E(absu(site, "og/home.jpg"))}">'
             f'<meta name="twitter:card" content="summary_large_image"><link rel="sitemap" type="application/xml" href="/sitemap.xml">'
