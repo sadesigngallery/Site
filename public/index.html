@@ -2170,8 +2170,7 @@ body.setsp main.page>h1.pt,body.setsp main.page>.lead2{text-align:center!importa
 }
 /* v212 home: only the film, nothing to scroll until the index is opened */
 html.noscroll,html.noscroll body{overflow:hidden!important;height:100%;overscroll-behavior:none}
-html.noscroll #idx>.hvid.hvtop{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;height:100vh!important;height:100lvh!important;min-height:100%!important;margin:0!important;z-index:0}
-html.noscroll #idx>.hvid.hvtop video.vmain{height:100%!important}
+
 body.idxhide #foot{display:none!important}
 body{background-color:#fff}
 /* v210: words, logo and icons on the home film follow the film's light */
@@ -3008,12 +3007,11 @@ function fitTag(){const p=document.querySelector(".hvtop .intro.onfilm .tagl2"),
   let fs=parseFloat(getComputedStyle(p).fontSize),w=nat();if(!w)return;for(let i=0;i<6;i++){fs=fs*tw/w;p.style.setProperty("font-size",fs.toFixed(2)+"px","important");w=nat();if(Math.abs(w-tw)<1)break}}
 addEventListener("load",()=>setTimeout(fitTag,300));if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>setTimeout(fitTag,50));
 function fitFilm(){fitTag();const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));
-  if(document.documentElement.classList.contains("noscroll")){hv.style.removeProperty("margin-top");
-    /* one fixed height from the device screen: the film never resizes when Safari's bars move, and it reaches under them */
-    const sw=screen.width||0,sh=screen.height||0,SH=innerWidth>innerHeight?Math.min(sw,sh):Math.max(sw,sh),H=Math.round(Math.max(SH,innerHeight,vv?vv.height:0));
-    if(hv._H!==H){hv._H=H;hv.style.setProperty("height",H+"px","important")}const vt=vv?vv.offsetTop:0;hv.style.setProperty("--tb",Math.max(0,Math.round(H-vis-vt))+"px")}
+  if(document.documentElement.classList.contains("noscroll")){
+    /* as in v210: the film is as tall as the screen with Safari's bars retracted, so it runs under the bottom bar */
+    LVH=Math.max(LVH,lvh());const H=Math.max(vis,LVH);hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb",Math.max(0,H-vis)+"px")}
   else{const H=vis;hv._H=0;hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb","0px");}
-  if(scrollY<4&&!document.documentElement.classList.contains("noscroll")){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
+  if(scrollY<4){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
   const vd=hv.querySelector("video.vmain");if(vd){const po=vd.getAttribute("poster");if(po){hv.style.backgroundImage=`url("${po}")`;vd.removeAttribute("poster")}
     if(vd.paused){const p=vd.play&&vd.play();if(p&&p.catch)p.catch(()=>{})}}}
 /* Safari tints its top and bottom bars from the page: give them the film's colour while the film is on screen */
