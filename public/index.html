@@ -1973,6 +1973,8 @@ body:not(.dark) .dims i{color:#7d7d7d}
 .focus .cat:not(.on) .ixb>img,.focus .cat:not(.on) .tile{opacity:.2!important}
 .focus .cat:not(.on) h2.cath,.focus .cat:not(.on) .icap{opacity:.24!important}
 /* v164 */
+.colpage .pprev.ptop{margin:4px 0 14px!important;height:190px}
+.colpage .pprev.ptop canvas{max-height:176px}
 .crow2{overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;overscroll-behavior-y:none;-webkit-overflow-scrolling:touch}
 .crow2 a{overflow:visible}
 .crow2 .rv,.crow2 a{transform:none!important;translate:none!important}
@@ -3366,12 +3368,11 @@ function renderColor(id,editK){
   const edit=editK!=null&&SEL[editK]&&SEL[editK].id===id?SEL[+editK]:null;
   let hue=200,sat=70,lig=50,hex=edit&&edit.hex?edit.hex:"#3A8FB7",code=edit?edit.code||"":"";
   const mine=SEL.map((q,k)=>[q,k]).filter(([q])=>q.id===id&&q.color==="custom"&&q.hex);
-  view.innerHTML=`<main class="page colpage"><p class="crumb"><a href="#/p/${id}">← ${x?esc(x.en):""}</a></p><h1 class="pt">${T_.cCustom}</h1><p class="lead2">${T_.pickLead}</p><p class="sci">${T_.colSci}</p>
+  view.innerHTML=`<main class="page colpage"><p class="crumb"><a href="#/p/${id}">← ${x?esc(x.en):""}</a></p><h1 class="pt">${T_.cCustom}</h1><div class="pprev ptop"><canvas id="pcv" width="10" height="10"></canvas></div><p class="lead2">${T_.pickLead}</p><p class="sci">${T_.colSci}</p>
    <div class="chart"><div class="gtop" dir="ltr"><span>0° Red</span><span>60° Yellow</span><span>120° Green</span><span>180° Cyan</span><span>240° Blue</span><span>300° Magenta</span></div>
    <div class="gmid"><div class="gside"><span>${T_.gTint}</span><b>${T_.gLight} ↕</b><span>${T_.gShade}</span></div><canvas id="cv" width="720" height="360"></canvas></div>
    <div class="gbot" dir="ltr"><span>← ${T_.gWarm}</span><b>${T_.gHue} (H)</b><span>${T_.gCool} →</span></div></div>
    <label class="rng"><span>${T_.gMuted}</span><input type="range" id="satR" min="0" max="100" value="${sat}"><span>${T_.gVivid}</span></label><p class="gcap">${T_.gChroma} (C)</p>
-   <div class="pprev"><canvas id="pcv" width="10" height="10"></canvas></div>
    <div class="chosen"><div class="bigdome" id="bigd"><canvas id="chip" width="360" height="360"></canvas><img id="chipImg" alt="" hidden></div><b id="hexT"></b><small id="rgbT"></small></div>
    <p style="text-align:center;margin:4px 0"><button type="button" class="panadd" id="panAdd"${edit&&edit.pantone?" hidden":""}>${T_.panAdd}</button></p><label class="pan" id="panL"${edit&&edit.pantone?"":" hidden"}>${T_.pantone}<input id="pan" dir="ltr" style="text-align:center" placeholder="Pantone —" value="${edit&&edit.pantone?esc(edit.pantone):""}"></label><p class="pang" id="panG"></p>
    <p style="text-align:center"><button type="button" class="addbtn solidpill" id="useC">${T_.saveColour}</button></p>
