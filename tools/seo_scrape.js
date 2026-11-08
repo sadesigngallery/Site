@@ -17,7 +17,7 @@ const {chromium}=require('playwright');
       const desc=[...document.querySelectorAll('.info .desc p')].map(p=>p.textContent.trim()).filter(Boolean);
       const photos=(PH[id]||[]).map(k=>IMG[k]).filter(Boolean);
       const c=catOf(x.cat),grp=x.cat==='piano'?['PIANO','LIMITED EDITION']:[c[1]==='Lighting'?'LIGHTING':c[1]==='Seating'?'SEATING':'DESIGN',catName(c).toUpperCase()];
-      return {id,name:x.en,fa:x.fa,cat:catName(c),catId:x.cat,grp,tbb:(PACK.TBB||{})[id]||null,ts:TS[id]||null,year:x.year||null,hero:heroSrc(id)||null,thumb:IMG['t-'+id]||null,
+      return {id,name:x.en,fa:x.fa,cat:catName(c),catId:x.cat,grp,yt:(typeof YTV!=='undefined'&&YTV[id])||null,tbb:(PACK.TBB||{})[id]||null,ts:TS[id]||null,year:x.year||null,hero:heroSrc(id)||null,thumb:IMG['t-'+id]||null,
         drawing:DR[id]?IMG['d-'+id]:null,photos,dims,spec,desc,edition:(q('.edbadge b')||{}).textContent||'',editionNote:(q('.edbadge span')||{}).textContent||''}},id);
     out.pieces.push(d);
   }

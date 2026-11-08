@@ -136,9 +136,10 @@ def build(out_dir, tools_dir, site, assets):
         ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
         dr = f'<img src="/{E(x["drawing"])}" alt="{E(x["name"])} — technical drawing" loading="lazy">' if x["drawing"] else ""
         hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions" width="1600" height="1600">' if x["hero"] else ""
+        yt = (f'<div style="position:relative;aspect-ratio:16/9;margin:6px 0 18px;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/{E(x["yt"])}?rel=0&modestbranding=1&playsinline=1" title="{E(x["name"])} — film" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>') if x.get("yt") else ""
         ed = f'<div class="ed"><b>{E(x["edition"])}</b>{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}</div>' if x["edition"] else ""
         body = f"""<main><p class="crumb"><a href="/pieces/">All pieces</a> / {E(x['cat'])}</p><h1>{E(x['name'])}</h1><p class="fa" lang="fa" dir="rtl">{E(x['fa'])}</p><p class="cat">{E(cat1)}{' · ' + str(x['year']) if x['year'] else ''}</p>
-{hero}<div class="dims">{dims}</div>{ed}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
+{hero}<div class="dims">{dims}</div>{ed}{yt}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
 <div class="cta"><a class="p" href="/#/p/{E(pid)}">View in the catalogue</a><a href="https://wa.me/989397133918?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="mailto:Sadesigngallery@gmail.com?subject=Sa%20Design%20%E2%80%94%20{E(x['name'])}">Email</a></div>
 <div class="ph">{ph}{dr}</div></main>"""
         prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
