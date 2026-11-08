@@ -98,7 +98,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
 <header class="sb"><a href="/" aria-label="Sa Editions"><img src="/sa-logo.png" alt="Sa Editions logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="/pieces/">All pieces</a></nav>
+<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="/pieces/">All pieces</a><a href="/#/discover">Discover</a><a href="/#/trade">Trade</a></nav>
 <p>Copyright © 2026 Sa Inc. All rights reserved</p></footer></body></html>"""
 
 
@@ -140,7 +140,7 @@ def build(out_dir, tools_dir, site, assets):
         ed = f'<div class="ed"><b>{E(x["edition"])}</b>{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}</div>' if x["edition"] else ""
         body = f"""<main><p class="crumb"><a href="/pieces/">All pieces</a> / {E(x['cat'])}</p><h1>{E(x['name'])}</h1><p class="fa" lang="fa" dir="rtl">{E(x['fa'])}</p><p class="cat">{E(cat1)}{' · ' + str(x['year']) if x['year'] else ''}</p>
 {hero}<div class="dims">{dims}</div>{ed}{yt}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
-<div class="cta"><a class="p" href="/#/p/{E(pid)}">View in the catalogue</a><a href="https://wa.me/989397133918?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="mailto:Sadesigngallery@gmail.com?subject=Sa%20Design%20%E2%80%94%20{E(x['name'])}">Email</a></div>
+<div class="cta"><a class="p" href="/#/p/{E(pid)}">View in the catalogue</a><a href="https://wa.me/14039229905?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="mailto:Sadesigngallery@gmail.com?subject=Sa%20Editions%20%E2%80%94%20{E(x['name'])}">Email</a></div>
 <div class="ph">{ph}{dr}</div></main>"""
         prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
                 "category": cat1, "description": d0 or desc, "image": [absu(site, i) for i in imgs], "url": site.rstrip("/") + path,
