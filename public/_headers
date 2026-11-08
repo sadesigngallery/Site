@@ -3,7 +3,7 @@
 /a/*
   Cache-Control: public, max-age=31536000, immutable
 /p/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=86400
 /v/*
   Cache-Control: public, max-age=604800
 /

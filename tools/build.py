@@ -16,7 +16,12 @@ What it does:
     the page into separate, content-hashed files under public/i and public/a,
     so the first visit downloads far less;
   * copies photos and films, and writes public/_headers for long caching of
-    the hashed files.
+    the hashed files;
+  * removes the claude.ai page wrapper, so the site is one clean HTML document;
+  * writes the search-engine pages (tools/seo.py): one page per piece, an
+    index of all pieces, About, link-preview pictures, sitemap.xml, robots.txt,
+    and the home page's title, description and structured data.
+The site address used in those pages is read from state/site.json.
 The result is written to public/, which Cloudflare Pages serves.
 """
 import base64, hashlib, json, os, re, shutil, sys
@@ -40,11 +45,29 @@ def js(o):
     return t
 
 
+def unwrap(s):
+    """The app as saved from claude.ai sits inside a small host page:
+    <!doctype html><html><head>HOST STYLE</head><body> APP DOCUMENT  LATE SCRIPTS </body></html>.
+    Keep the app document, move the host style into its head and the late scripts into its body."""
+    m = re.match(r"(?is)\s*<!doctype html><html><head>(.*?)</head><body>\s*(<!DOCTYPE html>.*)$", s)
+    if not m:
+        return s
+    host_head, rest = m.group(1), m.group(2)
+    end = rest.rfind("</body>")
+    inner_end = rest.find("</body>\n</html>")
+    if inner_end < 0 or end <= inner_end:
+        return s
+    inner, late = rest[:inner_end], rest[inner_end + len("</body>\n</html>"):end]
+    style = "".join(re.findall(r"(?is)<style>.*?</style>", host_head))
+    inner = inner.replace("<head>", "<head>" + style, 1)
+    return inner + late + "</body>\n</html>\n"
+
+
 def main(app_html, photos, films):
     s = open(app_html, encoding="utf-8").read()
 
     # 1) bake studio settings just before the app's first render
-    bake = ("/* public site: studio settings baked in */try{"
+    bake = ("/* public site: studio settings baked in */window.SA_SITE=true;try{"
             f"ROOMCFG={js(load_state('room.json', None))};"
             f"Object.assign(LIGHTS,{js(load_state('lights.json', {}))});"
             f"Object.assign(EDB,{js(load_state('editions.json', {}))});"
@@ -81,6 +104,7 @@ def main(app_html, photos, films):
             moved += 1
     s = s[:i] + "const PACK=" + json.dumps(pack, separators=(",", ":"), ensure_ascii=False) + ";" + s[j:]
 
+    s = unwrap(s)
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(s)
 
@@ -90,10 +114,26 @@ def main(app_html, photos, films):
     with open(os.path.join(OUT, "_headers"), "w") as f:
         f.write("/i/*\n  Cache-Control: public, max-age=31536000, immutable\n"
                 "/a/*\n  Cache-Control: public, max-age=31536000, immutable\n"
-                "/p/*\n  Cache-Control: public, max-age=604800\n"
+                "/p/*\n  Cache-Control: public, max-age=86400\n"
                 "/v/*\n  Cache-Control: public, max-age=604800\n"
                 "/\n  Cache-Control: no-cache\n"
                 "/index.html\n  Cache-Control: no-cache\n")
+    # 4) search-engine pages, then the home page's own head
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import seo
+    site = load_state("site.json", {}).get("url", "https://sa-editions.com")
+    brand = os.path.join(STATE, "brand")
+    org, pieces = seo.build(OUT, os.path.dirname(os.path.abspath(__file__)), site,
+                            {n: os.path.join(brand, n) for n in ("sa-logo.png", "sa-k64.png", "sa-w64.png", "sa-apple180.png")})
+    head, noscript = seo.home_head(site, org, pieces)
+    if s.count("<title>Sa</title>") != 1:
+        raise SystemExit("home <title> not found exactly once")
+    s = s.replace("<title>Sa</title>", head, 1)
+    s = re.sub(r"<html lang=\"fa\" dir=\"rtl\">", '<html lang="en" dir="ltr">', s, count=1)
+    s = s.replace("<body>", "<body>" + noscript, 1)
+    with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
+        f.write(s)
+    print(f"wrote {len(pieces)} piece pages, /pieces/, /about/, sitemap.xml, robots.txt for {site}")
     size = os.path.getsize(os.path.join(OUT, "index.html"))
     print(f"moved {moved} pictures out of the page; index.html is now {size/1e6:.1f} MB")
 
