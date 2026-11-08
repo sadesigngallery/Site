@@ -2260,6 +2260,30 @@ html:root body .ov.menu,html:root body .ov.menu .mlist>a,html:root body .ov.menu
 body.certpg .bar .mark{visibility:hidden}
 .certsign{display:flex;justify-content:center;margin:56px 0 24px}
 .certsign img{width:132px;height:auto;opacity:.92}
+/* v219 certificate page: one screen, paper and graphite, italic entries, fountain-pen signature */
+body.certpg{--paper:#f2eee4;--ink:#3e3e3c;--gph:#4a4a47;background-color:#f2eee4!important;
+ background-image:radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.55),rgba(255,255,255,0) 70%),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42  0 0 0 0 .38  0 0 0 0 .31  0 0 0 .09 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>")!important;background-attachment:fixed!important}
+html.noscroll body.certpg{overflow:hidden!important}
+body.certpg .bar,body.certpg #homebar,body.certpg main.page{background:transparent!important;box-shadow:none!important;border:0!important}
+body.certpg #foot{display:none!important}
+body.certpg .bar *,body.certpg #menuB2,body.certpg #searchB2,body.certpg #bag,body.certpg #left .back,body.certpg .back{color:var(--gph)!important}
+body.certpg .certp{height:calc(100svh - var(--hdh,118px) - 40px);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;padding-top:4px!important;padding-bottom:8px!important;overflow:hidden;color:var(--gph)}
+body.certpg .certp .crumb{display:none}
+body.certpg .certp .pt{font-family:"Cormorant Garamond",Georgia,serif!important;font-style:italic;font-weight:500!important;color:var(--gph)!important;font-size:clamp(1.6rem,6vw,2.2rem)!important;margin:0 0 4px!important}
+body.certpg .certp .lead2{font-size:.78rem!important;line-height:1.5!important;color:#6a6a66!important;margin:0 auto 6px!important}
+body.certpg .certf{gap:clamp(4px,1.3svh,12px)!important;margin-top:2px!important}
+body.certpg .certf label{color:#6a6a66!important;font-size:.64rem!important;gap:0!important}
+body.certpg .certf input,body.certpg .certf select{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif!important;font-style:italic!important;font-size:1.22rem!important;color:var(--ink)!important;padding:4px 2px 5px!important;border-bottom:1px solid rgba(74,74,71,.45)!important;-webkit-text-fill-color:var(--ink)}
+body.certpg .certf input::placeholder{font-style:italic;color:rgba(74,74,71,.45)}
+body.certpg .certf input:focus,body.certpg .certf select:focus{border-bottom-color:var(--ink)!important}
+body.certpg .certf .addbtn,body.certpg .certout .addbtn{color:var(--gph)!important;-webkit-text-fill-color:var(--gph)!important;border-color:rgba(74,74,71,.55)!important;background:transparent!important;margin-top:6px}
+body.certpg .certsign{margin:auto 0 0!important;padding-top:6px}
+body.certpg .certsign img{width:min(120px,30vw)!important;height:auto!important;opacity:1}
+@media (max-height:720px){body.certpg .certp .lead2{display:none}body.certpg .certf label{font-size:.58rem!important}body.certpg .certf input,body.certpg .certf select{font-size:1.1rem!important;padding:2px 2px 3px!important}body.certpg .certsign img{width:96px!important}body.certpg .certf .addbtn{padding-top:8px!important;padding-bottom:8px!important}}
+body.certpg .certp.issued .pt,body.certpg .certp.issued .lead2{display:none}
+body.certpg .certout{margin:0;display:flex;flex-direction:column;align-items:center;min-height:0;flex:1 1 auto}
+body.certpg .certout img{width:auto!important;max-width:100%;max-height:calc(100svh - var(--hdh,118px) - 170px);object-fit:contain}
+body.certpg .certout figcaption{margin-top:10px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,#phil.pa .pw{opacity:1!important;transform:none!important;filter:none!important}}
 .v3d{position:relative;margin:0 0 4px;background:linear-gradient(to bottom,#FFFFFF 0%,#F6F6F5 62%,#EDEDEB 100%)}
 .v3d canvas{display:block;width:100%;aspect-ratio:1/1;max-height:78vh;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .9s ease}
@@ -3725,7 +3749,8 @@ let CERTD={};
 function certNo(x,d){let h=2166136261;const s=x.id+"|"+d.no+"|"+d.name+"|"+d.date;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return `SA-${x.id.replace(/[^a-z]/g,"").slice(0,3).toUpperCase()}-${(d.date||"").slice(0,4)}-${String(d.no).padStart(String(edTotal(x)).length,"0")}-${(h>>>0).toString(36).toUpperCase().slice(0,5)}`}
 function certColours(){return [["black","Black · مشکی"],["white","White · سفید"]].concat(PRESETS.filter(p=>p[0]!=="SA-01"&&p[0]!=="SA-02").map(p=>[p[0],`${p[0]} · ${p[2]} · ${p[3]}`]))}
 function renderCert(id){
-  onIndex=false; const x=byId(id); if(!x){location.hash="#/";return} document.body.classList.add("certpg");
+  onIndex=false; const x=byId(id); if(!x){location.hash="#/";return} document.body.classList.add("certpg"); document.documentElement.classList.add("noscroll");
+  if(!document.getElementById("cgfont")){const l=document.createElement("link");l.id="cgfont";l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap";document.head.appendChild(l)}
   const E=et(),N=edTotal(x),e=EDS[x.id],today=new Date().toISOString().slice(0,10);
   const d=CERTD[id]||(CERTD[id]={name:"",no:Math.min(N,(e?e.sold:0)+1),col:"white",custom:"",date:today,place:""});
   view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><h1 class="pt">${E.cert}</h1><p class="lead2">${E.hint}</p>
@@ -3741,13 +3766,13 @@ function renderCert(id){
    <figure class="certout" id="certout" hidden><img id="certimg" alt="${E.cert}"><figcaption><button type="button" class="addbtn solidpill" id="certsave">${E.save}</button><button type="button" class="addbtn" id="certedit">${E.edit}</button></figcaption></figure>
    <div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"></div>
   </main>`;
-  {const sg=$("#certsg"),play=()=>{sg.src="p/sa-sign.webp?t="+Date.now()};if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){play();io.disconnect()}}),{threshold:.6});io.observe(sg)}else play()}
+  {const sg=$("#certsg");setTimeout(()=>{sg.src="p/sa-sign.webp?t="+Date.now()},500)}
   left.innerHTML=menuBtn(); rail.style.display="none";
   const f=$("#certf");
   f.col.onchange=()=>{f.querySelector(".cfc").hidden=f.col.value!=="custom"};
   f.onsubmit=async ev=>{ev.preventDefault();Object.assign(d,{name:f.name.value.trim(),no:Math.max(1,Math.min(N,+f.no.value||1)),col:f.col.value,custom:f.custom.value.trim(),date:f.date.value||today,place:f.place.value.trim()});
     if(!d.name){$("#cerr").hidden=false;f.name.focus();return}$("#cerr").hidden=true;
-    const cv=await drawCert(x,d);const url=cv.toDataURL("image/png");$("#certimg").src=url;f.hidden=true;$("#certout").hidden=false;$("#certout").scrollIntoView({block:"start",behavior:"smooth"});
+    const cv=await drawCert(x,d);const url=cv.toDataURL("image/png");$("#certimg").src=url;f.hidden=true;$("#certout").hidden=false;view.querySelector(".certp").classList.add("issued");
     $("#certsave").onclick=async()=>{const fn=`SA-Certificate-${x.en.replace(/\s+/g,"-")}-${String(d.no).padStart(String(N).length,"0")}.png`;
       try{const dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null;if(dl){const blob=await new Promise(r=>cv.toBlob(r,"image/png"));await dl.save({filename:fn,data:blob});return}}catch(err){if(err&&err.code==="declined")return}
       const a=document.createElement("a");a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove()};
@@ -3765,7 +3790,7 @@ async function drawCert(x,d){
   const wrap=(txt,xx,y,maxW,font,col,lh,dir,align)=>{g.font=font;g.direction=dir||"ltr";const ws=txt.split(/\s+/);let ln="",yy=y;const out=[];ws.forEach(w=>{const t_=ln?ln+" "+w:w;if(g.measureText(t_).width>maxW&&ln){out.push(ln);ln=w}else ln=t_});if(ln)out.push(ln);out.forEach(l=>{tx(l,xx,yy,font,col,align||(dir==="rtl"?"right":"left"),dir);yy+=lh});return yy};
   const logo=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=LOGO});
   if(logo){const lw=210,lh=lw*logo.height/logo.width;g.drawImage(logo,W/2-lw/2,150,lw,lh)}
-  sp("DESIGN",W/2,345,`300 26px ${LAT}`,mute,10,"center");
+  sp("EDITIONS",W/2,345,`300 26px ${LAT}`,mute,10,"center");
   sp("CERTIFICATE OF AUTHENTICITY",W/2,450,`300 40px ${LAT}`,ink,14,"center");
   tx("گواهی اصالت اثر",W/2,515,`300 38px ${FA}`,mute,"center","rtl");
   g.strokeStyle=line;g.lineWidth=1.2;g.beginPath();g.moveTo(W/2-60,560);g.lineTo(W/2+60,560);g.stroke();
