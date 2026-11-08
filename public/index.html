@@ -2015,7 +2015,8 @@ html[lang="fa"] .certf label,html[lang="ar"] .certf label{letter-spacing:0;text-
 .certf input:focus,.certf select:focus{outline:none;border-bottom-color:#000!important}
 .certf button,.certf .addbtn{justify-self:center}
 /* v207 home: full-screen film, the words on the film, the index only on demand */
-#idx>.hvid.hvtop.vland{aspect-ratio:auto!important;height:100vh!important;height:100svh!important}
+#idx>.hvid.hvtop{aspect-ratio:auto!important;height:100vh!important;height:100svh!important;min-height:-webkit-fill-available;background-color:#cfcfcf!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+#idx>.hvid.hvtop video.vmain{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important}
 #idx>.hvid.hvtop video.vmain{transform:scale(1.16);transform-origin:50% 42%}
 #idx>.hvid.hvtop::after{content:"";position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.46));pointer-events:none;z-index:1}
 .hvtop .intro.onfilm{position:absolute!important;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 92px);z-index:3;margin:0!important;padding:0 14px!important;text-align:center;pointer-events:none;filter:drop-shadow(0 1px 10px rgba(0,0,0,.28))}
@@ -2880,6 +2881,13 @@ function renderCatalogue(k){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en;if(!Q.ca
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
   $("#cgPrint").onclick=()=>{try{window.print()}catch(_){}};
 }
+/* v208: the home film always fills the phone screen (iPhone: real visible height, starts at the very top, still frame covers if autoplay is blocked) */
+function fitFilm(){const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,H=Math.round(Math.max(innerHeight,vv?vv.height:0));
+  hv.style.setProperty("height",H+"px","important");
+  if(scrollY<4){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
+  const vd=hv.querySelector("video.vmain");if(vd){const po=vd.getAttribute("poster");if(po){hv.style.backgroundImage=`url("${po}")`;vd.removeAttribute("poster")}
+    if(vd.paused){const p=vd.play&&vd.play();if(p&&p.catch)p.catch(()=>{})}}}
+{let fw=innerWidth;const re=()=>{if(innerWidth!==fw||scrollY<40){fw=innerWidth;fitFilm()}};addEventListener("resize",re);addEventListener("orientationchange",()=>setTimeout(fitFilm,300));if(window.visualViewport)visualViewport.addEventListener("resize",re);addEventListener("pageshow",()=>setTimeout(fitFilm,50))}
 let IDXOPEN=0;
 function openIdx(){IDXOPEN=1;if(!document.body.classList.contains("idxhide"))return;document.body.classList.remove("idxhide");try{layoutGrids()}catch(_){}try{dispatchEvent(new Event("resize"))}catch(_){}}
 addEventListener("click",e=>{if(e.target.closest&&e.target.closest(".bar .logo,.bar .mark"))IDXOPEN=0},true);
@@ -2960,7 +2968,7 @@ function renderIndex(){
   }
   h.push(`<div class="totopw"><button type="button" class="totop" id="totop" aria-label="Top"><svg viewBox="0 0 24 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M12 38V3"/><path d="M4 11l8-8 8 8"/></svg></button></div><div class="tailspace"></div></main>`);
   view.innerHTML=h.join("");
-  {const hv=view.querySelector("#idx>.hvtop"),it=view.querySelector("#idx>.intro");if(hv&&it){it.classList.add("onfilm");hv.appendChild(it)}}
+  {const hv=view.querySelector("#idx>.hvtop"),it=view.querySelector("#idx>.intro");if(hv&&it){it.classList.add("onfilm");hv.appendChild(it)}fitFilm();requestAnimationFrame(fitFilm);setTimeout(fitFilm,400)}
   left.innerHTML=menuBtn(); rail.style.display="flex"; langrow.style.display="flex";
   $("#sortSel").onchange=e=>{sortMode=e.target.value;renderIndex();idxStart()};
   $("#famSel").onchange=e=>{famFilter=e.target.value;renderIndex();idxStart()};
