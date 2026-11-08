@@ -2256,6 +2256,10 @@ html:root body .ov.menu,html:root body .ov.menu .mlist>a,html:root body .ov.menu
 .revl img{width:76px;height:52px;object-fit:cover;border-radius:6px;background:#eee;display:block}
 .revl small{font-size:.72rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .revl .rx{width:36px;height:36px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:.9rem;color:#333;cursor:pointer}
+/* v218 certificate page */
+body.certpg .bar .mark{visibility:hidden}
+.certsign{display:flex;justify-content:center;margin:56px 0 24px}
+.certsign img{width:132px;height:auto;opacity:.92}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,#phil.pa .pw{opacity:1!important;transform:none!important;filter:none!important}}
 .v3d{position:relative;margin:0 0 4px;background:linear-gradient(to bottom,#FFFFFF 0%,#F6F6F5 62%,#EDEDEB 100%)}
 .v3d canvas{display:block;width:100%;aspect-ratio:1/1;max-height:78vh;touch-action:pan-y;cursor:grab;opacity:0;transition:opacity .9s ease}
@@ -3194,7 +3198,7 @@ function filmPrep(vd){if(!vd||vd._prep)return;vd._prep=1;try{vd.muted=true;vd.de
   go()}
 function vidTop(){{const v0=document.querySelector(".hvtop video");if(v0)filmPrep(v0)}const bar=$(".bar"),v=$(".hvtop");{const ic=document.querySelector("#menuB2 circle");if(ic){const r=ic.getBoundingClientRect();document.documentElement.style.setProperty("--dotx",(r.left+r.width/2-3.5)+"px")}}if(bar)document.documentElement.style.setProperty("--hdh",bar.offsetHeight+"px");
   if(v){v.querySelectorAll(".hvt").forEach(a=>a.onclick=e=>{e.preventDefault();e.stopPropagation();v.querySelectorAll(".hvt").forEach(q=>q.classList.toggle("tap",q===a));
-      setTimeout(()=>{if(a.dataset.go&&onIndex){openIdx();requestAnimationFrame(()=>requestAnimationFrame(()=>goCat(a.dataset.go,true)))}else location.hash=a.getAttribute("href");setTimeout(()=>a.classList.remove("tap"),900)},380)});
+      setTimeout(()=>{if(a.dataset.go&&onIndex){openIdx();requestAnimationFrame(()=>requestAnimationFrame(()=>{goCat(a.dataset.go,false);setTimeout(()=>goCat(a.dataset.go,false),350)}))}else location.hash=a.getAttribute("href");setTimeout(()=>a.classList.remove("tap"),900)},380)});
     const vd=v.querySelector("video"),bf=parseFloat(v.dataset.bright);if(vd&&onIndex){v.querySelectorAll("video").forEach(vv=>{const sl=()=>{vv.playbackRate=.6};sl();vv.addEventListener("loadedmetadata",sl);vv.addEventListener("play",sl)})}
     if(vd&&bf){const upd=()=>{if(v._smp)return;const on=vd.currentTime>=bf;v.classList.toggle("bright",on);document.body.classList.toggle("vbright",on)};vd.addEventListener("timeupdate",upd);vd.addEventListener("seeked",upd)}
     else document.body.classList.remove("vbright");
@@ -3721,7 +3725,7 @@ let CERTD={};
 function certNo(x,d){let h=2166136261;const s=x.id+"|"+d.no+"|"+d.name+"|"+d.date;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return `SA-${x.id.replace(/[^a-z]/g,"").slice(0,3).toUpperCase()}-${(d.date||"").slice(0,4)}-${String(d.no).padStart(String(edTotal(x)).length,"0")}-${(h>>>0).toString(36).toUpperCase().slice(0,5)}`}
 function certColours(){return [["black","Black · مشکی"],["white","White · سفید"]].concat(PRESETS.filter(p=>p[0]!=="SA-01"&&p[0]!=="SA-02").map(p=>[p[0],`${p[0]} · ${p[2]} · ${p[3]}`]))}
 function renderCert(id){
-  onIndex=false; const x=byId(id); if(!x){location.hash="#/";return}
+  onIndex=false; const x=byId(id); if(!x){location.hash="#/";return} document.body.classList.add("certpg");
   const E=et(),N=edTotal(x),e=EDS[x.id],today=new Date().toISOString().slice(0,10);
   const d=CERTD[id]||(CERTD[id]={name:"",no:Math.min(N,(e?e.sold:0)+1),col:"white",custom:"",date:today,place:""});
   view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><h1 class="pt">${E.cert}</h1><p class="lead2">${E.hint}</p>
@@ -3735,7 +3739,9 @@ function renderCert(id){
     <button type="submit" class="addbtn solidpill">${E.issue}</button>
    </form>
    <figure class="certout" id="certout" hidden><img id="certimg" alt="${E.cert}"><figcaption><button type="button" class="addbtn solidpill" id="certsave">${E.save}</button><button type="button" class="addbtn" id="certedit">${E.edit}</button></figcaption></figure>
+   <div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"></div>
   </main>`;
+  {const sg=$("#certsg"),play=()=>{sg.src="p/sa-sign.webp?t="+Date.now()};if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){play();io.disconnect()}}),{threshold:.6});io.observe(sg)}else play()}
   left.innerHTML=menuBtn(); rail.style.display="none";
   const f=$("#certf");
   f.col.onchange=()=>{f.querySelector(".cfc").hidden=f.col.value!=="custom"};
@@ -4831,7 +4837,7 @@ function route(){
   const tr_=$("#tray"); if(tr_) tr_.classList.remove("on");
   const h=location.hash.replace(/^#\/?/,"").split("/");
   if(ov.classList.contains("ss")||ov.classList.contains("menu")) closeOv();
-  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp","setsp");
+  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp","setsp","certpg");
   if(APP===3)document.body.classList.add("dark","a3");
   if(APP===3&&!["jewellery","sculpture","love","care","about","contact"].includes(h[0])){renderApp3Home();scrollTo(0,0);activeCat=null;return}
   if(APP!==3&&["jewellery","sculpture","love"].includes(h[0])){location.replace("#/");return}
