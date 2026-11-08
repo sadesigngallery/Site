@@ -4586,13 +4586,13 @@ function openMenu(){
    <div class="mtop mtop3"><button type="button" class="mhome menuicon" id="mx" aria-label="Home"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button></div>
    <nav class="mlist">
    ${APP===3?"":`<a class="mmain mallt" href="${window.SA_SITE?'/pieces/':'#/all'}" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{if(window.SA_SITE){location.href='/pieces/';return}try{closeOv()}catch(_){}sortMode='cat';famFilter='all';GROUP=null;if(location.hash!=='#/all')location.hash='#/all';else{route()}},1350)"><i class="pm"><s></s><s></s></i><span>${ALLW[L]||ALLW.en}</span></a>`}
-   ${APP===3?"":`<a class="mmain mdisc" href="#/discover"><span>${DISC[L]||DISC.en}</span></a><a class="mmain mtrade" href="#/trade"><span>${TRADEN[L]||TRADEN.en}</span></a>`}
    ${APP===3?`<a class="a3m" href="#/sculpture"><span>${LOVEN[L]||LOVEN.en}</span></a><a class="a3m" href="#/jewellery"><span>${FFC[L]||FFC.en}</span></a>`
    :`${grp(T_.design,"#/c/dining",["dining","desk","side","coffee","console","mirror","light","lounge","bench","chair","armchair","sofa"].filter(catOf).map(id=>catItems(catOf(id))))}
    ${grp(T_.piano,"#/k/piano",P.filter(x=>x.cat==="piano").map(x=>[`#/p/${x.id}`,mName(x)]))}
    ${grp(MIXN[L]||MIXN.en,"#/sets",SETS.map(q=>[`#/set/${q.id}`,sN(q)]))}`}
    <a class="mmain" href="#/subjects" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/subjects'},1350)"><i class="ar"><s></s><s></s></i><span>${SUBJN[L]||SUBJN.en}</span></a>
    <a class="mmain" href="#/editions" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/editions'},1350)"><i class="ar"><s></s><s></s></i><span>${EDTN[L]||EDTN.en}</span></a>
+   ${APP===3?"":`<a class="mmain mdisc" href="#/discover" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/discover'},1350)"><i class="ar"><s></s><s></s></i><span>${DISC[L]||DISC.en}</span></a><a class="mmain mtrade" href="#/trade" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/trade'},1350)"><i class="ar"><s></s><s></s></i><span>${TRADEN[L]||TRADEN.en}</span></a>`}
    <a href="#/care"><span>${T_.care}</span></a>
    <a href="#/about"><span>${T_.aboutT}</span></a><a href="#/contact"><span>${L==="fa"?"تماس با ما":T_.contact}</span></a>
    </nav>
