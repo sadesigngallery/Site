@@ -92,13 +92,13 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
     ogi = f'<meta property="og:image" content="{E(absu(site, og))}"><meta name="twitter:image" content="{E(absu(site, og))}">' if og else ""
     return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Design"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/sa-k64.png" media="(prefers-color-scheme: light)"><link rel="icon" href="/sa-w64.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="/sa-apple180.png">
 <style>{CSS}</style>{j}</head><body>
-<header class="sb"><a href="/" aria-label="Sa Design"><img src="/sa-logo.png" alt="Sa Design logo" width="120" height="46"></a><span>DESIGN</span></header>
+<header class="sb"><a href="/" aria-label="Sa Editions"><img src="/sa-logo.png" alt="Sa Editions logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="https://wa.me/989397133918" rel="noopener">WhatsApp</a><a href="/pieces/">All pieces</a></nav>
+<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="/pieces/">All pieces</a></nav>
 <p>Copyright © 2026 Sa Inc. All rights reserved</p></footer></body></html>"""
 
 
@@ -114,7 +114,7 @@ def build(out_dir, tools_dir, site, assets):
         if src and os.path.exists(src):
             with open(src, "rb") as f, open(os.path.join(out_dir, name), "wb") as g: g.write(f.read())
     pieces = data["pieces"]
-    org = {"@context": "https://schema.org", "@type": "Organization", "name": "Sa Design", "alternateName": ["Sa", "SA Design House", "Sa Editions"],
+    org = {"@context": "https://schema.org", "@type": "Organization", "name": "Sa Editions", "alternateName": ["Sa", "SA Editions"],
            "url": site.rstrip("/") + "/", "logo": absu(site, "sa-logo.png"), "foundingDate": "2010",
            "founder": [{"@type": "Person", "name": "Alireza Emtiaz"}, {"@type": "Person", "name": "Saqar Khakdan"}],
            "email": "Sadesigngallery@gmail.com", "sameAs": ["https://www.instagram.com/sa_editions_/"],
@@ -127,15 +127,15 @@ def build(out_dir, tools_dir, site, assets):
         imgs = [i for i in [x["hero"]] + x["photos"] + ([x["drawing"]] if x["drawing"] else []) if i]
         og = og_image(out_dir, x["hero"] or x["thumb"], pid)
         cat1 = re.sub(r"s$", "", x["cat"]) if x["cat"] else ""
-        title = f"{x['name']} — {cat1} | Sa Design"
+        title = f"{x['name']} — {cat1} | Sa Editions"
         d0 = " ".join(x["desc"]) if x["desc"] else ""
         mat = dict(x["spec"]).get("Material", "")
-        desc = short(f"{x['name']} ({x['fa']}), {cat1.lower()} by Sa Design. {x['edition']}{'. ' if x['edition'] else ''}{mat + '. ' if mat else ''}{d0}")
+        desc = short(f"{x['name']} ({x['fa']}), {cat1.lower()} by Sa Editions. {x['edition']}{'. ' if x['edition'] else ''}{mat + '. ' if mat else ''}{d0}")
         dims = "".join(f"<div><small>{E(k)}</small><b>{E(v)}</b></div>" for k, v in x["dims"])
         spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in x["spec"])
-        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Design — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
+        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
         dr = f'<img src="/{E(x["drawing"])}" alt="{E(x["name"])} — technical drawing" loading="lazy">' if x["drawing"] else ""
-        hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Design" width="1600" height="1600">' if x["hero"] else ""
+        hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions" width="1600" height="1600">' if x["hero"] else ""
         ed = f'<div class="ed"><b>{E(x["edition"])}</b>{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}</div>' if x["edition"] else ""
         body = f"""<main><p class="crumb"><a href="/pieces/">All pieces</a> / {E(x['cat'])}</p><h1>{E(x['name'])}</h1><p class="fa" lang="fa" dir="rtl">{E(x['fa'])}</p><p class="cat">{E(cat1)}{' · ' + str(x['year']) if x['year'] else ''}</p>
 {hero}<div class="dims">{dims}</div>{ed}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
@@ -143,10 +143,10 @@ def build(out_dir, tools_dir, site, assets):
 <div class="ph">{ph}{dr}</div></main>"""
         prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
                 "category": cat1, "description": d0 or desc, "image": [absu(site, i) for i in imgs], "url": site.rstrip("/") + path,
-                "brand": {"@type": "Brand", "name": "Sa Design"}, "manufacturer": {"@type": "Organization", "name": "Sa Design"}}
+                "brand": {"@type": "Brand", "name": "Sa Editions"}, "manufacturer": {"@type": "Organization", "name": "Sa Editions"}}
         if mat: prod["material"] = mat
         crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Sa Design", "item": site.rstrip("/") + "/"},
+            {"@type": "ListItem", "position": 1, "name": "Sa Editions", "item": site.rstrip("/") + "/"},
             {"@type": "ListItem", "position": 2, "name": "All pieces", "item": site.rstrip("/") + "/pieces/"},
             {"@type": "ListItem", "position": 3, "name": x["name"], "item": site.rstrip("/") + path}]}
         os.makedirs(os.path.join(out_dir, "p", pid), exist_ok=True)
@@ -164,7 +164,7 @@ def build(out_dir, tools_dir, site, assets):
             return None
         a = ts[0] / ts[1]; bh = 80; ih = bh / (b[3] - b[1]); iw = ih * a; bw = iw * (b[2] - b[0])
         left = bw / 2 + 2 - iw * (b[0] + b[2]) / 2; bot = 4 - ih * (1 - b[3])
-        return (f'<a href="/p/{E(x["id"])}/"><span class="eb" style="width:{bw + 4:.0f}px"><img src="/{E(x["thumb"])}" alt="{E(x["name"])} by Sa Design" loading="lazy" '
+        return (f'<a href="/p/{E(x["id"])}/"><span class="eb" style="width:{bw + 4:.0f}px"><img src="/{E(x["thumb"])}" alt="{E(x["name"])} by Sa Editions" loading="lazy" '
                 f'style="height:{ih:.1f}px;width:{iw:.1f}px;left:{left:.1f}px;bottom:{bot:.1f}px"></span><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>')
 
     def block(c, xs):
@@ -173,12 +173,12 @@ def build(out_dir, tools_dir, site, assets):
         if xs[0].get("catId") == "dining" and all(eqtile(x) for x in xs):
             return head + "<div class='eq'>" + "".join(eqtile(x) for x in xs) + "</div>"
         return head + "<div class='grid'>" + "".join(
-            f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by Sa Design" loading="lazy"><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>' for x in xs) + "</div>"
+            f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by Sa Editions" loading="lazy"><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>' for x in xs) + "</div>"
     body = "<main><h1>All pieces</h1>" + "".join(block(c, xs) for c, xs in groups.items()) + "</main>"
     os.makedirs(os.path.join(out_dir, "pieces"), exist_ok=True)
     with open(os.path.join(out_dir, "pieces", "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(site, "/pieces/", "All pieces — sculptural furniture, pianos and lighting | Sa Design",
-                     short("The full Sa Design collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
+        f.write(page(site, "/pieces/", "All pieces — sculptural furniture, pianos and lighting | Sa Editions",
+                     short("The full Sa Editions collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
                      body, "og/home.jpg", [org]))
     # about
     a = data.get("about") or {"title": "About SA", "paras": [], "bios": []}
@@ -187,8 +187,8 @@ def build(out_dir, tools_dir, site, assets):
            '<div class="cta"><a class="p" href="/">Enter the catalogue</a><a href="/#/contact">Contact</a></div></main>'
     os.makedirs(os.path.join(out_dir, "about"), exist_ok=True)
     with open(os.path.join(out_dir, "about", "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(site, "/about/", "About Sa Design — Alireza Emtiaz & Saqar Khakdan",
-                     short("Sa Design is a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan, working across Objects, Collectibles and Spaces. Every piece is made by hand in a limited edition."),
+        f.write(page(site, "/about/", "About Sa Editions — Alireza Emtiaz & Saqar Khakdan",
+                     short("Sa Editions is a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan, working across Objects, Collectibles and Spaces. Every piece is made by hand in a limited edition."),
                      body, "og/home.jpg", [org]))
     # home preview picture: the logo on white
     lg = os.path.join(out_dir, "sa-logo.png")
@@ -209,14 +209,14 @@ def build(out_dir, tools_dir, site, assets):
 
 
 def home_head(site, org, pieces):
-    title = "Sa — Sculptural furniture in limited editions | Sa Design"
-    desc = "Sa Design: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
-    web = {"@context": "https://schema.org", "@type": "WebSite", "name": "Sa Design", "alternateName": ["Sa", "Sa Editions"], "url": site.rstrip("/") + "/"}
+    title = "Sa — Sculptural furniture in limited editions | Sa Editions"
+    desc = "Sa Editions: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
+    web = {"@context": "https://schema.org", "@type": "WebSite", "name": "Sa Editions", "alternateName": ["Sa", "SA Editions"], "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
     head = (f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
-            f'<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Design"><meta property="og:title" content="{E(title)}">'
+            f'<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}">'
             f'<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(site.rstrip("/") + "/")}"><meta property="og:image" content="{E(absu(site, "og/home.jpg"))}">'
             f'<meta name="twitter:card" content="summary_large_image"><link rel="sitemap" type="application/xml" href="/sitemap.xml">'
             f'<script type="application/ld+json">{json.dumps(org, ensure_ascii=False)}</script><script type="application/ld+json">{json.dumps(web, ensure_ascii=False)}</script>')
-    noscript = f'<noscript><main><h1>Sa Design — sculptural furniture in limited editions</h1><p>{E(desc)}</p><ul>{links}</ul><p><a href="/about/">About</a> · <a href="/pieces/">All pieces</a></p></main></noscript>'
+    noscript = f'<noscript><main><h1>Sa Editions — sculptural furniture in limited editions</h1><p>{E(desc)}</p><ul>{links}</ul><p><a href="/about/">About</a> · <a href="/pieces/">All pieces</a></p></main></noscript>'
     return head, noscript

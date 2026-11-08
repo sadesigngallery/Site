@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the public SA Design site from the app page.
+"""Build the public Sa Editions site from the app page.
 
 Usage:
   python3 tools/build.py APP_HTML PHOTOS_DIR FILMS_DIR
