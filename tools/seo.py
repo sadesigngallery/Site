@@ -93,7 +93,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
     return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/sa-k64.png" media="(prefers-color-scheme: light)"><link rel="icon" href="/sa-w64.png" media="(prefers-color-scheme: dark)"><link rel="apple-touch-icon" href="/sa-apple180.png">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>{CSS}</style>{j}</head><body>
 <header class="sb"><a href="/" aria-label="Sa Editions"><img src="/sa-logo.png" alt="Sa Editions logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>

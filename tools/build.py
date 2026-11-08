@@ -131,6 +131,11 @@ def main(app_html, photos, films):
     s = s.replace("<title>Sa</title>", head, 1)
     s = re.sub(r"<html lang=\"fa\" dir=\"rtl\">", '<html lang="en" dir="ltr">', s, count=1)
     s = s.replace("<body>", "<body>" + noscript, 1)
+    # tab icons as real files: Safari ignores data: icons and falls back to a letter in a circle
+    for n, out in (("favicon.ico", "favicon.ico"), ("favicon-32.png", "favicon-32.png"), ("favicon-512.png", "favicon-512.png"), ("sa-apple180.png", "apple-touch-icon.png")):
+        shutil.copy(os.path.join(brand, n), os.path.join(OUT, out))
+    s = re.sub(r'<link rel="(?:icon|apple-touch-icon)"[^>]*>', "", s)
+    s = s.replace("</head>", '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head>', 1)
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(s)
     print(f"wrote {len(pieces)} piece pages, /pieces/, /about/, sitemap.xml, robots.txt for {site}")
