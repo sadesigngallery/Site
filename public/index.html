@@ -2162,10 +2162,16 @@ body.setsp .setcard small{display:block;font-size:.86rem!important;margin-top:4p
 body.setsp .setpage .setT,body.setsp .setpage .lead2,body.setsp .setnav p{text-align:center}
 body.setsp .setnav a span{font-size:.95rem}
 body.setsp .setgrid{gap:44px!important}
-.famrow a.xtra{cursor:default}.famrow a.xtra img{object-fit:cover;background:#d1d1d1}
+.famrow a.xtra{cursor:default}
+.famrow .ixt{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;opacity:0;transition:opacity .4s}
+.famrow .ixt.on{opacity:1}
+.famrow .ixt img{position:absolute!important;max-width:none!important;height:auto!important;aspect-ratio:auto!important;object-fit:fill!important;background:none!important}
+body.setsp .famrow a.xtra img{background:none!important}
+.famrow .ixt,body.setsp .famrow a.xtra img{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 6%,#000 80%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 91%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 6%,#000 80%,transparent 100%);mask-composite:intersect}.famrow a.xtra img{object-fit:cover;background:#d1d1d1}
 body.setsp main.page>h1.pt,body.setsp .setpage h1.setT,body.setsp .setcard b,body.setsp .setnav a span{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-weight:100!important;font-style:normal!important;text-transform:uppercase;font-stretch:85%;letter-spacing:.02em!important;color:#111!important}
-body.setsp .setcard b{font-size:1.7rem!important;line-height:1.25}
-body.setsp .setpage h1.setT{font-size:clamp(2rem,6.4vw,3rem)!important;line-height:1.2}
+body.setsp .setcard b{font-size:clamp(2rem,6.6vw,2.6rem)!important;line-height:1.2}
+body.setsp .setnav a span{font-size:1.25rem!important}
+body.setsp .setpage h1.setT{font-size:clamp(2.4rem,8vw,3.6rem)!important;line-height:1.15}
 html[lang=fa] body.setsp main.page>h1.pt,html[lang=fa] body.setsp .setpage h1.setT,html[lang=fa] body.setsp .setcard b,html[lang=fa] body.setsp .setnav a span{font-weight:300!important;font-family:inherit!important}
 body.setsp main.page>h1.pt,body.setsp main.page>.lead2{text-align:center!important;margin-left:auto!important;margin-right:auto!important}
 /* phones: the words sit lower on the film than on tablets and monitors */
@@ -2745,11 +2751,11 @@ const SETS=[
  {id:3,name:"Mazandaran Held in Weave",fa:"مازندران در تار و پود",imgs:["s3-01","s3-12","s3-14","s3-10","s3-21","s3-07"],pieces:["lams","re-a","ta","far","miyan","pe"],
   en:"The palette of this collection was drawn directly from the kilim itself. Colours were not approximated; they were carefully translated, so that every element resolves as part of a single composition.",
   f:"پالت رنگیِ این مجموعه مستقیماً از دلِ همان گلیم استخراج شد. رنگ‌ها تقریبی انتخاب نشدند، با دقت بازخوانی شدند تا همهٔ اجزا در یک ترکیب یکپارچه دیده شوند."},
- {id:5,name:"Madder Wash",fa:"آبرنگِ روناس",xtra:[{en:"Sliding side table",fa:"میز سایدِ کشویی",img:"p/s5-x1.webp?v=1"},{en:"Fabric sofa",fa:"کاناپهٔ پارچه‌ای",img:"p/s5-x2.webp?v=1"}],imgs:["s5-01","s5-02","s5-03","s5-04","s5-05","s5-06","s5-07","s5-08","s5-09","s5-10","s5-11","s5-12","s5-13","s5-14","s5-15","s5-16","s5-17","s5-18"],pieces:["saken","mad","sahn","ney"],
+ {id:5,name:"Madder Wash",fa:"آبرنگِ روناس",xtra:[{en:"Sliding side table",fa:"میز سایدِ کشویی",img:"p/s5-x1.webp?v=2"},{en:"Fabric sofa",fa:"کاناپهٔ پارچه‌ای",img:"p/s5-x2.webp?v=2"}],imgs:["s5-01","s5-02","s5-03","s5-04","s5-05","s5-06","s5-07","s5-08","s5-09","s5-10","s5-11","s5-12","s5-13","s5-14","s5-15","s5-16","s5-17","s5-18"],pieces:["saken","mad","sahn","ney"],
   en:"Madder is the root behind the reds of old kilims; a wash is what a watercolourist calls colour laid down wet. In this kilim the red never stops at a hard line: it bleeds into black and fades into chalk, as if the weave had been painted. Saken, Mad, Sahn and Ney were finished in that madder red and a softened terracotta, so the whole room reads as one wash of colour.",
   f:"روناس ریشه‌ای است که قرمزِ گلیم‌های کهن از آن می‌آید و آبرنگ، رنگی است که خیس روی کاغذ می‌نشیند. در این گلیم قرمز هیچ‌جا با خطی سخت تمام نمی‌شود؛ در سیاه نشت می‌کند و در رنگ گچی محو می‌شود، گویی بافت را با قلم‌مو کشیده‌اند. ساکن، مد، صحن و نی در همان قرمزِ روناسی و یک حناییِ ملایم پرداخت شدند تا کل فضا مثل یک لایهٔ آبرنگ دیده شود."}
 ];
-for(let k=1;k<=18;k++){const n="s5-"+String(k).padStart(2,"0");if(!IMG[n])IMG[n]="p/"+n+".webp?v=1"}
+for(let k=1;k<=18;k++){const n="s5-"+String(k).padStart(2,"0");if(!IMG[n])IMG[n]="p/"+n+".webp?v=2"}
 SETS.push({id:4,name:"Blue Grid Woven into Form",fa:"شبکهٔ آبی، بافته در فرم",imgs:["s4-01","s4-12","s4-16","s4-20","s4-22","s4-24","s4-33","s4-34","s4-13"],pieces:["mah","re-a","mad","te","nun"],en:"The “All Blue Carpet”, one of the rarest and most captivating examples of Persian weaving, served as the point of departure for this collection. More than a century after its creation, its uninterrupted field of blue, subtle tonal variations and tranquil rhythm of weave became the design language of the collection, lending the furniture a character defined by authenticity, serenity and depth.",f:"«فرش یکسره ‌آبی»، یکی از نادرترین و مسحورکننده‌ترین نمونه‌های هنر بافندگی ایرانی، نقطه آغاز شکل‌گیری این مجموعه بود. بیش از یک قرن پس از خلق آن، گستره یکپارچه آبی، ظرافت تغییرات رنگی و ریتم آرام بافت آن به زبان طراحی این مجموعه تبدیل شد و به مبلمان شخصیتی مبتنی بر اصالت، آرامش و عمق بخشید."});
 SETS.sort((a,b)=>a.id-b.id);
 const setsOf=id=>SETS.filter(s=>s.pieces.includes(id));
@@ -4340,6 +4346,8 @@ async function exportImage(){
 }
 
 /* ---------- mix & match ---------- */
+function ixThumb(id){const q=byId(id);if(!q)return "";const nn=(IX[q.cat]||{}).n,z=nn&&nn.z.find(v=>v.id===id),src=IMG["ix-"+q.cat];if(!z||!src)return "";return `<span class="ixt"><img src="${src}" data-ob="${z.ob.join(",")}" alt="" onload="ixFit(this)"></span>`}
+function ixFit(im){const [x,y,w,h]=im.dataset.ob.split(",").map(Number),W=im.naturalWidth,H=im.naturalHeight;if(!W||!H)return;const bw=w*W,bh=h*H,sd=Math.max(bw,bh)*1.1,cx=(x+w/2)*W,cy=(y+h/2)*H;im.style.width=(W/sd*100)+"%";im.style.left=(-(cx-sd/2)/sd*100)+"%";im.style.top=(-(cy-sd/2)/sd*100)+"%";im.parentElement.classList.add("on")}
 function renderSets(){
   onIndex=false; const T_=t(); document.body.classList.add("setsp");
   view.innerHTML=`<main class="page"><h1 class="pt">${t().mix}</h1><p class="lead2">${T_.setLead}</p>
@@ -4352,7 +4360,7 @@ function renderSet(sid){
   view.innerHTML=`<main class="page setpage"><div class="setcover"><img src="${IMG[s.imgs[0]]}" alt=""></div><div class="setbar"><p class="crumb"><a href="#/sets">← ${t().mix}</a></p>${s.collab===0?"":`<span class="collab" dir="ltr">Sa Editions × Lotfi House</span>`}</div>
    <h1 class="pt setT">${sN(s)}</h1><p class="lead2">${L==="fa"?s.f:((TX()&&TX().sets[s.id])||s.en)}</p>
    ${s.imgs.length>1?`<div class="sslide"><div class="strk">${s.imgs.slice(1).map((k,j)=>`<div class="sfr${j%2?" rv":""}"><img src="${IMG[k]}" alt="" data-j="${j+1}" draggable="false"></div>`).join("")}</div>${s.imgs.length>2?`<button type="button" class="snav l" aria-label="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="snav r" aria-label="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button><div class="sdots">${s.imgs.slice(1).map((_,j)=>`<i class="${j?"":"on"}"></i>`).join("")}</div>`:""}</div>`:""}
-   <h2 class="sub">${T_.piecesIn}</h2><div class="famrow wide">${s.pieces.map(id=>{const q=byId(id);return `<a href="#/p/${id}"><img src="${thumb(id)}" alt=""><span>${esc(q.en)}</span><small>${q.fa}</small></a>`}).join("")}${(s.xtra||[]).map(q=>`<a class="xtra" role="presentation"><img src="${q.img}" alt=""><span>${esc(q.en)}</span><small>${q.fa}</small></a>`).join("")}</div>
+   <h2 class="sub">${T_.piecesIn}</h2><div class="famrow wide">${s.pieces.map(id=>{const q=byId(id);return `<a href="#/p/${id}">${ixThumb(id)||`<img src="${thumb(id)}" alt="">`}<span>${esc(q.en)}</span><small>${q.fa}</small></a>`}).join("")}${(s.xtra||[]).map(q=>`<a class="xtra" role="presentation"><img src="${q.img}" alt=""><span>${esc(q.en)}</span><small>${q.fa}</small></a>`).join("")}</div>
    <p style="text-align:center;margin-top:22px"><button type="button" class="addbtn" id="addSet">+ ${T_.addSet}</button></p>
    <nav class="setnav"><p>${t().mix}</p>${SETS.map(q=>`<a href="#/set/${q.id}" class="${q.id==s.id?"on":""}"><img src="${IMG[q.imgs[0]]}" alt=""><span>${sN(q)}</span></a>`).join("")}</nav></main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
