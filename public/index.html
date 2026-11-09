@@ -2170,6 +2170,10 @@ body.setsp main.page>h1.pt,body.setsp main.page>.lead2{text-align:center!importa
 }
 /* v212 home: only the film, nothing to scroll until the index is opened */
 html.noscroll,html.noscroll body{overflow:hidden!important;height:100%;overscroll-behavior:none}
+html.noscroll #idx>.hvid.hvtop{width:108vw!important;max-width:none!important;margin-left:calc(50% - 54vw)!important;margin-right:calc(50% - 54vw)!important;left:auto!important}
+html.noscroll #idx>.hvid.hvtop .intro.onfilm{left:4vw!important;right:4vw!important}
+html.noscroll #idx>.hvid.hvtop .hvmenu{left:4vw!important;right:4vw!important}
+html.noscroll #idx>.hvid.hvtop .hvctl{right:calc(4vw + 10px)!important}
 
 body.idxhide #foot{display:none!important}
 body{background-color:#fff}
@@ -3037,7 +3041,10 @@ addEventListener("load",()=>setTimeout(fitTag,300));if(document.fonts&&document.
 function fitFilm(){fitTag();const hv=document.querySelector("#idx>.hvtop");if(!hv)return;const vv=window.visualViewport,vis=Math.round(Math.max(innerHeight,vv?vv.height:0));
   if(document.documentElement.classList.contains("noscroll")){
     /* as in v210: the film is as tall as the screen with Safari's bars retracted, so it runs under the bottom bar */
-    LVH=Math.max(LVH,lvh());const H=Math.max(vis,LVH);hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb",Math.max(0,H-vis)+"px")}
+    /* the film frame is larger than any browser window, in height and width; the page cannot scroll, so the film always fills the screen */
+    LVH=Math.max(LVH,lvh());const sw=screen.width||0,sh=screen.height||0,SH=innerWidth>innerHeight?Math.min(sw,sh):Math.max(sw,sh);
+    const H=Math.round(Math.max(vis,LVH,SH)*1.08);if(!hv._H||H>hv._H||Math.abs(innerWidth-(hv._W||0))>2){hv._H=H;hv._W=innerWidth;hv.style.setProperty("height",H+"px","important")}
+    const vt=vv?vv.offsetTop:0;hv.style.setProperty("--tb",Math.max(0,Math.round(hv._H-vis-vt))+"px")}
   else{const H=vis;hv._H=0;hv.style.setProperty("height",H+"px","important");hv.style.setProperty("--tb","0px");}
   if(scrollY<4){const r=hv.getBoundingClientRect();if(Math.abs(r.top)>.5){const mt=parseFloat(getComputedStyle(hv).marginTop)||0;hv.style.setProperty("margin-top",(mt-r.top)+"px","important")}}
   const vd=hv.querySelector("video.vmain");if(vd){const po=vd.getAttribute("poster");if(po){hv.style.backgroundImage=`url("${po}")`;vd.removeAttribute("poster")}
@@ -3095,6 +3102,9 @@ function filmChain(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv.qu
   vd.addEventListener("ended",()=>{if(!vd.isConnected)return;FILMI=(FILMI+1)%FILMS.length;const F=FILMS[FILMI];vd.style.transition="opacity .6s ease";vd.style.opacity="0";
     setTimeout(()=>{if(!vd.isConnected)return;if(F.po)hv.style.backgroundImage=`url("${F.po}")`;vd.setAttribute("src",F.src);vd._prep=0;filmPrep(vd);vd.playbackRate=F.rate||.6;
       const on=()=>{vd.playbackRate=F.rate||.6;vd.style.opacity="1";vd.removeEventListener("playing",on)};vd.addEventListener("playing",on);setTimeout(on,1500)},600)})}
+/* while the home is on the film, nothing moves the page */
+document.addEventListener("touchmove",e=>{if(document.documentElement.classList.contains("noscroll")&&!(e.target.closest&&e.target.closest(".ov,.sheet,input,textarea,select")))e.preventDefault()},{passive:false});
+document.addEventListener("wheel",e=>{if(document.documentElement.classList.contains("noscroll")&&!(e.target.closest&&e.target.closest(".ov,.sheet")))e.preventDefault()},{passive:false});
 let IDXOPEN=0;
 function openIdx(){IDXOPEN=1;document.documentElement.classList.remove("noscroll");try{fitFilm()}catch(_){}if(!document.body.classList.contains("idxhide"))return;document.body.classList.remove("idxhide");try{layoutGrids()}catch(_){}try{dispatchEvent(new Event("resize"))}catch(_){}}
 addEventListener("click",e=>{if(e.target.closest&&e.target.closest(".bar .logo,.bar .mark"))IDXOPEN=0},true);
