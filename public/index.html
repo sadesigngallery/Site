@@ -2018,7 +2018,7 @@ html[lang="fa"] .certf label,html[lang="ar"] .certf label{letter-spacing:0;text-
 #idx>.hvid.hvtop{aspect-ratio:auto!important;height:100vh!important;height:100lvh!important;min-height:-webkit-fill-available;background-color:#cfcfcf!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
 #idx>.hvid.hvtop video.vmain{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important}
 #idx>.hvid.hvtop video.vmain{transform:translate(var(--fx,0%),var(--fy,0%)) scale(var(--fz,1.16));transform-origin:50% 42%}
-#idx>.hvid.hvtop::after{content:"";position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.46));pointer-events:none;z-index:1}
+#idx>.hvtop::after{content:none!important;display:none!important}
 .hvtop .intro.onfilm{position:absolute!important;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 92px + var(--tb,0px));z-index:3;margin:0!important;padding:0 14px!important;text-align:center;pointer-events:none;filter:drop-shadow(0 1px 10px rgba(0,0,0,.28))}
 .hvtop .intro.onfilm .phil{color:#fff!important}
 .hvtop .intro.onfilm #phil::after{display:none!important}
@@ -2301,6 +2301,8 @@ body.certpg .certout figcaption{margin-top:10px}
 .ffbar .ffbs{display:flex;gap:8px;justify-content:flex-end}
 .ffbar button{border:1px solid rgba(255,255,255,.5);background:none;color:#fff;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer}
 .ffbar .ffo{background:#fff;color:#111;font-weight:600}
+.ffzb{position:absolute;right:calc(4vw + 14px);top:calc(var(--hdh,118px) + 76px);z-index:7;display:grid;gap:8px}
+.ffzb button{width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#111;font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .ffz{position:absolute;right:calc(4vw + 14px);top:calc(var(--hdh,118px) + 20px);z-index:7;width:44px;height:44px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:ns-resize;touch-action:none;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .ffg{position:absolute;left:-2px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:ns-resize;touch-action:none;pointer-events:auto;z-index:8;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .hvtop .intro.onfilm .ffgi{top:0;transform:none}
@@ -3140,7 +3142,7 @@ function ffEditor(){const hv=document.querySelector("#idx>.hvtop");if(!hv||hv.qu
   b.onclick=e=>{e.stopPropagation();ffOpen(hv)}}
 function ffOpen(hv){if(FFEDIT)return;FFEDIT=true;hv.classList.add("ffon");const k=ffKey(),start=ffGet(),prevLocal=FFLOCAL[k];let f=Object.assign({},start);
   const set=()=>{FFLOCAL[k]=Object.assign({},f);filmFitApply()};
-  const bar=document.createElement("div");bar.className="ffbar";const FA=L==="fa";bar.innerHTML=`<span class="ffk"></span><span class="ffh">${FA?"فیلم را بکشید تا جابه‌جا شود · ⤡ برای بزرگ‌نمایی · ≡ برای جابه‌جایی نوشته‌ها و لینک‌ها":"Drag the film to move it · ⤡ to zoom · ≡ to move the words and the links"}</span><div class="ffbs"><button type="button" class="ffr">${FA?"بازنشانی":"Reset"}</button><button type="button" class="ffc">${FA?"انصراف":"Cancel"}</button><button type="button" class="ffo">${FA?"تأیید":"OK"}</button></div>`;document.body.appendChild(bar);
+  const bar=document.createElement("div");bar.className="ffbar";const FA=L==="fa";bar.innerHTML=`<span class="ffk"></span><span class="ffh">${FA?"فیلم را بکشید تا جابه‌جا شود · + و − یا دو انگشت برای بزرگ و کوچک کردن · ≡ برای جابه‌جایی نوشته‌ها و لینک‌ها":"Drag the film to move it · + / − or two fingers to zoom in and out · ≡ to move the words and the links"}</span><div class="ffbs"><button type="button" class="ffr">${FA?"بازنشانی":"Reset"}</button><button type="button" class="ffc">${FA?"انصراف":"Cancel"}</button><button type="button" class="ffo">${FA?"تأیید":"OK"}</button></div>`;document.body.appendChild(bar);
   const hz=document.createElement("div");hz.className="ffz";hz.textContent="⤡";hv.appendChild(hz);
   const hi=document.createElement("div");hi.className="ffg ffgi";hi.textContent="≡";hv.querySelector(".intro.onfilm").appendChild(hi);
   const hm=document.createElement("div");hm.className="ffg ffgm";hm.textContent="≡";hv.querySelector(".hvmenu").appendChild(hm);
@@ -3149,11 +3151,18 @@ function ffOpen(hv){if(FFEDIT)return;FFEDIT=true;hv.classList.add("ffon");const 
     const mv=ev=>{fn(ev.clientX-sx,ev.clientY-sy,f0);set()};const up=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up)};
     addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up)});
   const vd=hv.querySelector("video.vmain");
-  drag(hv,(dx,dy,f0)=>{f.x=+(f0.x+dx/hv.clientWidth*100/f0.z).toFixed(2);f.y=+(f0.y+dy/hv.clientHeight*100/f0.z).toFixed(2)});
-  drag(hz,(dx,dy,f0)=>{f.z=+Math.max(1,Math.min(3,f0.z*(1-dy/400))).toFixed(3)});
+  drag(hv,(dx,dy,f0)=>{if(pinch)return;f.x=+(f0.x+dx/hv.clientWidth*100/f0.z).toFixed(2);f.y=+(f0.y+dy/hv.clientHeight*100/f0.z).toFixed(2)});
+  drag(hz,(dx,dy,f0)=>{f.z=+Math.max(.5,Math.min(3,f0.z*(1-dy/400))).toFixed(3)});
+  const zb=document.createElement("div");zb.className="ffzb";zb.innerHTML='<button type="button" data-z="1.06">+</button><button type="button" data-z="0.943">−</button>';hv.appendChild(zb);
+  zb.querySelectorAll("button").forEach(bt=>{bt.addEventListener("pointerdown",e=>e.stopPropagation());bt.onclick=e=>{e.stopPropagation();f.z=+Math.max(.5,Math.min(3,f.z*+bt.dataset.z)).toFixed(3);set()}});
+  const pts=new Map();let pinch=null;const ac=new AbortController(),sg={signal:ac.signal};
+  hv.addEventListener("pointerdown",e=>{pts.set(e.pointerId,[e.clientX,e.clientY]);if(pts.size===2){const [a,b]=[...pts.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:f.z}}},{capture:true,signal:ac.signal});
+  addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);if(pinch&&pts.size===2){const [a,b]=[...pts.values()];f.z=+Math.max(.5,Math.min(3,pinch.z*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch.d)).toFixed(3);set()}},sg);
+  const pend=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null};addEventListener("pointerup",pend,sg);addEventListener("pointercancel",pend,sg);
+  hv.addEventListener("wheel",e=>{if(!FFEDIT)return;e.preventDefault();f.z=+Math.max(.5,Math.min(3,f.z*(e.deltaY<0?1.04:.962))).toFixed(3);set()},{passive:false,signal:ac.signal});
   drag(hi,(dx,dy,f0)=>{f.ib=Math.round(Math.max(0,Math.min(innerHeight*.8,f0.ib-dy)))});
   drag(hm,(dx,dy,f0)=>{f.mb=Math.round(Math.max(0,Math.min(innerHeight*.6,f0.mb-dy)))});
-  const close=()=>{FFEDIT=false;hv.classList.remove("ffon");[bar,hz,hi,hm].forEach(n=>n.remove());filmFitApply()};
+  const close=()=>{ac.abort();FFEDIT=false;hv.classList.remove("ffon");[bar,hz,hi,hm,hv.querySelector(".ffzb")].forEach(n=>n&&n.remove());filmFitApply()};
   bar.querySelector(".ffr").onclick=()=>{f=FFDEF();set()};
   bar.querySelector(".ffc").onclick=()=>{if(prevLocal===undefined)delete FFLOCAL[k];else FFLOCAL[k]=prevLocal;close()};
   bar.querySelector(".ffo").onclick=()=>{FILMFIT[k]=Object.assign({},f);FFLOCAL[k]=Object.assign({},f);try{localStorage.setItem("sa-filmfit",JSON.stringify(FFLOCAL))}catch(_){}
