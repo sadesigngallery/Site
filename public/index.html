@@ -2162,6 +2162,10 @@ body.setsp .setcard small{display:block;font-size:.86rem!important;margin-top:4p
 body.setsp .setpage .setT,body.setsp .setpage .lead2,body.setsp .setnav p{text-align:center}
 body.setsp .setnav a span{font-size:.95rem}
 body.setsp .setgrid{gap:44px!important}
+body.setsp main.page>h1.pt,body.setsp .setpage h1.setT,body.setsp .setcard b,body.setsp .setnav a span{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-weight:100!important;font-style:normal!important;text-transform:uppercase;font-stretch:85%;letter-spacing:.02em!important;color:#111!important}
+body.setsp .setcard b{font-size:1.7rem!important;line-height:1.25}
+body.setsp .setpage h1.setT{font-size:clamp(2rem,6.4vw,3rem)!important;line-height:1.2}
+html[lang=fa] body.setsp main.page>h1.pt,html[lang=fa] body.setsp .setpage h1.setT,html[lang=fa] body.setsp .setcard b,html[lang=fa] body.setsp .setnav a span{font-weight:300!important;font-family:inherit!important}
 body.setsp main.page>h1.pt,body.setsp main.page>.lead2{text-align:center!important;margin-left:auto!important;margin-right:auto!important}
 /* phones: the words sit lower on the film than on tablets and monitors */
 @media (max-width:700px){
@@ -2739,9 +2743,14 @@ const SETS=[
   f:"گفت‌وگویی دیگر با یک گلیم راه‌راهِ کهن از لطفی هاوس. چرم‌ها به‌صورت اختصاصی رنگ شدند و هر سطح طوری پرداخت شد که با قرمز و رنگ‌های خاکیِ بافت هم‌صدا باشد."},
  {id:3,name:"Mazandaran Held in Weave",fa:"مازندران در تار و پود",imgs:["s3-01","s3-12","s3-14","s3-10","s3-21","s3-07"],pieces:["lams","re-a","ta","far","miyan","pe"],
   en:"The palette of this collection was drawn directly from the kilim itself. Colours were not approximated; they were carefully translated, so that every element resolves as part of a single composition.",
-  f:"پالت رنگیِ این مجموعه مستقیماً از دلِ همان گلیم استخراج شد. رنگ‌ها تقریبی انتخاب نشدند، با دقت بازخوانی شدند تا همهٔ اجزا در یک ترکیب یکپارچه دیده شوند."}
+  f:"پالت رنگیِ این مجموعه مستقیماً از دلِ همان گلیم استخراج شد. رنگ‌ها تقریبی انتخاب نشدند، با دقت بازخوانی شدند تا همهٔ اجزا در یک ترکیب یکپارچه دیده شوند."},
+ {id:5,name:"Madder Wash",fa:"آبرنگِ روناس",collab:0,imgs:["s5-01","s5-02","s5-03","s5-04","s5-05","s5-06","s5-07","s5-08","s5-09","s5-10","s5-11","s5-12","s5-13","s5-14","s5-15","s5-16","s5-17","s5-18"],pieces:["saken","mad","sahn","ney"],
+  en:"Madder is the root behind the reds of old kilims; a wash is what a watercolourist calls colour laid down wet. In this kilim the red never stops at a hard line: it bleeds into black and fades into chalk, as if the weave had been painted. Saken, Mad, Sahn and Ney were finished in that madder red and a softened terracotta, so the whole room reads as one wash of colour.",
+  f:"روناس ریشه‌ای است که قرمزِ گلیم‌های کهن از آن می‌آید و آبرنگ، رنگی است که خیس روی کاغذ می‌نشیند. در این گلیم قرمز هیچ‌جا با خطی سخت تمام نمی‌شود؛ در سیاه نشت می‌کند و در رنگ گچی محو می‌شود، گویی بافت را با قلم‌مو کشیده‌اند. ساکن، مد، صحن و نی در همان قرمزِ روناسی و یک حناییِ ملایم پرداخت شدند تا کل فضا مثل یک لایهٔ آبرنگ دیده شود."}
 ];
+for(let k=1;k<=18;k++){const n="s5-"+String(k).padStart(2,"0");if(!IMG[n])IMG[n]="p/"+n+".webp?v=1"}
 SETS.push({id:4,name:"Blue Grid Woven into Form",fa:"شبکهٔ آبی، بافته در فرم",imgs:["s4-01","s4-12","s4-16","s4-20","s4-22","s4-24","s4-33","s4-34","s4-13"],pieces:["mah","re-a","mad","te","nun"],en:"The “All Blue Carpet”, one of the rarest and most captivating examples of Persian weaving, served as the point of departure for this collection. More than a century after its creation, its uninterrupted field of blue, subtle tonal variations and tranquil rhythm of weave became the design language of the collection, lending the furniture a character defined by authenticity, serenity and depth.",f:"«فرش یکسره ‌آبی»، یکی از نادرترین و مسحورکننده‌ترین نمونه‌های هنر بافندگی ایرانی، نقطه آغاز شکل‌گیری این مجموعه بود. بیش از یک قرن پس از خلق آن، گستره یکپارچه آبی، ظرافت تغییرات رنگی و ریتم آرام بافت آن به زبان طراحی این مجموعه تبدیل شد و به مبلمان شخصیتی مبتنی بر اصالت، آرامش و عمق بخشید."});
+SETS.sort((a,b)=>a.id-b.id);
 const setsOf=id=>SETS.filter(s=>s.pieces.includes(id));
 const JEWEL=["j1","j3","j12","j15","j80","j9","j57","j6","j14","j24","j27","j125","j39","j42","j77","j19"];
 
@@ -4339,7 +4348,7 @@ function renderSets(){
 function renderSet(sid){
   onIndex=false; const T_=t(); document.body.classList.add("setsp"); const s=SETS.find(q=>q.id==sid); if(!s){location.hash="#/sets";return}
   const imgs=s.imgs.map(k=>IMG[k]);
-  view.innerHTML=`<main class="page setpage"><div class="setcover"><img src="${IMG[s.imgs[0]]}" alt=""></div><div class="setbar"><p class="crumb"><a href="#/sets">← ${t().mix}</a></p><span class="collab" dir="ltr">Sa Editions × Lotfi House</span></div>
+  view.innerHTML=`<main class="page setpage"><div class="setcover"><img src="${IMG[s.imgs[0]]}" alt=""></div><div class="setbar"><p class="crumb"><a href="#/sets">← ${t().mix}</a></p>${s.collab===0?"":`<span class="collab" dir="ltr">Sa Editions × Lotfi House</span>`}</div>
    <h1 class="pt setT">${sN(s)}</h1><p class="lead2">${L==="fa"?s.f:((TX()&&TX().sets[s.id])||s.en)}</p>
    ${s.imgs.length>1?`<div class="sslide"><div class="strk">${s.imgs.slice(1).map((k,j)=>`<div class="sfr${j%2?" rv":""}"><img src="${IMG[k]}" alt="" data-j="${j+1}" draggable="false"></div>`).join("")}</div>${s.imgs.length>2?`<button type="button" class="snav l" aria-label="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="snav r" aria-label="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button><div class="sdots">${s.imgs.slice(1).map((_,j)=>`<i class="${j?"":"on"}"></i>`).join("")}</div>`:""}</div>`:""}
    <h2 class="sub">${T_.piecesIn}</h2><div class="famrow wide">${s.pieces.map(id=>{const q=byId(id);return `<a href="#/p/${id}"><img src="${thumb(id)}" alt=""><span>${esc(q.en)}</span><small>${q.fa}</small></a>`}).join("")}</div>
