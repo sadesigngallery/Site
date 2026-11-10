@@ -120,7 +120,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
 <header class="sb"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/discover">Discover</a><a href="/#/trade">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a></nav>
+<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/discover">Discover</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a></nav>
 <p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
 
 

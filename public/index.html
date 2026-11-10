@@ -90,7 +90,8 @@ html[lang="ar"] .cat h2,html[lang="fa"] .cat h2{font-family:var(--fa-body);lette
 .photos{display:grid;gap:4px;margin-top:4px}
 .photos img{width:100%;height:auto;cursor:zoom-in;background:var(--lacquer)}
 @media(min-width:900px){.photos{gap:10px;margin-top:10px}}
-.info{padding:22px 18px 8px;display:grid;gap:20px}
+.info{padding:22px 18px 8px;display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+main.page .lead2{max-width:none!important;margin-left:0!important;margin-right:0!important}
 @media(min-width:900px){.info{padding:0}}
 .head{text-align:start}
 .head{text-align:center}
@@ -2299,7 +2300,32 @@ body.certpg .certf input,body.certpg .certf select{font-family:"Cormorant Garamo
 body.certpg .certf input::placeholder{font-style:italic;color:rgba(74,74,71,.45)}
 body.certpg .certf input:focus,body.certpg .certf select:focus{border-bottom-color:var(--ink)!important}
 body.certpg .certf .addbtn,body.certpg .certout .addbtn{color:var(--gph)!important;-webkit-text-fill-color:var(--gph)!important;border-color:rgba(74,74,71,.55)!important;background:transparent!important;margin-top:6px}
-body.certpg .certsign{margin:auto 0 0!important;padding-top:6px}
+body.certpg{background:#e6e2d9!important}
+body.certpg .certp{align-items:center;justify-content:center!important}
+body.certpg .sheet{position:relative;box-sizing:border-box;height:100%;max-width:100%;aspect-ratio:1/1.414;margin:0 auto;display:flex;flex-direction:column;padding:clamp(26px,5.5svh,54px) clamp(24px,7%,56px) clamp(20px,4svh,40px);background-color:#fbf8f1;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .32  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),radial-gradient(120% 90% at 50% 40%,rgba(255,255,255,.55),rgba(232,224,206,.35));box-shadow:0 1px 1px rgba(60,48,28,.08),0 2px 6px rgba(60,48,28,.06),0 22px 44px -22px rgba(60,48,28,.38);overflow:hidden}
+body.certpg .sheet::before{content:"";position:absolute;inset:12px;border:1px solid rgba(124,108,80,.5);pointer-events:none}
+body.certpg .sheet::after{content:"";position:absolute;inset:17px;border:.5px solid rgba(124,108,80,.32);pointer-events:none}
+body.certpg .sheet .cmark{margin:0 0 clamp(4px,1.4svh,14px);text-align:center;font:400 1.15rem "Cormorant Garamond",Georgia,serif;letter-spacing:.02em;color:#4a4a47}
+body.certpg .sheet .cmark span{font:500 .5rem var(--latin,system-ui);letter-spacing:.32em;vertical-align:middle;margin-left:4px}
+body.certpg .sheet .pt{text-align:center}
+body.certpg .sheet .cpiece{margin:0 0 clamp(6px,2svh,18px);text-align:center;font:italic 400 1rem "Cormorant Garamond",Georgia,serif;color:#4a4a47}
+body.certpg .sheet .cpiece small{display:block;font:500 .54rem var(--latin,system-ui);font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:#7d776c;margin-top:3px}
+body.certpg .certfoot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-top:6px}
+body.certpg .certfoot .cplace{margin:0;font:500 .52rem var(--latin,system-ui);letter-spacing:.22em;text-transform:uppercase;line-height:1.7;color:#7d776c}
+body.certpg .certsign{margin:0!important;padding-top:0;display:flex;flex-direction:column;align-items:center}
+body.certpg .certsign span{display:block;width:100%;min-width:110px;border-top:1px solid rgba(74,74,71,.5);padding-top:4px;text-align:center;font:500 .5rem var(--latin,system-ui);letter-spacing:.24em;text-transform:uppercase;color:#7d776c}
+@media (max-width:600px){body.certpg .sheet{padding:30px 26px 22px}body.certpg .sheet::before{inset:9px}body.certpg .sheet::after{inset:13px}
+ body.certpg .sheet .cmark{font-size:.95rem;margin-bottom:2px}body.certpg .sheet .pt{font-size:1.45rem!important;margin-bottom:2px!important}
+ body.certpg .sheet .cpiece{font-size:.88rem;margin-bottom:6px}body.certpg .sheet .cpiece small{font-size:.48rem}
+ body.certpg .certf{gap:3px!important}body.certpg .certf label{font-size:.5rem!important}body.certpg .certf input,body.certpg .certf select{font-size:.98rem!important;padding:1px 2px 2px!important;min-height:0!important;height:auto!important}
+ body.certpg .certf .addbtn{padding:6px 14px!important;font-size:.62rem!important;margin-top:4px!important}
+ body.certpg .certsign img{width:78px!important}body.certpg .certsign span{min-width:90px;font-size:.45rem}body.certpg .certfoot .cplace{font-size:.45rem}}
+@media (max-width:600px) and (max-height:720px){body.certpg .sheet{padding:16px 22px 10px}body.certpg .sheet .cmark,body.certpg .sheet .cpiece small{display:none}
+ body.certpg .sheet .pt{font-size:1.25rem!important}body.certpg .sheet .cpiece{font-size:.8rem;margin-bottom:2px}
+ body.certpg .certf{gap:0!important}body.certpg .certf input,body.certpg .certf select{font-size:.9rem!important;line-height:1.2!important}body.certpg .certf .addbtn{padding:4px 12px!important;margin-top:2px!important}
+ body.certpg .certsign img{width:60px!important}body.certpg .certfoot{padding-top:2px}}
+body.certpg .certp.issued .sheet{background:none;box-shadow:none;padding:0;aspect-ratio:auto}
+body.certpg .certp.issued .sheet::before,body.certpg .certp.issued .sheet::after,body.certpg .certp.issued .cmark,body.certpg .certp.issued .cpiece,body.certpg .certp.issued .certfoot{display:none}
 body.certpg .certsign img{width:min(120px,30vw)!important;height:auto!important;opacity:1}
 @media (max-height:720px){body.certpg .certp .lead2{display:none}body.certpg .certf label{font-size:.58rem!important}body.certpg .certf input,body.certpg .certf select{font-size:1.1rem!important;padding:2px 2px 3px!important}body.certpg .certsign img{width:96px!important}body.certpg .certf .addbtn{padding-top:8px!important;padding-bottom:8px!important}}
 body.certpg .certp.issued .pt,body.certpg .certp.issued .lead2{display:none}
@@ -2312,13 +2338,18 @@ body.certpg .certout figcaption{margin-top:10px}
 .hvtop.ffon{cursor:move;touch-action:none}
 .hvtop.ffon .hvmenu a{pointer-events:none}
 .hvtop.ffon .ffbtn{display:none}
-.socp{max-width:520px;margin:0 auto;padding-bottom:12vh}
-.socp .socg{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:34px 0 0;direction:ltr}
-.socp .socg h2{margin:0 0 2px;font:600 .9rem var(--latin,system-ui);color:#111}
+.socp{max-width:640px;margin:0 auto;padding-bottom:12vh}
+.socp h1.pt{text-align:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,"Helvetica Neue",Arial,sans-serif!important;font-weight:100!important;text-transform:uppercase;font-stretch:85%;letter-spacing:.02em;font-size:clamp(2.2rem,8vw,3.4rem)!important;margin-bottom:8px!important}
+.socp .socg{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:42px 0 0;direction:ltr}
+.socp .socg h2{margin:0;padding:0 0 10px;border-bottom:1px solid #111;font:600 .62rem var(--latin,system-ui);letter-spacing:.28em;text-transform:uppercase;color:#111}
 .socp .socg a{font:400 .95rem var(--latin,system-ui);color:#111;text-decoration:none}
 .socp .socg a:not(.soon):hover{text-decoration:underline}
 .socp .socg a.soon{color:#9a9a9a;cursor:default}
-.socp .socr{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;margin-bottom:6px}
+.socp .socr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 18px;width:100%;padding:15px 0;border-bottom:1px solid #e4e4e4}
+.socp .socr>a{display:inline-flex;align-items:center;gap:12px}
+.socp .socr>a::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+@media (max-width:560px){.socp .socr{flex-direction:column;align-items:flex-start;gap:3px}.socp .socr .socu{padding-left:18px;font-size:.82rem}}
+.socp .socr.off .socu{-webkit-user-select:none;user-select:none;cursor:default;color:#b5b5b5}
 .socp .socu{font:400 .88rem var(--latin,system-ui);color:#777;-webkit-user-select:all;user-select:all;cursor:text;word-break:break-all}
 .photos .argo{width:100vw;overflow:hidden;line-height:0}
 .photos .argo{touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}.photos .argo.grab{cursor:grabbing}
@@ -3064,7 +3095,9 @@ function selText(W){const T_=t(),S=SLM[L]||SLM.en,R_=RTL[L],line="— — — �
 window._selURL=k=>{const W=whoGet(),S=SLM[L]||SLM.en,tx=selText(W);if(k==="mailSel")return `mailto:${MAIL}?subject=${encodeURIComponent(`Sa Editions — ${S.t} — ${selRef()}${W?" — "+W.name:""}`)}&body=${encodeURIComponent(tx)}`;return `https://wa.me/${k==="waSel1"?WA_IR:WA_CA}?text=${encodeURIComponent(tx)}`};
 /* v207: Trade — architects and interior designers */
 const SOC=[["Instagram","Ig",""],["Pinterest","Pi",""],["LinkedIn","Li",""],["Facebook","Fb",""],["X","X",""],["YouTube","Yt",""]];
-const TRADEN={en:"Download",fa:"دانلود",es:"Descargas",it:"Download",fr:"Téléchargements",de:"Downloads",zh:"下载",ja:"ダウンロード",ar:"تنزيل"};
+const TRADEN={en:"Trade",fa:"معماران و طراحان",es:"Profesionales",it:"Professionisti",fr:"Professionnels",de:"Für Planer",zh:"设计师专区",ja:"トレード",ar:"للمحترفين"};
+const DLN={en:"Download",fa:"دانلود",es:"Descargas",it:"Download",fr:"Téléchargements",de:"Downloads",zh:"下载",ja:"ダウンロード",ar:"تنزيل"};
+const DLLEAD={en:"Drawings and catalogues for architects and designers: download what is ready, or ask for the files you need.",fa:"نقشه‌ها و کاتالوگ‌ها برای معماران و طراحان: آنچه آماده است را دانلود کنید یا فایل مورد نیازتان را درخواست دهید."};
 const TRT={
 en:{lead:"For architects and interior designers: collaborations and joint projects, 2D drawings for your layouts, catalogues, and the trade price list.",s1:"Collaborate with us",s1p:"Tell us about your studio and the project. We answer every request personally.",name:"Name",studio:"Studio / company",prof:"Profession",profs:["Architect","Interior designer","Developer","Other"],city:"City, country",pt:"Request",pts:["Collaboration","Joint project","Specify Sa pieces in a project"],msg:"Project and message",s2:"2D drawings — AutoCAD",s2p:"Plan and elevation drawings of each piece, ready to drop into your layouts. Choose the pieces and we send the DWG files.",s2b:"Request drawings",s2s:"Selected pieces",s3:"Catalogues",s3p:"Each catalogue is generated from the live collection, so it is always current.",dl:"Download PDF",cats:{full:"Full catalogue",piano:"Piano catalogue",info:"Studio & information",tables:"Tables catalogue",lighting:"Lighting catalogue",seating:"Seating catalogue"},s4:"Trade price list",s4p:"Prices are shared with architects and designers on request.",s4b:"Request the price list",need:"Please enter your name.",pick:"Please choose at least one piece.",print:"Save as PDF",back:"Trade"},
 fa:{lead:"برای معماران و طراحان داخلی: همکاری و پروژهٔ مشترک، نقشه‌های دوبعدی برای چیدمان، کاتالوگ‌ها و لیست قیمت همکاران.",s1:"همکاری با ما",s1p:"دربارهٔ دفتر و پروژه‌تان بگویید. به هر درخواست شخصاً پاسخ می‌دهیم.",name:"نام",studio:"دفتر / شرکت",prof:"حرفه",profs:["معمار","طراح داخلی","سازنده / توسعه‌دهنده","سایر"],city:"شهر، کشور",pt:"نوع درخواست",pts:["همکاری","پروژهٔ مشترک","استفاده از آثار سا در پروژه"],msg:"پروژه و پیام",s2:"نقشه‌های دوبعدی — اتوکد",s2p:"پلان و نمای هر قطعه، آمادهٔ قرار گرفتن در نقشه‌های شما. قطعه‌ها را انتخاب کنید تا فایل‌های DWG را بفرستیم.",s2b:"درخواست نقشه‌ها",s2s:"قطعه‌های انتخاب‌شده",s3:"کاتالوگ‌ها",s3p:"هر کاتالوگ از مجموعهٔ زندهٔ سایت ساخته می‌شود و همیشه به‌روز است.",dl:"دانلود PDF",cats:{full:"کاتالوگ کامل",piano:"کاتالوگ پیانو",info:"معرفی و اطلاعات استودیو",tables:"کاتالوگ میزها",lighting:"کاتالوگ نورپردازی",seating:"کاتالوگ نشیمن‌ها"},s4:"لیست قیمت همکاران",s4p:"قیمت‌ها با درخواست، برای معماران و طراحان فرستاده می‌شود.",s4b:"درخواست لیست قیمت",need:"لطفاً نام خود را وارد کنید.",pick:"لطفاً دست‌کم یک قطعه انتخاب کنید.",print:"ذخیره به صورت PDF",back:"معماران و طراحان"},
@@ -3082,20 +3115,20 @@ const catPieces=k=>CATS.filter(c=>c[0]!=="mirror"&&(!CATGRP[k]||CATGRP[k].includ
 function tradeMsg(kind,extra){const Q=TRT[L]||TRT.en,f=id=>{const e=document.getElementById(id);return e?e.value.trim():""};
   const who=[`${Q.name}: ${f("trN")}`,f("trS")&&`${Q.studio}: ${f("trS")}`,`${Q.prof}: ${f("trP")}`,f("trC")&&`${Q.city}: ${f("trC")}`,kind===Q.s1&&`${Q.pt}: ${f("trT")}`].filter(Boolean);
   return [`SA EDITIONS · TRADE — ${kind}`,"",...who,"",extra,f("trM")].filter((v,i,a)=>v||(i>0&&a[i-1]&&i<a.length-1)).join("\n").trim()}
-function renderTrade(){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{};
+function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{};
   const sendRow=k=>`<div class="sendopts trsend" data-k="${k}"><a href="mailto:${MAIL}" data-tr="mail">${T_.email}<span dir="ltr">${MAIL}</span></a><a href="https://wa.me/${WA_CA}" data-tr="ca" target="_blank" rel="noopener">${T_.wa2}<span dir="ltr">+1 403 922 9905</span></a><a href="https://wa.me/${WA_IR}" data-tr="ir" target="_blank" rel="noopener">${T_.wa1}<span dir="ltr">+98 939 713 3918</span></a></div>`;
-  view.innerHTML=`<main class="page tradepage"><h1 class="pt">${TRADEN[L]||TRADEN.en}</h1><p class="lead2">${Q.lead}</p>
-   <section class="trs"><h2 class="sub"><i>01</i>${Q.s1}</h2><p class="trp">${Q.s1p}</p>
+  const num=n=>String(n).padStart(2,"0");
+  view.innerHTML=`<main class="page tradepage${DL?" dlpage":""}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1><p class="lead2">${DL?(DLLEAD[L]||DLLEAD.en):Q.lead}</p>
+   <section class="trs${DL?" trme":""}">${DL?"":`<h2 class="sub"><i>01</i>${Q.s1}</h2><p class="trp">${Q.s1p}</p>`}
     <div class="trform"><label>${Q.name} *<input id="trN" autocomplete="name" value="${esc(W.name||"")}"></label><label>${Q.studio}<input id="trS" autocomplete="organization"></label>
      <label>${Q.prof}<select id="trP">${Q.profs.map(p=>`<option${W.prof===p?" selected":""}>${p}</option>`).join("")}</select></label><label>${Q.city}<input id="trC"></label>
-     <label>${Q.pt}<select id="trT">${Q.pts.map(p=>`<option>${p}</option>`).join("")}</select></label><label>${Q.msg}<textarea id="trM" rows="4"></textarea></label></div>
-    <p class="wneed" id="trE" hidden>${Q.need}</p>${sendRow("collab")}</section>
-   <section class="trs"><h2 class="sub"><i>02</i>${Q.s2}</h2><p class="trp">${Q.s2p}</p>
+     ${DL?"":`<label>${Q.pt}<select id="trT">${Q.pts.map(p=>`<option>${p}</option>`).join("")}</select></label><label>${Q.msg}<textarea id="trM" rows="4"></textarea></label>`}</div>
+    <p class="wneed" id="trE" hidden>${Q.need}</p>${DL?"":sendRow("collab")}</section>
+   ${DL?`<section class="trs"><h2 class="sub"><i>01</i>${Q.s2}</h2><p class="trp">${Q.s2p}</p>
     <div class="dwgl">${CATS.filter(c=>c[0]!=="mirror").map(c=>`<div class="dwgr"><p>${catName(c)}</p><div>${P.filter(x=>x.cat===c[0]).map(x=>DWG[x.id]?`<a class="dwgc has" href="${DWG[x.id]}" download>${esc(x.en)} ↓</a>`:`<button type="button" class="dwgc" data-id="${x.id}">${esc(x.en)}</button>`).join("")}</div></div>`).join("")}</div>
     <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>
-   <section class="trs"><h2 class="sub"><i>03</i>${Q.s3}</h2><p class="trp">${Q.s3p}</p>
-    <div class="catl">${["full","piano","info","tables","lighting","seating"].map(k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`}).join("")}</div></section>
-   <section class="trs"><h2 class="sub"><i>04</i>${Q.s4}</h2><p class="trp">${Q.s4p}</p>${sendRow("price")}</section>
+   <section class="trs"><h2 class="sub"><i>02</i>${Q.s3}</h2><p class="trp">${Q.s3p}</p>
+    <div class="catl">${["full","piano","info","tables","lighting","seating"].map(k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`}).join("")}</div></section>`:`<section class="trs"><h2 class="sub"><i>02</i>${Q.s4}</h2><p class="trp">${Q.s4p}</p>${sendRow("price")}</section>`}
   </main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
   view.querySelectorAll(".dwgc[data-id]").forEach(b=>b.onclick=()=>b.classList.toggle("on"));
@@ -3107,7 +3140,7 @@ function renderTrade(){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{
     const tx=tradeMsg(kind,extra),sub=`Sa Editions — Trade — ${kind} — ${nm}`;
     openOut(a.dataset.tr==="mail"?`mailto:${MAIL}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(tx)}`:`https://wa.me/${a.dataset.tr==="ir"?WA_IR:WA_CA}?text=${encodeURIComponent(tx)}`)},true));
 }
-function renderCatalogue(k){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en;if(!Q.cats[k]){location.replace("#/trade");return}
+function renderCatalogue(k){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en;if(!Q.cats[k]){location.replace("#/download");return}
   const d2=x=>{const o=dimsOf(x);return o.est?"—":`${o.d.join(" × ")} cm · ${o.d.map(v=>(v/2.54).toFixed(1).replace(/\.0$/,"")).join(" × ")} in`};
   let body="";
   if(k==="info"){body=`<section class="cginfo"><p class="cglead">${T_.lead}</p><p class="cgtag">${TAGL[L]||TAGL.en}</p>
@@ -3115,7 +3148,7 @@ function renderCatalogue(k){onIndex=false;const T_=t(),Q=TRT[L]||TRT.en;if(!Q.ca
     <h2 class="sub">Colours · SA-01 – SA-24</h2><div class="cgsw">${PRESETS.map(p=>`<span><i style="background:${p[1]}"></i><small>${p[0]}<br>${L==="fa"?p[3]:p[2]}</small></span>`).join("")}</div>
     <h2 class="sub">${T_.contact}</h2><p class="cgct" dir="ltr">${MAIL}<br>WhatsApp +1 403 922 9905 · +98 939 713 3918<br>instagram.com/sa_editions_ · sa-editions.com</p></section>`}
   else{const xs=catPieces(k);body=`<div class="cggrid">${xs.map(x=>{const c=catOf(x.cat);return `<a class="cgc" href="#/p/${x.id}"><span class="cgim"><img src="${heroSrc(x.id)||thumb(x.id)}" alt="${esc(x.en)}" loading="lazy"></span><b>${esc(x.en)} <i class="mfa">${FAV[x.id]||x.fa}</i></b><small>${c?catName(c):""}${x.year?" · "+n(x.year):""}</small><small dir="ltr">${d2(x)}</small><small>${edLab(edTotal(x))} · ${(OUTY[L]||OUTY.en)[isOutdoor(x)?0:1]}</small></a>`}).join("")}</div>`}
-  view.innerHTML=`<main class="page catpage"><div class="cgbar noprint"><a href="#/trade">← ${Q.back}</a><button type="button" class="solid cta-d" id="cgPrint">${Q.print}</button></div>
+  view.innerHTML=`<main class="page catpage"><div class="cgbar noprint"><a href="#/download">← ${Q.back}</a><button type="button" class="solid cta-d" id="cgPrint">${Q.print}</button></div>
    <header class="cghead"><img src="${LOGO}" alt="Sa"><span>EDITIONS</span><h1>${Q.cats[k]}</h1><p dir="ltr">${new Date().getFullYear()} · sa-editions.com</p></header>${body}</main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
   $("#cgPrint").onclick=()=>{try{window.print()}catch(_){}};
@@ -3957,7 +3990,7 @@ function renderCert(id){
   if(!document.getElementById("cgfont")){const l=document.createElement("link");l.id="cgfont";l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap";document.head.appendChild(l)}
   const E=et(),N=edTotal(x),e=EDS[x.id],today=new Date().toISOString().slice(0,10);
   const d=CERTD[id]||(CERTD[id]={name:"",no:Math.min(N,(e?e.sold:0)+1),col:"white",custom:"",date:today,place:""});
-  view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><h1 class="pt">${E.cert}</h1><p class="lead2">${E.hint}</p>
+  const FAc=L==="fa";view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><div class="sheet"><p class="cmark" dir="ltr">Sa <span>EDITIONS</span></p><h1 class="pt">${E.cert}</h1><p class="cpiece" dir="auto"><b>${esc(x.en)}</b> · ${x.fa}<small dir="ltr">${FAc?"نسخه‌ای از":"An edition of"} ${N}</small></p><p class="lead2">${E.hint}</p>
    <form class="certf" id="certf" autocomplete="off">
     <label>${E.name}<input name="name" required value="${esc(d.name)}" dir="auto"></label>
     <div class="cf2"><label>${E.no}<input name="no" type="number" min="1" max="${N}" value="${d.no}" dir="ltr"></label><label>${E.date}<input name="date" type="date" value="${d.date}" dir="ltr"></label></div>
@@ -3968,7 +4001,7 @@ function renderCert(id){
     <button type="submit" class="addbtn solidpill">${E.issue}</button>
    </form>
    <figure class="certout" id="certout" hidden><img id="certimg" alt="${E.cert}"><figcaption><button type="button" class="addbtn solidpill" id="certsave">${E.save}</button><button type="button" class="addbtn" id="certedit">${E.edit}</button></figcaption></figure>
-   <div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"></div>
+   <div class="certfoot"><p class="cplace" dir="ltr">Sa Editions<br>Tehran</p><div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"><span>${FAc?"امضا":"Signature"}</span></div></div></div>
   </main>`;
   {const sg=$("#certsg");setTimeout(()=>{sg.src="p/sa-sign.webp?t="+Date.now()},500)}
   left.innerHTML=menuBtn(); rail.style.display="none";
@@ -4896,7 +4929,7 @@ const SOCN={en:"Social media",fa:"شبکه‌های اجتماعی",es:"Redes so
 function renderSocial(){onIndex=false;const live=(n,u)=>u?`<a href="${u}" target="_blank" rel="noopener">${n}</a>`:`<a role="link" aria-disabled="true" class="soon">${n}</a>`;
   view.innerHTML=`<main class="page socp"><h1 class="pt">${SOCN[L]||SOCN.en}</h1>
    <section class="socg"><h2>Instagram</h2>${IGS.map(([n,h])=>`<div class="socr">${live(n,"https://www.instagram.com/"+h+"/")}<span class="socu">instagram.com/${h}</span></div>`).join("")}</section>
-   <section class="socg">${SOC.filter(q=>q[0]!=="Instagram").map(([n,m,u])=>live(n,u)).join("")}</section></main>`;
+   <section class="socg"><h2>${L==="fa"?"سایر شبکه‌ها":"Other platforms"}</h2>${SOC.filter(q=>q[0]!=="Instagram").map(([n,m,u])=>`<div class="socr${u?"":" off"}">${live(n,u)}<span class="socu">${u?u.replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,""):(L==="fa"?"به‌زودی":"Coming soon")}</span></div>`).join("")}</section></main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none"}
 function renderContact(){
   onIndex=false; const T_=t(), fa_=L==="fa", msg=encodeURIComponent(fa_?"سلام، از کاتالوگ سا پیام می‌دهم.":"Hello, I am writing from the Sa catalogue.");
@@ -5022,7 +5055,7 @@ function openMenu(){
    ${grp(MIXN[L]||MIXN.en,"#/sets",SETS.map(q=>[`#/set/${q.id}`,sN(q)]))}`}
    <a class="mmain" href="#/subjects" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/subjects'},1350)"><i class="ar"><s></s><s></s></i><span>${SUBJN[L]||SUBJN.en}</span></a>
    <a class="mmain" href="#/editions" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/editions'},1350)"><i class="ar"><s></s><s></s></i><span>${EDTN[L]||EDTN.en}</span></a>
-   ${APP===3?"":`<a class="mmain mdisc" href="${window.SA_SITE?'/pieces/':'#/all'}" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{if(window.SA_SITE){location.href='/pieces/';return}try{closeOv()}catch(_){}sortMode='cat';famFilter='all';GROUP=null;if(location.hash!=='#/all')location.hash='#/all';else route()},1350)"><i class="ar"><s></s><s></s></i><span>${DISC[L]||DISC.en}</span></a><a class="mmain mtrade" href="#/trade" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/trade'},1350)"><i class="ar"><s></s><s></s></i><span>${TRADEN[L]||TRADEN.en}</span></a>`}
+   ${APP===3?"":`<a class="mmain mdisc" href="${window.SA_SITE?'/pieces/':'#/all'}" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{if(window.SA_SITE){location.href='/pieces/';return}try{closeOv()}catch(_){}sortMode='cat';famFilter='all';GROUP=null;if(location.hash!=='#/all')location.hash='#/all';else route()},1350)"><i class="ar"><s></s><s></s></i><span>${DISC[L]||DISC.en}</span></a><a class="mmain mtrade" href="#/trade" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/trade'},1350)"><i class="ar"><s></s><s></s></i><span>${TRADEN[L]||TRADEN.en}</span></a><a class="mmain mtrade mdl" href="#/download" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/download'},1350)"><i class="ar"><s></s><s></s></i><span>${DLN[L]||DLN.en}</span></a>`}
    <a href="#/care"><span>${T_.care}</span></a>
    <a href="#/about"><span>${T_.aboutT}</span></a><a href="#/contact"><span>${L==="fa"?"تماس با ما":T_.contact}</span></a>
    </nav>
@@ -5065,7 +5098,7 @@ function renderChrome(){
   lt.querySelectorAll(".dd button").forEach(b=>b.onclick=()=>{lt.classList.remove("open");if(b.dataset.l==="other")otherLangs();else setLang(b.dataset.l)});
   langrow.innerHTML=LANGS.map(([k,l])=>`<button type="button" data-l="${k}" class="${k===L?"on":""}">${l}</button>`).join("");
   langrow.querySelectorAll("button").forEach(b=>b.onclick=()=>{const y=scrollY;setLang(b.dataset.l);if(onIndex)scrollTo(0,y)});
-  foot.innerHTML=`<nav class="fnav" aria-label="footer" dir="ltr"><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="#/about">${T_.aboutT}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a><a href="#/social">${SOCN[L]||SOCN.en}</a></nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
+  foot.innerHTML=`<nav class="fnav" aria-label="footer" dir="ltr"><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="#/about">${T_.aboutT}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a><a href="#/download">${DLN[L]||DLN.en}</a><a href="#/social">${SOCN[L]||SOCN.en}</a></nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
 
   const hb=$("#homebar");hb.innerHTML=`<div class="hbl"></div><span class="hbr"><button type="button" class="iconbtn menuicon" id="menuB2" aria-label="Menu"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button><button type="button" class="iconbtn" id="searchB2" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5l5 5"/></svg></button><a class="iconbtn" id="bag" href="#/sel" aria-label="Saved items"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M12 19.6s-7.4-4.5-7.4-9.9A4.2 4.2 0 0112 7.3a4.2 4.2 0 017.4 2.4c0 5.4-7.4 9.9-7.4 9.9z"/></svg><em id="selcount2"></em></a></span>`;
   hb.querySelector(".hbl").appendChild(left);$("#menuB2").onclick=menuDots;{const mk_=$(".mark");if(mk_)mk_.onclick=e=>{e.preventDefault();if(location.hash.replace(/^#\/?/,"")==="")scrollTo({top:0,behavior:"smooth"});else location.hash="#/"}};rail.scrollLeft=0;$("#searchB2").onclick=openSearch;
@@ -5091,6 +5124,7 @@ function route(){
   else if(h[0]==="all"){ IDXOPEN=1; sortMode="cat";famFilter="all";GROUP=null;renderIndex(); const tl=view.querySelector("#idx>.tools"); scrollTo(0,tl?Math.max(0,tl.getBoundingClientRect().top+scrollY-90):0) }
   else if(h[0]==="discover"){ if(window.SA_SITE){location.href="/pieces/";return} location.replace("#/all"); return }
   else if(h[0]==="trade"){ renderTrade(); scrollTo(0,0) }
+  else if(h[0]==="download"){ renderTrade("dl"); scrollTo(0,0) }
   else if(h[0]==="catalogue"){ renderCatalogue(h[1]); scrollTo(0,0) }
   else if(h[0]==="lighting"){ renderLighting(); scrollTo(0,0) }
   else if(h[0]==="sets"){ renderSets(); scrollTo(0,0) }
