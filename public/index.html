@@ -1486,7 +1486,7 @@ html body:not(.a3) .ov.menu{background:rgba(255,255,255,.12)!important;-webkit-b
 .sslide .sfr{flex:0 0 100%;overflow:hidden;line-height:0}
 .sslide .sfr img{flex:none!important;width:100%;transform:scale(1.06);transform-origin:50% 50%;will-change:transform}
 .sslide .sfr.on img{animation:sdrift 14s ease-in-out infinite alternate}
-.sslide .sfr.rv.on img{animation-name:sdrift2}
+.sslide .sfr.sr.on img{animation-name:sdrift2}
 @keyframes sdrift{from{transform:scale(1.06) translateX(-2%) rotate(-.6deg)}to{transform:scale(1.16) translateX(2%) rotate(.6deg)}}
 @keyframes sdrift2{from{transform:scale(1.06) translateX(2%) rotate(.6deg)}to{transform:scale(1.16) translateX(-2%) rotate(-.6deg)}}
 html body.scl.subjp .bar{background:rgba(12,12,12,.5)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
@@ -4501,7 +4501,7 @@ function renderSet(sid){
   const imgs=s.imgs.map(k=>IMG[k]);
   view.innerHTML=`<main class="page setpage"><div class="setcover"><img src="${IMG[s.imgs[0]]}" alt=""></div><div class="setbar"><p class="crumb"><a href="#/sets">← ${t().mix}</a></p>${s.collab===0?"":`<span class="collab" dir="ltr">Sa Editions × Lotfi House</span>`}</div>
    <h1 class="pt setT">${sN(s)}</h1><p class="lead2">${L==="fa"?s.f:((TX()&&TX().sets[s.id])||s.en)}</p>
-   ${s.imgs.length>1?`<div class="sslide"><div class="strk">${s.imgs.slice(1).map((k,j)=>`<div class="sfr${j%2?" rv":""}"><img src="${IMG[k]}" alt="" data-j="${j+1}" draggable="false"></div>`).join("")}</div>${s.imgs.length>2?`<button type="button" class="snav l" aria-label="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="snav r" aria-label="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button><div class="sdots">${s.imgs.slice(1).map((_,j)=>`<i class="${j?"":"on"}"></i>`).join("")}</div>`:""}</div>`:""}
+   ${s.imgs.length>1?`<div class="sslide"><div class="strk">${s.imgs.slice(1).map((k,j)=>`<div class="sfr${j%2?" sr":""}"><img src="${IMG[k]}" alt="" data-j="${j+1}" draggable="false"></div>`).join("")}</div>${s.imgs.length>2?`<button type="button" class="snav l" aria-label="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="snav r" aria-label="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button><div class="sdots">${s.imgs.slice(1).map((_,j)=>`<i class="${j?"":"on"}"></i>`).join("")}</div>`:""}</div>`:""}
    <h2 class="sub">${T_.piecesIn}</h2><div class="famrow wide">${s.pieces.map(id=>{const q=byId(id);return `<a href="#/p/${id}">${ixThumb(id)||`<img src="${thumb(id)}" alt="">`}<span>${esc(q.en)}</span><small>${q.fa}</small></a>`}).join("")}${(s.xtra||[]).map(q=>`<a class="xtra" role="presentation"><img src="${q.img}" alt=""><span>${esc(q.en)}</span><small>${q.fa}</small></a>`).join("")}</div>
    <p style="text-align:center;margin-top:22px"><button type="button" class="addbtn" id="addSet">+ ${T_.addSet}</button></p>
    <nav class="setnav"><p>${t().mix}</p>${SETS.map(q=>`<a href="#/set/${q.id}" class="${q.id==s.id?"on":""}"><img src="${IMG[q.imgs[0]]}" alt=""><span>${sN(q)}</span></a>`).join("")}</nav></main>`;
@@ -4513,7 +4513,7 @@ function renderSet(sid){
     sl.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;moved=false},{passive:true});
     sl.addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){moved=true;go(dx<0?1:-1)}},{passive:true});
     tr.querySelectorAll("img").forEach(im=>im.onclick=()=>{if(moved){moved=false;return}slideshow(imgs,+im.dataset.j)});
-    if(n_>1)go(0)}}
+    tr.style.transition="none";tr.style.transform="translateX(0)";void tr.offsetWidth;if(n_>1)go(0);requestAnimationFrame(()=>requestAnimationFrame(()=>{tr.style.transition=""}))}}
   view.querySelector(".setcover img").onclick=()=>slideshow(imgs,0);
   $("#addSet").onclick=()=>{s.pieces.forEach(id=>addSel(id));flashBag();$("#addSet").textContent="♥ "+T_.added};
 }
