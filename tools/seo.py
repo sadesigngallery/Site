@@ -147,18 +147,27 @@ def _latin(t, strict):
     return t.encode("latin-1", "replace").decode("latin-1") if strict else t
 
 
-def spec_pdf(out_dir, x, cat1, site):
-    """/spec/<id>.pdf — one A4 sheet: picture, dimensions, specification, edition, contact."""
+SPEC_PDF = "spec/sa-editions-spec-sheets.pdf"  # one file, one A4 page per piece (keeps the site under 1,000 files)
+
+
+def spec_book(out_dir):
     from reportlab.lib.pagesizes import A4
     from reportlab.pdfgen import canvas
-    from reportlab.lib.utils import ImageReader
-    R_, B_, strict = _pdf_font()
-    L = lambda t: _latin(t, strict)
     os.makedirs(os.path.join(out_dir, "spec"), exist_ok=True)
-    rel = f"spec/{x['id']}.pdf"
+    c = canvas.Canvas(os.path.join(out_dir, SPEC_PDF), pagesize=A4)
+    c.setTitle(f"{BRAND} — specification sheets"); c.setAuthor(BRAND); c.setSubject("Specification sheets")
+    c._sa_font = _pdf_font()
+    return c
+
+
+def spec_page(c, out_dir, x, cat1, site):
+    """One A4 sheet on canvas c: picture, dimensions, specification, edition, contact."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.utils import ImageReader
+    R_, B_, strict = c._sa_font
+    L = lambda t: _latin(t, strict)
     W, H = A4; m = 48
-    c = canvas.Canvas(os.path.join(out_dir, rel), pagesize=A4)
-    c.setTitle(f"{x['name']} — {cat1} | {BRAND}"); c.setAuthor(BRAND); c.setSubject("Specification sheet")
+    c.bookmarkPage(x["id"]); c.addOutlineEntry(x["name"], x["id"])
     y = H - m
     lg = os.path.join(out_dir, "sa-logo.png")
     if os.path.exists(lg):
@@ -207,8 +216,7 @@ def spec_pdf(out_dir, x, cat1, site):
     c.setFont(R_, 8); c.setFillColorRGB(.33, .33, .33)
     c.drawString(m, m + 14, L(f"Enquiries: {mail()}  ·  WhatsApp +1 403 922 9905  ·  instagram.com/sa_editions_"))
     c.drawString(m, m, L(f"{site.rstrip('/')}/p/{x['id']}/  ·  Copyright © 2026 {BRAND}"))
-    c.showPage(); c.save()
-    return rel
+    c.showPage()
 
 
 def enquiry_href(name):
@@ -256,7 +264,8 @@ def build(out_dir, tools_dir, site, assets, email=None):
     urls = [("/", [absu(site, "og/home.jpg")]), ("/pieces/", []), ("/collections/", []), ("/designers/", []),
             ("/editions/", []), ("/about/", []), ("/contact/", [])]
     # piece pages
-    for x in pieces:
+    book = spec_book(out_dir)
+    for pno, x in enumerate(pieces, 1):
         pid = x["id"]; path = f"/p/{pid}/"
         imgs = [i for i in [x["hero"]] + x["photos"] + ([x["drawing"]] if x["drawing"] else []) if i]
         og = og_image(out_dir, x["hero"] or x["thumb"], pid)
@@ -266,7 +275,8 @@ def build(out_dir, tools_dir, site, assets, email=None):
             at = 1 if spec_rows and spec_rows[0][0] == "Category" else 0
             spec_rows.insert(at, ("Designers", " & ".join(FOUNDERS)))
         x["spec"] = spec_rows
-        pdf = spec_pdf(out_dir, x, cat1, site)
+        spec_page(book, out_dir, x, cat1, site)
+        pdf = f"{SPEC_PDF}#page={pno}"
         title = f"{x['name']} — {cat1} | {BRAND}"
         d0 = " ".join(x["desc"]) if x["desc"] else ""
         mat = dict(spec_rows).get("Material", "")
@@ -286,7 +296,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
         related = (f"<h2>Related pieces</h2><div class='grid'>{''.join(tile(y) for y in rel)}</div>") if rel else ""
         body = f"""<main><p class="crumb"><a href="/pieces/">All pieces</a> / {E(x['cat'])}</p><h1>{E(x['name'])}</h1><p class="fa" lang="fa" dir="rtl">{E(x['fa'])}</p><p class="cat">{E(cat1)}{' · ' + str(x['year']) if x['year'] else ''}</p>
 {hero}<div class="dims">{dims}</div>{ed}{yt}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
-<div class="cta"><a class="p" href="{E(enquiry_href(x['name']))}">Enquire</a><a href="https://wa.me/{WHATSAPP}?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="/{E(pdf)}" download>Download spec sheet</a><a href="/#/p/{E(pid)}">View in the catalogue</a></div>
+<div class="cta"><a class="p" href="{E(enquiry_href(x['name']))}">Enquire</a><a href="https://wa.me/{WHATSAPP}?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="/{E(pdf)}" rel="noopener">Spec sheet (PDF)</a><a href="/#/p/{E(pid)}">View in the catalogue</a></div>
 <div class="ph">{ph}{dr}</div>{related}</main>"""
         prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
                 "category": cat1, "description": d0 or desc, "image": [absu(site, i) for i in imgs], "url": site.rstrip("/") + path,
@@ -294,6 +304,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
         if mat: prod["material"] = mat
         write(out_dir, path, page(site, path, title, desc, body, og, [prod, crumbs(("All pieces", "/pieces/"), (x["name"], path))]))
         urls.append((path, [absu(site, i) for i in imgs]))
+    book.save()
     # all pieces
     groups = {}
     for x in pieces: groups.setdefault(x["cat"], []).append(x)
