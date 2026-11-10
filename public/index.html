@@ -2318,9 +2318,11 @@ body.certpg .certout figcaption{margin-top:10px}
 .socp .socg a{font:400 .95rem var(--latin,system-ui);color:#111;text-decoration:none}
 .socp .socg a:not(.soon):hover{text-decoration:underline}
 .socp .socg a.soon{color:#9a9a9a;cursor:default}
+.socp .socr{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;margin-bottom:6px}
+.socp .socu{font:400 .88rem var(--latin,system-ui);color:#777;-webkit-user-select:all;user-select:all;cursor:text;word-break:break-all}
 .photos .argo{width:100vw;overflow:hidden;line-height:0}
 .photos .argo{touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}.photos .argo.grab{cursor:grabbing}
-.photos .argo .mqt{display:flex;gap:6px;width:max-content;will-change:transform}
+.photos .argo .mqt{display:flex;gap:6px;width:max-content;will-change:transform;backface-visibility:hidden;transform:translate3d(0,0,0)}
 .photos .argo img{flex:none;display:block;object-fit:cover;max-width:none!important;cursor:zoom-in;border-radius:0!important}
 @keyframes argo{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--mqw)))}}
 @media (prefers-reduced-motion:reduce){.photos .argo .mqt{animation-duration:calc(var(--mqd,90s) * 3)}}
@@ -2346,7 +2348,14 @@ body.ixon .ixb .icap{pointer-events:none}
 .ixed b{flex:none;font:600 .62rem var(--latin,system-ui);background:#fff;color:#111;border-radius:6px;padding:2px 3px;min-width:30px;text-align:center}
 @media(max-width:560px){.ixed{flex-direction:column;align-items:flex-end;gap:3px;transform:translateY(-10px)}.ixed button[data-d="1"]{order:-1}.ixed button{width:24px;height:24px;font-size:.95rem;background:rgba(17,17,17,.78)}.ixed b{min-width:0;font-size:.56rem}}
 .ixbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:70;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;background:rgba(17,17,17,.88);color:#fff;border-radius:16px;padding:10px 12px;max-width:calc(100vw - 24px);font:400 .78rem var(--latin,system-ui);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.ixbar span{width:100%;text-align:center;opacity:.8}
+.ixbar .ixh{width:100%;text-align:center;opacity:.8}
+.ixbar .ixpad{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;flex-wrap:wrap}
+.ixbar .ixpad .ixn{min-width:64px;text-align:center;font-weight:600}
+.ixbar .ixpad button{width:36px;height:36px;padding:0;border-radius:50%;font-size:1.05rem;touch-action:manipulation}
+.ixbar:not(.has) .ixpad button{opacity:.35;pointer-events:none}
+.ixbar .ixpad .ixp{font-style:normal;min-width:42px;text-align:center}
+.ixbar .ixact{display:flex;gap:8px;justify-content:center;width:100%}
+body.ixon .ixb .zone.ixsel{outline:2px solid #111!important;outline-offset:-2px}
 .ixbar button{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:999px;padding:8px 14px;font:inherit;cursor:pointer}
 .ixbar .ixo{background:#fff;color:#111;font-weight:600}
 .hvtop.ffon::before{content:"";position:absolute;inset:0;z-index:2;box-shadow:inset 0 0 0 2px rgba(255,255,255,.9);pointer-events:none}
@@ -3205,21 +3214,28 @@ function ixTf(id){const v=ixv(id);return `translate(${(v.x*100).toFixed(3)}%,${(
 function ixApply(){document.querySelectorAll(".ixb").forEach(B=>{B.querySelectorAll(".ixc").forEach(c=>{const id=c.dataset.id,v=ixv(id);c.style.transform=ixTf(id);const zn=B.querySelector(`.zone[data-id="${id}"]`);if(zn&&zn.dataset.l){zn.style.left=(+zn.dataset.l+v.x*100)+"%";zn.style.top=(+zn.dataset.t+v.y*100)+"%"}const cp=B.querySelector(`.icap[data-id="${id}"]`);if(cp&&cp.dataset.l)cp.style.left=(+cp.dataset.l+v.x*100).toFixed(2)+"%";const ed=B.querySelector(`.ixed[data-id="${id}"]`);if(ed&&zn){ed.style.left=zn.style.left;ed.style.top=zn.style.top;ed.querySelector("b").textContent=Math.round(v.s*100)+"%"}})})}
 try{if(/[?&]ixedit\b/.test(location.search)||!window.SA_SITE){const v=JSON.parse(localStorage.getItem("sa-ixs")||"null");if(v&&typeof v==="object")Object.assign(IXS,v)}}catch(_){}
 function ixCanEdit(){return !window.SA_SITE||/[?&]ixedit\b/.test(location.search)}
-function ixEdBtn(){if(!ixCanEdit()||!view.querySelector(".ixb"))return;const b=document.createElement("button");b.type="button";b.className="ixbtn";b.textContent=L==="fa"?"اندازهٔ آیکون‌ها":"Icon sizes";view.appendChild(b);b.onclick=ixEdOpen}
-function ixEdOpen(){if(IXEDIT)return;IXEDIT=true;const before=JSON.stringify(IXS);document.body.classList.add("ixon");const FA2=L==="fa";
-  document.querySelectorAll(".ixc").forEach(c=>{const id=c.dataset.id,z=c.parentElement,zr=[...z.querySelectorAll(".zone")].find(a=>a.dataset.id===id);if(!zr)return;const e=document.createElement("div");e.className="ixed";e.dataset.id=id;e.style.left=zr.style.left;e.style.top=zr.style.top;e.style.width=zr.style.width;e.innerHTML=`<button type="button" data-d="-1">−</button><b>${Math.round((IXS[id]||1)*100)}%</b><button type="button" data-d="1">+</button>`;z.appendChild(e);
-    e.querySelectorAll("button").forEach(bt=>bt.onclick=ev=>{ev.preventDefault();ev.stopPropagation();const o=ixv(id);o.s=Math.max(.4,Math.min(2,+(o.s+(+bt.dataset.d)*.05).toFixed(2)));ixset(id,o);ixApply()});
+function ixEdBtn(){if(!ixCanEdit()||!view.querySelector(".ixb"))return;const b=document.createElement("button");b.type="button";b.className="ixbtn";b.textContent=L==="fa"?"چیدمان آیکون‌ها":"Arrange icons";view.appendChild(b);b.onclick=ixEdOpen}
+function ixEdOpen(){if(IXEDIT)return;IXEDIT=true;const before=JSON.stringify(IXS);document.body.classList.add("ixon");const FA2=L==="fa";let sel=null;
+  const bar=document.createElement("div");bar.className="ixbar";
+  bar.innerHTML=`<span class="ixh">${FA2?"روی یک آیکون بزنید، بعد با دکمه‌ها جابه‌جا یا بزرگ و کوچکش کنید (یا آن را بکشید)":"Tap an icon, then move or size it with the buttons (or drag it)"}</span>
+   <div class="ixpad"><b class="ixn">—</b><button type="button" data-a="l" aria-label="left">←</button><button type="button" data-a="u" aria-label="up">↑</button><button type="button" data-a="d" aria-label="down">↓</button><button type="button" data-a="r" aria-label="right">→</button><button type="button" data-a="m" aria-label="smaller">−</button><i class="ixp">100%</i><button type="button" data-a="p" aria-label="larger">+</button></div>
+   <div class="ixact"><button type="button" class="ixr">${FA2?"همه به حالت اول":"Reset all"}</button><button type="button" class="ixc0">${FA2?"انصراف":"Cancel"}</button><button type="button" class="ixo">${FA2?"تمام":"Done"}</button></div>`;document.body.appendChild(bar);
+  const show=()=>{document.querySelectorAll(".ixb .zone.ixsel").forEach(z=>z.classList.remove("ixsel"));bar.classList.toggle("has",!!sel);if(!sel){bar.querySelector(".ixn").textContent="—";return}document.querySelectorAll(`.ixb .zone[data-id="${sel}"]`).forEach(z=>z.classList.add("ixsel"));const q=byId(sel);bar.querySelector(".ixn").textContent=q?q.en:sel;bar.querySelector(".ixp").textContent=Math.round(ixv(sel).s*100)+"%"};
+  const step=a=>{if(!sel)return;const o=ixv(sel),M=.004;if(a==="l")o.x-=M;if(a==="r")o.x+=M;if(a==="u")o.y-=M;if(a==="d")o.y+=M;if(a==="m")o.s=Math.max(.4,+(o.s-.05).toFixed(2));if(a==="p")o.s=Math.min(2,+(o.s+.05).toFixed(2));ixset(sel,o);ixApply();show()};
+  bar.querySelectorAll(".ixpad button").forEach(bt=>{let t=0,r=0;const go=()=>step(bt.dataset.a);const stop=()=>{clearTimeout(t);clearInterval(r)};
+    bt.addEventListener("pointerdown",e=>{e.preventDefault();go();t=setTimeout(()=>{r=setInterval(go,70)},380)});["pointerup","pointerleave","pointercancel"].forEach(ev=>bt.addEventListener(ev,stop))});
+  document.querySelectorAll(".ixb .zone").forEach(zr=>{const id=zr.dataset.id,z=zr.closest(".ixb");
     zr.onclick=ev=>{if(IXEDIT){ev.preventDefault();ev.stopPropagation()}};
-    zr.onpointerdown=ev=>{if(!IXEDIT)return;ev.preventDefault();const R_=z.getBoundingClientRect(),o0=ixv(id),x0=ev.clientX,y0=ev.clientY;zr.setPointerCapture&&zr.setPointerCapture(ev.pointerId);document.body.classList.add("ixdrag");
+    zr.onpointerdown=ev=>{if(!IXEDIT)return;ev.preventDefault();sel=id;show();const R_=z.getBoundingClientRect(),o0=ixv(id),x0=ev.clientX,y0=ev.clientY;document.body.classList.add("ixdrag");
       const mv=e2=>{const o=Object.assign({},o0);o.x=o0.x+(e2.clientX-x0)/R_.width;o.y=o0.y+(e2.clientY-y0)/R_.height;ixset(id,o);ixApply()};
       const up=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);document.body.classList.remove("ixdrag")};
       addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up)}});
-  const bar=document.createElement("div");bar.className="ixbar";bar.innerHTML=`<span>${FA2?"آیکون را بکشید تا جابه‌جا شود · با + و − بزرگ و کوچک کنید":"Drag an icon to move it · + and − to size it"}</span><button type="button" class="ixr">${FA2?"همه به حالت اول":"Reset all"}</button><button type="button" class="ixc0">${FA2?"انصراف":"Cancel"}</button><button type="button" class="ixo">${FA2?"تأیید":"OK"}</button>`;document.body.appendChild(bar);
-  const close=()=>{IXEDIT=false;document.body.classList.remove("ixon");bar.remove();document.querySelectorAll(".ixed").forEach(n=>n.remove());ixApply()};
-  bar.querySelector(".ixr").onclick=()=>{for(const k in IXS)delete IXS[k];ixApply();ixSave(1)};
+  const close=()=>{IXEDIT=false;sel=null;document.body.classList.remove("ixon");document.querySelectorAll(".ixb .zone.ixsel").forEach(z=>z.classList.remove("ixsel"));bar.remove();ixApply()};
+  bar.querySelector(".ixr").onclick=()=>{for(const k in IXS)delete IXS[k];ixApply();ixSave(1);show()};
   bar.querySelector(".ixc0").onclick=()=>{for(const k in IXS)delete IXS[k];Object.assign(IXS,JSON.parse(before));ixSave(1);close()};
   bar.querySelector(".ixo").onclick=()=>{const data=JSON.parse(JSON.stringify(IXS));ixSave(1);close();
-    if(window.SA_SITE){const code=JSON.stringify(data);const box=document.createElement("div");box.className="ffcode";box.innerHTML=`<p>${FA2?"برای اینکه برای همهٔ بازدیدکننده‌ها ثابت شود، این خط را برای Claude بفرستید:":"To keep it for every visitor, send this line to Claude:"}</p><textarea readonly dir="ltr">${code}</textarea><button type="button">${FA2?"کپی":"Copy"}</button><button type="button" class="ffx">${FA2?"بستن":"Close"}</button>`;document.body.appendChild(box);box.querySelector("button").onclick=()=>{try{navigator.clipboard.writeText(code)}catch(_){}box.querySelector("textarea").select()};box.querySelector(".ffx").onclick=()=>box.remove()}}}
+    if(window.SA_SITE){const code=JSON.stringify(data);const box=document.createElement("div");box.className="ffcode";box.innerHTML=`<p>${FA2?"برای اینکه برای همهٔ بازدیدکننده‌ها ثابت شود، این خط را برای Claude بفرستید:":"To keep it for every visitor, send this line to Claude:"}</p><textarea readonly dir="ltr">${code}</textarea><button type="button">${FA2?"کپی":"Copy"}</button><button type="button" class="ffx">${FA2?"بستن":"Close"}</button>`;document.body.appendChild(box);box.querySelector("button").onclick=()=>{try{navigator.clipboard.writeText(code)}catch(_){}box.querySelector("textarea").select()};box.querySelector(".ffx").onclick=()=>box.remove()}};
+  show()}
 function ffCanEdit(){return /[?&]filmedit\b/.test(location.search)}
 function ffEditor(){const hv=document.querySelector("#idx>.hvtop");if(!hv||hv.querySelector(".ffbtn"))return;if(!ffCanEdit())return;
   const b=document.createElement("button");b.type="button";b.className="ffbtn";b.setAttribute("aria-label","Adjust film");b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';hv.appendChild(b);
@@ -3412,24 +3428,27 @@ function philWide(){const p=$("#idx .phil");if(!p||L!=="fa")return;p.style.remov
 function philAnim(){const p=$("#phil");if(!p||!p.closest("#idx")||p.classList.contains("pa"))return;p.classList.add("pa");
   const go_=()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){void p.offsetWidth;setTimeout(()=>p.classList.add("pin"),120);io.disconnect()}}),{threshold:.4});io.observe(p)};
   const fr=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();Promise.race([fr,new Promise(r=>setTimeout(r,2500))]).then(()=>setTimeout(()=>{try{fitPhil()}catch(_){}go_()},350))}
-function argoStrip(){const pid=(location.hash.split("/")[2]||"");const keys=(PH[pid]||[]).filter(k=>PHLOC[k]&&IMG[k]);const ph=view.querySelector(".photos");if(keys.length<2||!ph||view.querySelector(".argo"))return;
-  const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,asp=k=>DIM[k]?DIM[k][0]/DIM[k][1]:16/9,ws=keys.map(k=>Math.round(H*asp(k))),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1);
-  const one=keys.map((k,i)=>`<img src="${IMG[k]}" alt="" data-k="${k}" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
-  const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
+function argoStrip(){const pid=(location.hash.split("/")[2]||"");let keys=(PH[pid]||[]).filter(k=>PHLOC[k]&&IMG[k]);const ph=view.querySelector(".photos");if(keys.length<2||!ph||view.querySelector(".argo"))return;
+  const asp=k=>DIM[k]?DIM[k][0]/DIM[k][1]:16/9,wide=keys.filter(k=>asp(k)>=1),tall=keys.filter(k=>asp(k)<1),mix=[];for(let i=0;i<Math.max(wide.length,tall.length);i++){if(wide[i])mix.push(wide[i]);if(tall[i])mix.push(tall[i])}keys=mix;
+  const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,ws=keys.map(k=>Math.round(H*asp(k))),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1),SP=matchMedia("(prefers-reduced-motion: reduce)").matches?25:70,D=setW/SP;
+  const one=keys.map((k,i)=>`<img src="${IMG[k]}" alt="" data-k="${k}" decoding="async" draggable="false" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
+  const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.style.setProperty("--mqd",D.toFixed(2)+"s");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
   const cap=document.createElement("p");cap.className="phcap phloc";cap.textContent=L==="fa"?"کارخانهٔ آرگو، تهران":"Argo Factory, Tehran";
   const olds=[...ph.querySelectorAll("img")].filter(im=>PHLOC[im.dataset.k]);(olds[0]||ph.firstChild)?ph.insertBefore(box,olds[0]||ph.firstChild):ph.appendChild(box);box.after(cap);
   olds.forEach(im=>{const nx=im.nextElementSibling;if(nx&&nx.classList.contains("phloc"))nx.remove();im.remove()});
   const cp=view.querySelector(".cphoto img");if(cp&&keys.some(k=>IMG[k]===cp.getAttribute("src")))cp.closest(".cphoto").remove();
   const al=()=>{box.style.marginLeft="0px";box.style.marginLeft=(-box.getBoundingClientRect().left)+"px"};al();addEventListener("resize",al);
-  const trk=box.querySelector(".mqt"),SP=matchMedia("(prefers-reduced-motion: reduce)").matches?25:70;let off=0,last=performance.now(),drag=null,moved=0;
-  const put=()=>{off=((off%setW)+setW)%setW;trk.style.transform=`translate3d(${-off}px,0,0)`};
-  const tick=now=>{if(!box.isConnected)return;const dt=Math.min(.1,(now-last)/1000);last=now;if(!drag){off+=SP*dt;put()}requestAnimationFrame(tick)};requestAnimationFrame(tick);
-  box.addEventListener("pointerdown",e=>{drag={x:e.clientX,o:off,id:e.pointerId};moved=0;box.classList.add("grab")});
-  addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x;moved=Math.max(moved,Math.abs(dx));off=drag.o-dx;put()});
-  const end=e=>{if(drag&&e.pointerId===drag.id){drag=null;box.classList.remove("grab")}};addEventListener("pointerup",end);addEventListener("pointercancel",end);
-  box.addEventListener("click",e=>{if(moved>6){e.preventDefault();e.stopPropagation()}},true);
-  box.addEventListener("dragstart",e=>e.preventDefault())}
-function fsWire(){try{argoStrip()}catch(_){}view.querySelectorAll(".photos img").forEach(im=>{if(im.closest(".argo"))return;if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
+  const trk=box.querySelector(".mqt");let drag=null,moved=0,off=0;
+  const cur=()=>{const m=new DOMMatrixReadOnly(getComputedStyle(trk).transform);return ((-m.m41)%setW+setW)%setW};
+  const run=o=>{off=((o%setW)+setW)%setW;trk.style.transform="";trk.style.animation="none";void trk.offsetWidth;trk.style.animation=`argo ${D.toFixed(2)}s linear ${(-off/SP).toFixed(3)}s infinite`};
+  run(0);
+  box.addEventListener("pointerdown",e=>{off=cur();trk.style.animation="none";trk.style.transform=`translate3d(${-off}px,0,0)`;drag={x:e.clientX,o:off,id:e.pointerId};moved=0;box.classList.add("grab")});
+  addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x;moved=Math.max(moved,Math.abs(dx));off=(((drag.o-dx)%setW)+setW)%setW;trk.style.transform=`translate3d(${-off}px,0,0)`});
+  const end=e=>{if(drag&&e.pointerId===drag.id){drag=null;box.classList.remove("grab");run(off)}};addEventListener("pointerup",end);addEventListener("pointercancel",end);
+  box.addEventListener("click",e=>{if(moved>6){e.preventDefault();e.stopPropagation()}},true)}
+function fbAlign(){view.querySelectorAll(".cphoto,.photos .fsw,.photos .kbw").forEach(w=>{w.style.setProperty("margin-left","0px","important");w.style.setProperty("margin-right","0px","important");const l=w.getBoundingClientRect().left;w.style.setProperty("margin-left",(-l)+"px","important")})}
+addEventListener("resize",()=>{if(document.body.classList.contains("fsph"))fbAlign()});
+function fsWire(){try{argoStrip()}catch(_){}setTimeout(fbAlign,0);setTimeout(fbAlign,600);view.querySelectorAll(".photos img").forEach(im=>{if(im.closest(".argo"))return;if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
   view.querySelectorAll(".photos img,.cphoto img").forEach(im=>{if(im.closest(".argo"))return;const o=()=>{const w=im.closest(".kbw,.fsw,.cphoto");if(w&&im.naturalWidth)w.classList.toggle("pt",im.naturalHeight>im.naturalWidth*1.05)};if(im.complete)o();else im.addEventListener("load",o,{once:true})})}
 /* v123: slow push-in on each photograph (Barto) */
 const KBP={barto:1};
@@ -4875,7 +4894,7 @@ const IGS=[["Sa Editions","sa_editions_"],["Jewelry","sa_editions_jewelry"],["Pi
 const SOCN={en:"Social media",fa:"شبکه‌های اجتماعی",es:"Redes sociales",it:"Social media",fr:"Réseaux sociaux",de:"Soziale Medien",zh:"社交媒体",ja:"ソーシャルメディア",ar:"وسائل التواصل"};
 function renderSocial(){onIndex=false;const live=(n,u)=>u?`<a href="${u}" target="_blank" rel="noopener">${n}</a>`:`<a role="link" aria-disabled="true" class="soon">${n}</a>`;
   view.innerHTML=`<main class="page socp"><h1 class="pt">${SOCN[L]||SOCN.en}</h1>
-   <section class="socg"><h2>Instagram</h2>${IGS.map(([n,h])=>live(n,"https://www.instagram.com/"+h+"/")).join("")}</section>
+   <section class="socg"><h2>Instagram</h2>${IGS.map(([n,h])=>`<div class="socr">${live(n,"https://www.instagram.com/"+h+"/")}<span class="socu">instagram.com/${h}</span></div>`).join("")}</section>
    <section class="socg">${SOC.filter(q=>q[0]!=="Instagram").map(([n,m,u])=>live(n,u)).join("")}</section></main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none"}
 function renderContact(){
