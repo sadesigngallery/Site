@@ -126,6 +126,7 @@ def main(app_html, photos, films):
     # 4) search-engine pages, then the home page's own head
     s = seo_pages(s)
     # tab icons as real files: Safari ignores data: icons and falls back to a letter in a circle
+    brand = os.path.join(STATE, "brand")
     for n, out in (("favicon.ico", "favicon.ico"), ("favicon-32.png", "favicon-32.png"), ("favicon-512.png", "favicon-512.png"), ("sa-apple180.png", "apple-touch-icon.png")):
         shutil.copy(os.path.join(brand, n), os.path.join(OUT, out))
     s = re.sub(r'<link rel="(?:icon|apple-touch-icon)"[^>]*>', "", s)
