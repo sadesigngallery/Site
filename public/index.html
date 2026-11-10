@@ -4871,10 +4871,11 @@ function renderLighting(){
 }
 
 /* ---------- contact ---------- */
+const IGS=[["Sa Editions","sa_editions_"],["Jewelry","sa_editions_jewelry"],["Piano","sa_editions_piano"],["Architecture","sa_editions_architecture"],["Light","sa_editions_light"]];
 const SOCN={en:"Social media",fa:"شبکه‌های اجتماعی",es:"Redes sociales",it:"Social media",fr:"Réseaux sociaux",de:"Soziale Medien",zh:"社交媒体",ja:"ソーシャルメディア",ar:"وسائل التواصل"};
 function renderSocial(){onIndex=false;const live=(n,u)=>u?`<a href="${u}" target="_blank" rel="noopener">${n}</a>`:`<a role="link" aria-disabled="true" class="soon">${n}</a>`;
   view.innerHTML=`<main class="page socp"><h1 class="pt">${SOCN[L]||SOCN.en}</h1>
-   <section class="socg"><h2>Instagram</h2>${live("Sa Editions",IG)}</section>
+   <section class="socg"><h2>Instagram</h2>${IGS.map(([n,h])=>live(n,"https://www.instagram.com/"+h+"/")).join("")}</section>
    <section class="socg">${SOC.filter(q=>q[0]!=="Instagram").map(([n,m,u])=>live(n,u)).join("")}</section></main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none"}
 function renderContact(){
