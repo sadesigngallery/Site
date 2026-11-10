@@ -2312,6 +2312,12 @@ body.certpg .certout figcaption{margin-top:10px}
 .hvtop.ffon{cursor:move;touch-action:none}
 .hvtop.ffon .hvmenu a{pointer-events:none}
 .hvtop.ffon .ffbtn{display:none}
+.socp{max-width:520px;margin:0 auto;padding-bottom:12vh}
+.socp .socg{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:34px 0 0;direction:ltr}
+.socp .socg h2{margin:0 0 2px;font:600 .9rem var(--latin,system-ui);color:#111}
+.socp .socg a{font:400 .95rem var(--latin,system-ui);color:#111;text-decoration:none}
+.socp .socg a:not(.soon):hover{text-decoration:underline}
+.socp .socg a.soon{color:#9a9a9a;cursor:default}
 .photos .argo{width:100vw;overflow:hidden;line-height:0}
 .photos .argo .mqt{display:flex;gap:6px;width:max-content;animation:argo var(--mqd,90s) linear infinite;will-change:transform}
 .photos .argo img{flex:none;display:block;object-fit:cover;max-width:none!important;cursor:zoom-in;border-radius:0!important}
@@ -4851,6 +4857,12 @@ function renderLighting(){
 }
 
 /* ---------- contact ---------- */
+const SOCN={en:"Social media",fa:"شبکه‌های اجتماعی",es:"Redes sociales",it:"Social media",fr:"Réseaux sociaux",de:"Soziale Medien",zh:"社交媒体",ja:"ソーシャルメディア",ar:"وسائل التواصل"};
+function renderSocial(){onIndex=false;const live=(n,u)=>u?`<a href="${u}" target="_blank" rel="noopener">${n}</a>`:`<a role="link" aria-disabled="true" class="soon">${n}</a>`;
+  view.innerHTML=`<main class="page socp"><h1 class="pt">${SOCN[L]||SOCN.en}</h1>
+   <section class="socg"><h2>Instagram</h2>${live("Sa Editions",IG)}</section>
+   <section class="socg">${SOC.filter(q=>q[0]!=="Instagram").map(([n,m,u])=>live(n,u)).join("")}</section></main>`;
+  left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none"}
 function renderContact(){
   onIndex=false; const T_=t(), fa_=L==="fa", msg=encodeURIComponent(fa_?"سلام، از کاتالوگ سا پیام می‌دهم.":"Hello, I am writing from the Sa catalogue.");
   view.innerHTML=`<main class="page ctc"><h1 class="pt">${fa_?"تماس با ما":T_.contact}</h1>
@@ -5018,7 +5030,7 @@ function renderChrome(){
   lt.querySelectorAll(".dd button").forEach(b=>b.onclick=()=>{lt.classList.remove("open");if(b.dataset.l==="other")otherLangs();else setLang(b.dataset.l)});
   langrow.innerHTML=LANGS.map(([k,l])=>`<button type="button" data-l="${k}" class="${k===L?"on":""}">${l}</button>`).join("");
   langrow.querySelectorAll("button").forEach(b=>b.onclick=()=>{const y=scrollY;setLang(b.dataset.l);if(onIndex)scrollTo(0,y)});
-  foot.innerHTML=`<nav class="fnav" aria-label="footer"><a href="#/about">${T_.aboutT}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a></nav><nav class="fsoc" aria-label="social">${SOC.map(([n,m,u])=>{u=n==="Instagram"?IG:u;return u?`<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><i>${n}</i></a>`:`<a role="link" aria-disabled="true" class="soon" aria-label="${n}" title="${n}"><i>${n}</i></a>`}).join("")}</nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
+  foot.innerHTML=`<nav class="fnav" aria-label="footer"><a href="#/about">${T_.aboutT}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a><a href="#/social">${SOCN[L]||SOCN.en}</a></nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
 
   const hb=$("#homebar");hb.innerHTML=`<div class="hbl"></div><span class="hbr"><button type="button" class="iconbtn menuicon" id="menuB2" aria-label="Menu"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button><button type="button" class="iconbtn" id="searchB2" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5l5 5"/></svg></button><a class="iconbtn" id="bag" href="#/sel" aria-label="Saved items"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M12 19.6s-7.4-4.5-7.4-9.9A4.2 4.2 0 0112 7.3a4.2 4.2 0 017.4 2.4c0 5.4-7.4 9.9-7.4 9.9z"/></svg><em id="selcount2"></em></a></span>`;
   hb.querySelector(".hbl").appendChild(left);$("#menuB2").onclick=menuDots;{const mk_=$(".mark");if(mk_)mk_.onclick=e=>{e.preventDefault();if(location.hash.replace(/^#\/?/,"")==="")scrollTo({top:0,behavior:"smooth"});else location.hash="#/"}};rail.scrollLeft=0;$("#searchB2").onclick=openSearch;
@@ -5056,6 +5068,7 @@ function route(){
   else if(h[0]==="jewellery"){ renderJewel(); scrollTo(0,0) }
   else if(h[0]==="sculpture"){ renderSculpt(); scrollTo(0,0) }
   else if(h[0]==="contact"){ renderContact(); scrollTo(0,0) }
+  else if(h[0]==="social"){ renderSocial(); scrollTo(0,0) }
   else if(h[0]==="love"){ renderLove(+h[1]); scrollTo(0,0) }
   else if(h[0]==="care"){ renderCare(); scrollTo(0,0) }
   else if(h[0]==="cert"&&h[1]){ renderCert(h[1]); scrollTo(0,0) }
