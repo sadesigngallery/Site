@@ -2324,6 +2324,14 @@ body.certpg .certsign span{display:block;width:100%;min-width:110px;border-top:1
  body.certpg .sheet .pt{font-size:1.25rem!important}body.certpg .sheet .cpiece{font-size:.8rem;margin-bottom:2px}
  body.certpg .certf{gap:0!important}body.certpg .certf input,body.certpg .certf select{font-size:.9rem!important;line-height:1.2!important}body.certpg .certf .addbtn{padding:4px 12px!important;margin-top:2px!important}
  body.certpg .certsign img{width:60px!important}body.certpg .certfoot{padding-top:2px}}
+body.certpg .sheet{height:auto!important;max-height:100%;aspect-ratio:auto!important;width:min(100%,540px)}
+body.certpg .sheet .lead2{display:none!important}
+body.certpg .sheet .certf{margin-top:clamp(22px,6svh,60px)!important}
+body.certpg .certfoot{margin-top:clamp(18px,4svh,40px)!important}
+body.certpg .sheet .certfoot .certsign img{width:clamp(52px,14vw,74px)!important;filter:grayscale(1) brightness(2.1) contrast(.85) sepia(.08)!important;opacity:.78!important;mix-blend-mode:multiply}
+body.certpg .sheet .certfoot .certsign span{min-width:84px!important}
+body.certpg main.certp .sheet{padding-top:max(30px,4.5svh)!important;padding-bottom:28px!important}
+@media (max-height:720px){body.certpg .sheet .certf{margin-top:8px!important}body.certpg .certfoot{margin-top:10px!important}body.certpg main.certp .sheet{padding-top:24px!important;padding-bottom:24px!important}}
 body.certpg .certp.issued .sheet{background:none;box-shadow:none;padding:0;aspect-ratio:auto}
 body.certpg .certp.issued .sheet::before,body.certpg .certp.issued .sheet::after,body.certpg .certp.issued .cmark,body.certpg .certp.issued .cpiece,body.certpg .certp.issued .certfoot{display:none}
 body.certpg .certsign img{width:min(120px,30vw)!important;height:auto!important;opacity:1}
@@ -3990,7 +3998,7 @@ function renderCert(id){
   if(!document.getElementById("cgfont")){const l=document.createElement("link");l.id="cgfont";l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap";document.head.appendChild(l)}
   const E=et(),N=edTotal(x),e=EDS[x.id],today=new Date().toISOString().slice(0,10);
   const d=CERTD[id]||(CERTD[id]={name:"",no:Math.min(N,(e?e.sold:0)+1),col:"white",custom:"",date:today,place:""});
-  const FAc=L==="fa";view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><div class="sheet"><p class="cmark" dir="ltr">Sa <span>EDITIONS</span></p><h1 class="pt">${E.cert}</h1><p class="cpiece" dir="auto"><b>${esc(x.en)}</b> · ${x.fa}<small dir="ltr">${FAc?"نسخه‌ای از":"An edition of"} ${N}</small></p><p class="lead2">${E.hint}</p>
+  const FAc=L==="fa";view.innerHTML=`<main class="page certp"><p class="crumb"><a href="#/p/${id}">← ${E.back}</a></p><div class="sheet"><h1 class="pt">${E.cert}</h1><p class="cpiece" dir="auto"><b>${esc(x.en)}</b> · ${x.fa}</p><p class="lead2">${E.hint}</p>
    <form class="certf" id="certf" autocomplete="off">
     <label>${E.name}<input name="name" required value="${esc(d.name)}" dir="auto"></label>
     <div class="cf2"><label>${E.no}<input name="no" type="number" min="1" max="${N}" value="${d.no}" dir="ltr"></label><label>${E.date}<input name="date" type="date" value="${d.date}" dir="ltr"></label></div>
@@ -4001,7 +4009,7 @@ function renderCert(id){
     <button type="submit" class="addbtn solidpill">${E.issue}</button>
    </form>
    <figure class="certout" id="certout" hidden><img id="certimg" alt="${E.cert}"><figcaption><button type="button" class="addbtn solidpill" id="certsave">${E.save}</button><button type="button" class="addbtn" id="certedit">${E.edit}</button></figcaption></figure>
-   <div class="certfoot"><p class="cplace" dir="ltr">Sa Editions<br>Tehran</p><div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"><span>${FAc?"امضا":"Signature"}</span></div></div></div>
+   <div class="certfoot"><p class="cplace" dir="ltr">Sa Editions</p><div class="certsign" aria-label="Sa"><img id="certsg" alt="Sa" width="360" height="198"><span>${FAc?"امضا":"Signature"}</span></div></div></div>
   </main>`;
   {const sg=$("#certsg");setTimeout(()=>{sg.src="p/sa-sign.webp?t="+Date.now()},500)}
   left.innerHTML=menuBtn(); rail.style.display="none";
