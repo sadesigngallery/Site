@@ -3126,17 +3126,17 @@ function tradeMsg(kind,extra){const Q=TRT[L]||TRT.en,f=id=>{const e=document.get
 function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{};
   const sendRow=k=>`<div class="sendopts trsend" data-k="${k}"><a href="mailto:${MAIL}" data-tr="mail">${T_.email}<span dir="ltr">${MAIL}</span></a><a href="https://wa.me/${WA_CA}" data-tr="ca" target="_blank" rel="noopener">${T_.wa2}<span dir="ltr">+1 403 922 9905</span></a><a href="https://wa.me/${WA_IR}" data-tr="ir" target="_blank" rel="noopener">${T_.wa1}<span dir="ltr">+98 939 713 3918</span></a></div>`;
   const num=n=>String(n).padStart(2,"0");
-  view.innerHTML=`<main class="page tradepage${DL?" dlpage":""}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1><p class="lead2">${DL?(DLLEAD[L]||DLLEAD.en):Q.lead}</p>
+  const catSec=`<section class="trs"><h2 class="sub"><i>01</i>${Q.s3}</h2><p class="trp">${Q.s3p}</p>
+    <div class="catl">${["full","piano","info","tables","lighting","seating"].map(k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`}).join("")}</div></section>`;
+  view.innerHTML=`<main class="page tradepage${DL?" dlpage":""}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1><p class="lead2">${DL?(DLLEAD[L]||DLLEAD.en):Q.lead}</p>${DL?catSec:""}
    <section class="trs${DL?" trme":""}">${DL?"":`<h2 class="sub"><i>01</i>${Q.s1}</h2><p class="trp">${Q.s1p}</p>`}
     <div class="trform"><label>${Q.name} *<input id="trN" autocomplete="name" value="${esc(W.name||"")}"></label><label>${Q.studio}<input id="trS" autocomplete="organization"></label>
      <label>${Q.prof}<select id="trP">${Q.profs.map(p=>`<option${W.prof===p?" selected":""}>${p}</option>`).join("")}</select></label><label>${Q.city}<input id="trC"></label>
      ${DL?"":`<label>${Q.pt}<select id="trT">${Q.pts.map(p=>`<option>${p}</option>`).join("")}</select></label><label>${Q.msg}<textarea id="trM" rows="4"></textarea></label>`}</div>
     <p class="wneed" id="trE" hidden>${Q.need}</p>${DL?"":sendRow("collab")}</section>
-   ${DL?`<section class="trs"><h2 class="sub"><i>01</i>${Q.s2}</h2><p class="trp">${Q.s2p}</p>
+   ${DL?`<section class="trs"><h2 class="sub"><i>02</i>${Q.s2}</h2><p class="trp">${Q.s2p}</p>
     <div class="dwgl">${CATS.filter(c=>c[0]!=="mirror").map(c=>`<div class="dwgr"><p>${catName(c)}</p><div>${P.filter(x=>x.cat===c[0]).map(x=>DWG[x.id]?`<a class="dwgc has" href="${DWG[x.id]}" download>${esc(x.en)} ↓</a>`:`<button type="button" class="dwgc" data-id="${x.id}">${esc(x.en)}</button>`).join("")}</div></div>`).join("")}</div>
-    <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>
-   <section class="trs"><h2 class="sub"><i>02</i>${Q.s3}</h2><p class="trp">${Q.s3p}</p>
-    <div class="catl">${["full","piano","info","tables","lighting","seating"].map(k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`}).join("")}</div></section>`:`<section class="trs"><h2 class="sub"><i>02</i>${Q.s4}</h2><p class="trp">${Q.s4p}</p>${sendRow("price")}</section>`}
+    <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>`:`<section class="trs"><h2 class="sub"><i>02</i>${Q.s4}</h2><p class="trp">${Q.s4p}</p>${sendRow("price")}</section>`}
   </main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
   view.querySelectorAll(".dwgc[data-id]").forEach(b=>b.onclick=()=>b.classList.toggle("on"));
