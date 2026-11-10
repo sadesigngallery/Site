@@ -2312,10 +2312,10 @@ body.certpg .certout figcaption{margin-top:10px}
 .hvtop.ffon{cursor:move;touch-action:none}
 .hvtop.ffon .hvmenu a{pointer-events:none}
 .hvtop.ffon .ffbtn{display:none}
-.fsoc{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:16px auto 6px;direction:ltr}
-.fsoc a{width:38px;height:38px;border-radius:50%;border:1px solid #111;display:inline-flex;align-items:center;justify-content:center;color:#111;text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+.fsoc{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;margin:16px auto 6px;direction:ltr}
+.fsoc a{display:inline-flex;align-items:center;color:#111;text-decoration:none;cursor:pointer}
 .fsoc a i{font:500 .72rem var(--latin,system-ui);font-style:normal;letter-spacing:.02em;font-stretch:85%}
-.fsoc a:not(.soon):hover{background:#111;color:#fff}
+.fsoc a:not(.soon):hover{text-decoration:underline}
 .fsoc a.soon{cursor:default;opacity:.4}
 .ixb .ixbase{opacity:0}
 .ixb .ixc{position:absolute;inset:0;pointer-events:none;transition:transform .25s ease}
@@ -5007,7 +5007,7 @@ function renderChrome(){
   lt.querySelectorAll(".dd button").forEach(b=>b.onclick=()=>{lt.classList.remove("open");if(b.dataset.l==="other")otherLangs();else setLang(b.dataset.l)});
   langrow.innerHTML=LANGS.map(([k,l])=>`<button type="button" data-l="${k}" class="${k===L?"on":""}">${l}</button>`).join("");
   langrow.querySelectorAll("button").forEach(b=>b.onclick=()=>{const y=scrollY;setLang(b.dataset.l);if(onIndex)scrollTo(0,y)});
-  foot.innerHTML=`<nav class="fnav" aria-label="footer"><a href="#/about">${T_.aboutT}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a></nav><nav class="fsoc" aria-label="social">${SOC.map(([n,m,u])=>{u=n==="Instagram"?IG:u;return u?`<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><i>${m}</i></a>`:`<a role="link" aria-disabled="true" class="soon" aria-label="${n}" title="${n}"><i>${m}</i></a>`}).join("")}</nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
+  foot.innerHTML=`<nav class="fnav" aria-label="footer"><a href="#/about">${T_.aboutT}</a><a href="#/contact">${T_.contact}</a><a href="mailto:${MAIL}">${T_.email}</a><a href="${window.SA_SITE?'/pieces/':'#/all'}">${ALLP[L]||ALLP.en}</a></nav><nav class="fnav f2" aria-label="footer 2"><a href="${window.SA_SITE?"/pieces/":"#/all"}">${DISC[L]||DISC.en}</a><a href="#/trade">${TRADEN[L]||TRADEN.en}</a></nav><nav class="fsoc" aria-label="social">${SOC.map(([n,m,u])=>{u=n==="Instagram"?IG:u;return u?`<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><i>${n}</i></a>`:`<a role="link" aria-disabled="true" class="soon" aria-label="${n}" title="${n}"><i>${n}</i></a>`}).join("")}</nav><div class="copy"><span dir="ltr">Copyright © 2026 Sa Inc. All rights reserved</span></div>`;
 
   const hb=$("#homebar");hb.innerHTML=`<div class="hbl"></div><span class="hbr"><button type="button" class="iconbtn menuicon" id="menuB2" aria-label="Menu"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button><button type="button" class="iconbtn" id="searchB2" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5l5 5"/></svg></button><a class="iconbtn" id="bag" href="#/sel" aria-label="Saved items"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"><path d="M12 19.6s-7.4-4.5-7.4-9.9A4.2 4.2 0 0112 7.3a4.2 4.2 0 017.4 2.4c0 5.4-7.4 9.9-7.4 9.9z"/></svg><em id="selcount2"></em></a></span>`;
   hb.querySelector(".hbl").appendChild(left);$("#menuB2").onclick=menuDots;{const mk_=$(".mark");if(mk_)mk_.onclick=e=>{e.preventDefault();if(location.hash.replace(/^#\/?/,"")==="")scrollTo({top:0,behavior:"smooth"});else location.hash="#/"}};rail.scrollLeft=0;$("#searchB2").onclick=openSearch;
