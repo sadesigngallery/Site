@@ -2582,7 +2582,7 @@ PH.dad=["c292","c293","c290"];
 PHX.vespid=["q35", "q43", "q44", "q34", "q33", "q29", "q31"];
 const NOCPH={}, NOHERO={seda:1,taar:1};
 const PHCAP={c438:[["Re/3p","re-s"],["Mad","mad"],["Sahn","sahn"]]};
-const PHLOC={q37:1,q38:1,q39:1};
+const PHLOC={q37:1,q38:1,q39:1,"c-vespid-2":1,"c-vespid-3":1,"c-vespid-4":1};
 const SHM=PACK.SHM||{}, BODY=PACK.BODY||{}, HBODY=PACK.HBODY||{};
 const LEATHER={lam:1,lams:1,"re-a":1,"re-s":1,sahn:1,sad:1,dad:1};
 const LCARE={en:["This SA piece pairs a hand-finished composite shell with genuine leather upholstery. Leather is a natural material: its grain, tone and texture differ from hide to hide and will evolve with use. Marks or irregularities may appear over time; they are not flaws, but the signature of the material and of work done by hand.","To care for the leather, wipe it with a soft, dry, natural-coloured cloth. If it comes into contact with liquid, blot it at once and let it dry naturally at room temperature. Do not use solvents, detergents or abrasive products, and never soak or machine-wash any part of the piece; for deeper cleaning, we recommend a leather care specialist. Keep the piece away from prolonged direct sunlight and sources of heat, which fade and dry the leather, and avoid contact with dyed textiles, inks and sharp objects."],
@@ -3409,12 +3409,15 @@ function philWide(){const p=$("#idx .phil");if(!p||L!=="fa")return;p.style.remov
 function philAnim(){const p=$("#phil");if(!p||!p.closest("#idx")||p.classList.contains("pa"))return;p.classList.add("pa");
   const go_=()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){void p.offsetWidth;setTimeout(()=>p.classList.add("pin"),120);io.disconnect()}}),{threshold:.4});io.observe(p)};
   const fr=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();Promise.race([fr,new Promise(r=>setTimeout(r,2500))]).then(()=>setTimeout(()=>{try{fitPhil()}catch(_){}go_()},350))}
-function argoStrip(){const ims=[...view.querySelectorAll(".photos img")].filter(im=>PHLOC[im.dataset.k]);if(!ims.length||view.querySelector(".argo"))return;
-  const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,ks=ims.map(im=>im.dataset.k),ws=ks.map(k=>Math.round(H*DIM[k][0]/DIM[k][1])),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1);
-  const one=ims.map((im,i)=>`<img src="${im.src}" alt="${esc(im.alt)}" data-j="${im.dataset.j}" data-k="${im.dataset.k}" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
-  const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.style.setProperty("--mqd",Math.round(setW/16)+"s");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
-  ims[0].before(box);const al=()=>{box.style.marginLeft="0px";box.style.marginLeft=(-box.getBoundingClientRect().left)+"px"};al();addEventListener("resize",al);ims.forEach(im=>{const nx=im.nextElementSibling;if(nx&&nx.classList.contains("phloc")&&im!==ims[ims.length-1])nx.remove();im.remove()});
-  box.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{const o=view.querySelector(`.photos img[data-j="${im.dataset.j}"]`);if(o&&o!==im)o.click()}))}
+function argoStrip(){const pid=(location.hash.split("/")[2]||"");const keys=(PH[pid]||[]).filter(k=>PHLOC[k]&&IMG[k]);const ph=view.querySelector(".photos");if(keys.length<2||!ph||view.querySelector(".argo"))return;
+  const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,asp=k=>DIM[k]?DIM[k][0]/DIM[k][1]:16/9,ws=keys.map(k=>Math.round(H*asp(k))),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1);
+  const one=keys.map((k,i)=>`<img src="${IMG[k]}" alt="" data-k="${k}" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
+  const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.style.setProperty("--mqd",Math.round(setW/40)+"s");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
+  const cap=document.createElement("p");cap.className="phcap phloc";cap.textContent=L==="fa"?"کارخانهٔ آرگو، تهران":"Argo Factory, Tehran";
+  const olds=[...ph.querySelectorAll("img")].filter(im=>PHLOC[im.dataset.k]);(olds[0]||ph.firstChild)?ph.insertBefore(box,olds[0]||ph.firstChild):ph.appendChild(box);box.after(cap);
+  olds.forEach(im=>{const nx=im.nextElementSibling;if(nx&&nx.classList.contains("phloc"))nx.remove();im.remove()});
+  const cp=view.querySelector(".cphoto img");if(cp&&keys.some(k=>IMG[k]===cp.getAttribute("src")))cp.closest(".cphoto").remove();
+  const al=()=>{box.style.marginLeft="0px";box.style.marginLeft=(-box.getBoundingClientRect().left)+"px"};al();addEventListener("resize",al)}
 function fsWire(){try{argoStrip()}catch(_){}view.querySelectorAll(".photos img").forEach(im=>{if(im.closest(".argo"))return;if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
   view.querySelectorAll(".photos img,.cphoto img").forEach(im=>{if(im.closest(".argo"))return;const o=()=>{const w=im.closest(".kbw,.fsw,.cphoto");if(w&&im.naturalWidth)w.classList.toggle("pt",im.naturalHeight>im.naturalWidth*1.05)};if(im.complete)o();else im.addEventListener("load",o,{once:true})})}
 /* v123: slow push-in on each photograph (Barto) */
