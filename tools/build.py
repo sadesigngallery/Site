@@ -74,7 +74,8 @@ def main(app_html, photos, films):
             f"Object.assign(SJPOS,{js(load_state('subj.json', {}))});"
             f"EDSOLD=Object.assign({{}},{js(load_state('edsold.json', {}))},EDSOLD)"
             "}catch(_){}"
-            f"try{{Object.assign(FILMFIT,{js(load_state('filmfit.json', {}))});filmFitApply()}}catch(_){{}}\n")
+            f"try{{Object.assign(FILMFIT,{js(load_state('filmfit.json', {}))});filmFitApply()}}catch(_){{}}"
+            f"try{{Object.assign(IXS,{js(load_state('ixscale.json', {}))})}}catch(_){{}}\n")
     anchor = "renderChrome(); route();"
     if s.count(anchor) != 1:
         raise SystemExit("render anchor not found exactly once")
