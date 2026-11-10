@@ -17,6 +17,28 @@ from PIL import Image
 
 E = html.escape
 
+# Brand names. BRAND is the name Google should show; ALT_NAMES are the other
+# spellings people search for (WebSite / Organization "alternateName").
+BRAND = "Sa-editions"
+ALT_NAMES = ["Sa Editions", "Sa Edition", "Sa-edition", "Sa Design", "Sa"]
+FOUNDERS = ["Alireza Emtiaz", "Saqar Khakdan"]
+WHATSAPP = "14039229905"
+# The contact e-mail is read once from state/site.json ("email") by build().
+CFG = {"email": "Sadesigngallery@gmail.com"}
+ABOUT_LINE = ("Sa-editions — also known as Sa Editions, or simply Sa — is the work of SA, "
+              "a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan.")
+# Persian letter names; a piece whose Persian name is one letter, or one of these names, belongs to "Letters".
+LETTER_NAMES = {"سین", "میم", "نون", "صاد", "واو", "کاف", "عین", "طا", "رِ", "جیم", "شین", "ضاد", "ظا", "غین", "قاف", "گاف", "لام", "دال", "ذال", "الف"}
+
+
+def mail():
+    return CFG["email"]
+
+
+def is_letter(fa):
+    f = (fa or "").strip()
+    return len(f) == 1 or f in LETTER_NAMES
+
 
 def _serve(root):
     s = socket.socket(); s.bind(("127.0.0.1", 0)); port = s.getsockname()[1]; s.close()
@@ -83,7 +105,7 @@ h2.ch{text-align:center;border:0;font-weight:300;font-size:1rem;letter-spacing:.
 .eq .eb{position:relative;display:block;height:96px;margin:0 auto}.eq .eb img{position:absolute;max-width:none}.eq b{display:block;font-weight:500;margin-top:6px}.eq small{color:#555;font-size:.76rem}
 .bio{display:grid;grid-template-columns:120px 1fr;gap:16px;margin:18px 0}.bio img{width:120px;height:auto}
 footer{border-top:1px solid #e6e6e6;max-width:860px;margin:10px auto 0;padding:20px 16px 40px;text-align:center}footer nav{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;font-size:.84rem}footer nav a{text-decoration:none}footer p{color:#555;font-size:.74rem;margin:14px 0 0}
-.crumb{font-size:.8rem;color:#555;margin:0 0 4px}.crumb a{text-decoration:none}"""
+.crumb{font-size:.8rem;color:#555;margin:0 0 4px}.crumb a{text-decoration:none}.ed .por{font-weight:500;color:#111}"""
 
 
 def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
@@ -92,14 +114,14 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
     ogi = f'<meta property="og:image" content="{E(absu(site, og))}"><meta name="twitter:image" content="{E(absu(site, og))}">' if og else ""
     return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>{CSS}</style>{j}</head><body>
-<header class="sb"><a href="/" aria-label="Sa Editions"><img src="/sa-logo.png" alt="Sa Editions logo" width="120" height="46"></a><span>EDITIONS</span></header>
+<header class="sb"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/about/">About</a><a href="/#/contact">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:Sadesigngallery@gmail.com">Email</a><a href="/pieces/">All pieces</a><a href="/#/discover">Discover</a><a href="/#/trade">Trade</a></nav>
-<p>Copyright © 2026 Sa Inc. All rights reserved</p></footer></body></html>"""
+<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="mailto:{E(mail())}">Email</a><a href="/#/discover">Discover</a><a href="/#/trade">Trade</a></nav>
+<p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
 
 
 def short(text, n=155):
@@ -107,52 +129,170 @@ def short(text, n=155):
     return t if len(t) <= n else t[:n - 1].rsplit(" ", 1)[0] + "…"
 
 
-def build(out_dir, tools_dir, site, assets):
+def _pdf_font():
+    """A Unicode font for the spec sheets (Ā, ×, Ø, quotes); Helvetica if none is installed."""
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    for reg, bold in (("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),):
+        if os.path.exists(reg) and os.path.exists(bold):
+            pdfmetrics.registerFont(TTFont("SaR", reg)); pdfmetrics.registerFont(TTFont("SaB", bold))
+            return "SaR", "SaB", False
+    return "Helvetica", "Helvetica-Bold", True
+
+
+def _latin(t, strict):
+    # Persian script cannot be shaped by the PDF library: drop it (the Latin name is kept).
+    t = re.sub(r"[؀-ۿ‌‏]+", "", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    return t.encode("latin-1", "replace").decode("latin-1") if strict else t
+
+
+def spec_pdf(out_dir, x, cat1, site):
+    """/spec/<id>.pdf — one A4 sheet: picture, dimensions, specification, edition, contact."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.utils import ImageReader
+    R_, B_, strict = _pdf_font()
+    L = lambda t: _latin(t, strict)
+    os.makedirs(os.path.join(out_dir, "spec"), exist_ok=True)
+    rel = f"spec/{x['id']}.pdf"
+    W, H = A4; m = 48
+    c = canvas.Canvas(os.path.join(out_dir, rel), pagesize=A4)
+    c.setTitle(f"{x['name']} — {cat1} | {BRAND}"); c.setAuthor(BRAND); c.setSubject("Specification sheet")
+    y = H - m
+    lg = os.path.join(out_dir, "sa-logo.png")
+    if os.path.exists(lg):
+        im = Image.open(lg); k = 34 / im.height
+        c.drawImage(ImageReader(lg), m, y - 34, width=im.width * k, height=34, mask="auto")
+    c.setFont(R_, 8); c.drawRightString(W - m, y - 12, BRAND.upper() + "  ·  SPECIFICATION SHEET"); c.drawRightString(W - m, y - 24, site.replace("https://", ""))
+    y -= 62
+    c.setFont(B_, 24); c.drawString(m, y, L(x["name"]))
+    c.setFont(R_, 10); y -= 16
+    c.drawString(m, y, L(cat1.upper() + (f"  ·  {x['year']}" if x.get("year") else "")))
+    y -= 14
+    src = x.get("hero") or x.get("thumb")
+    if src and os.path.exists(os.path.join(out_dir, src.split("?")[0])):
+        im = Image.open(os.path.join(out_dir, src.split("?")[0])).convert("RGBA")
+        bb = im.getchannel("A").point(lambda a: 255 if a > 8 else 0).getbbox()
+        if bb: im = im.crop(bb)
+        bg = Image.new("RGB", im.size, (255, 255, 255)); bg.paste(im, mask=im.getchannel("A"))
+        bg.thumbnail((1000, 1000))
+        import io
+        buf = io.BytesIO(); bg.save(buf, "JPEG", quality=82, optimize=True); buf.seek(0)
+        bw, bh = W - 2 * m, 300; k = min(bw / bg.width, bh / bg.height)
+        iw, ih = bg.width * k, bg.height * k
+        c.drawImage(ImageReader(buf), m + (bw - iw) / 2, y - bh + (bh - ih) / 2, width=iw, height=ih)
+        y -= bh + 18
+    if x.get("dims"):
+        c.setStrokeColorRGB(.85, .85, .85); c.line(m, y, W - m, y)
+        cw = (W - 2 * m) / len(x["dims"])
+        for n, (k_, v) in enumerate(x["dims"]):
+            cx = m + cw * n + cw / 2
+            c.setFont(R_, 8); c.drawCentredString(cx, y - 14, L(k_)); c.setFont(B_, 14); c.drawCentredString(cx, y - 32, L(v))
+        y -= 42; c.line(m, y, W - m, y); y -= 20
+    rows = list(x["spec"])
+    for k_, v in rows:
+        c.setFont(R_, 9); c.setFillColorRGB(.33, .33, .33); c.drawString(m, y, L(k_)); c.setFillColorRGB(0, 0, 0)
+        words = L(v).split(" "); line = ""; first = True
+        for w in words:
+            t = (line + " " + w).strip()
+            if c.stringWidth(t, R_, 9) > W - 2 * m - 120:
+                c.drawString(m + 120, y, line); y -= 12; line = w
+            else:
+                line = t
+        c.drawString(m + 120, y, line); y -= 15
+        if y < 120: break
+    c.setFont(B_, 10); y -= 6
+    c.drawString(m, y, L(" · ".join(t for t in [x.get("edition"), x.get("editionNote"), "Price on request"] if t)))
+    c.setFont(R_, 8); c.setFillColorRGB(.33, .33, .33)
+    c.drawString(m, m + 14, L(f"Enquiries: {mail()}  ·  WhatsApp +1 403 922 9905  ·  instagram.com/sa_editions_"))
+    c.drawString(m, m, L(f"{site.rstrip('/')}/p/{x['id']}/  ·  Copyright © 2026 {BRAND}"))
+    c.showPage(); c.save()
+    return rel
+
+
+def enquiry_href(name):
+    from urllib.parse import quote
+    body = (f"Hello, I would like to enquire about {name}.\n\nName:\nCountry:\n"
+            "I am a: private client / architect / gallery\nMessage:\n")
+    return f"mailto:{mail()}?subject={quote(BRAND + ' — enquiry: ' + name)}&body={quote(body)}"
+
+
+def tile(x):
+    return (f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by {BRAND}" loading="lazy">'
+            f'<b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>')
+
+
+def write(out_dir, path, text):
+    d = os.path.join(out_dir, path.strip("/"))
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def build(out_dir, tools_dir, site, assets, email=None):
+    if email:
+        CFG["email"] = email
     data = scrape(out_dir, tools_dir)
     # brand files for the static pages
     for name, src in assets.items():
         if src and os.path.exists(src):
             with open(src, "rb") as f, open(os.path.join(out_dir, name), "wb") as g: g.write(f.read())
     pieces = data["pieces"]
-    org = {"@context": "https://schema.org", "@type": "Organization", "name": "Sa Editions", "alternateName": ["Sa", "SA Editions"],
-           "url": site.rstrip("/") + "/", "logo": absu(site, "sa-logo.png"), "foundingDate": "2010",
-           "founder": [{"@type": "Person", "name": "Alireza Emtiaz"}, {"@type": "Person", "name": "Saqar Khakdan"}],
-           "email": "Sadesigngallery@gmail.com", "sameAs": ["https://www.instagram.com/sa_editions_/"],
+    root = site.rstrip("/") + "/"
+    org = {"@context": "https://schema.org", "@type": "Organization", "name": BRAND, "alternateName": ALT_NAMES,
+           "url": root, "logo": absu(site, "sa-logo.png"), "foundingDate": "2010",
+           "founder": [{"@type": "Person", "name": n} for n in FOUNDERS],
+           "email": mail(), "sameAs": ["https://www.instagram.com/sa_editions_/"],
            "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "telephone": "+98-939-713-3918", "areaServed": "IR"},
                             {"@type": "ContactPoint", "contactType": "sales", "telephone": "+1-403-922-9905", "areaServed": "CA"}]}
-    urls = [("/", [absu(site, "og/home.jpg")]), ("/pieces/", []), ("/about/", [])]
+
+    def crumbs(*items):
+        el = [{"@type": "ListItem", "position": 1, "name": BRAND, "item": root}]
+        for n, (name, path) in enumerate(items):
+            el.append({"@type": "ListItem", "position": n + 2, "name": name, "item": site.rstrip("/") + path})
+        return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": el}
+
+    urls = [("/", [absu(site, "og/home.jpg")]), ("/pieces/", []), ("/collections/", []), ("/designers/", []),
+            ("/editions/", []), ("/about/", []), ("/contact/", [])]
     # piece pages
     for x in pieces:
         pid = x["id"]; path = f"/p/{pid}/"
         imgs = [i for i in [x["hero"]] + x["photos"] + ([x["drawing"]] if x["drawing"] else []) if i]
         og = og_image(out_dir, x["hero"] or x["thumb"], pid)
         cat1 = re.sub(r"s$", "", x["cat"]) if x["cat"] else ""
-        title = f"{x['name']} — {cat1} | Sa Editions"
+        spec_rows = list(x["spec"])
+        if not any(k.lower().startswith("design") and k != "Designed" for k, _ in spec_rows):
+            at = 1 if spec_rows and spec_rows[0][0] == "Category" else 0
+            spec_rows.insert(at, ("Designers", " & ".join(FOUNDERS)))
+        x["spec"] = spec_rows
+        pdf = spec_pdf(out_dir, x, cat1, site)
+        title = f"{x['name']} — {cat1} | {BRAND}"
         d0 = " ".join(x["desc"]) if x["desc"] else ""
-        mat = dict(x["spec"]).get("Material", "")
-        desc = short(f"{x['name']} ({x['fa']}), {cat1.lower()} by Sa Editions. {x['edition']}{'. ' if x['edition'] else ''}{mat + '. ' if mat else ''}{d0}")
+        mat = dict(spec_rows).get("Material", "")
+        desc = short(f"{x['name']} ({x['fa']}), {cat1.lower()} by {BRAND}. {x['edition']}{'. ' if x['edition'] else ''}{mat + '. ' if mat else ''}{d0}")
         dims = "".join(f"<div><small>{E(k)}</small><b>{E(v)}</b></div>" for k, v in x["dims"])
-        spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in x["spec"])
-        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
+        spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in spec_rows)
+        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by {BRAND} — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
         dr = f'<img src="/{E(x["drawing"])}" alt="{E(x["name"])} — technical drawing" loading="lazy">' if x["drawing"] else ""
-        hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by Sa Editions" width="1600" height="1600">' if x["hero"] else ""
+        hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by {BRAND}" width="1600" height="1600">' if x["hero"] else ""
         yt = (f'<div style="position:relative;aspect-ratio:16/9;margin:6px 0 18px;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/{E(x["yt"])}?rel=0&modestbranding=1&playsinline=1" title="{E(x["name"])} — film" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>') if x.get("yt") else ""
-        ed = f'<div class="ed"><b>{E(x["edition"])}</b>{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}</div>' if x["edition"] else ""
+        ed = (f'<div class="ed">{"<b>" + E(x["edition"]) + "</b>" if x["edition"] else ""}{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}'
+              f'<span class="por">Price on request</span></div>')
+        rel = [y for y in pieces if y["catId"] == x["catId"] and y["id"] != pid]
+        if len(rel) < 3:
+            rel += [y for y in pieces if y.get("grp", [""])[0] == x.get("grp", [""])[0] and y["id"] != pid and y not in rel]
+        rel = rel[:4]
+        related = (f"<h2>Related pieces</h2><div class='grid'>{''.join(tile(y) for y in rel)}</div>") if rel else ""
         body = f"""<main><p class="crumb"><a href="/pieces/">All pieces</a> / {E(x['cat'])}</p><h1>{E(x['name'])}</h1><p class="fa" lang="fa" dir="rtl">{E(x['fa'])}</p><p class="cat">{E(cat1)}{' · ' + str(x['year']) if x['year'] else ''}</p>
 {hero}<div class="dims">{dims}</div>{ed}{yt}<div class="desc">{''.join('<p>' + E(p) + '</p>' for p in x['desc'])}</div><dl>{spec}</dl>
-<div class="cta"><a class="p" href="/#/p/{E(pid)}">View in the catalogue</a><a href="https://wa.me/14039229905?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="mailto:Sadesigngallery@gmail.com?subject=Sa%20Editions%20%E2%80%94%20{E(x['name'])}">Email</a></div>
-<div class="ph">{ph}{dr}</div></main>"""
+<div class="cta"><a class="p" href="{E(enquiry_href(x['name']))}">Enquire</a><a href="https://wa.me/{WHATSAPP}?text={E(('Hello, about ' + x['name']).replace(' ', '%20'))}" rel="noopener">WhatsApp</a><a href="/{E(pdf)}" download>Download spec sheet</a><a href="/#/p/{E(pid)}">View in the catalogue</a></div>
+<div class="ph">{ph}{dr}</div>{related}</main>"""
         prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
                 "category": cat1, "description": d0 or desc, "image": [absu(site, i) for i in imgs], "url": site.rstrip("/") + path,
-                "brand": {"@type": "Brand", "name": "Sa Editions"}, "manufacturer": {"@type": "Organization", "name": "Sa Editions"}}
+                "brand": {"@type": "Brand", "name": BRAND}, "manufacturer": {"@type": "Organization", "name": BRAND}}
         if mat: prod["material"] = mat
-        crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Sa Editions", "item": site.rstrip("/") + "/"},
-            {"@type": "ListItem", "position": 2, "name": "All pieces", "item": site.rstrip("/") + "/pieces/"},
-            {"@type": "ListItem", "position": 3, "name": x["name"], "item": site.rstrip("/") + path}]}
-        os.makedirs(os.path.join(out_dir, "p", pid), exist_ok=True)
-        with open(os.path.join(out_dir, "p", pid, "index.html"), "w", encoding="utf-8") as f:
-            f.write(page(site, path, title, desc, body, og, [prod, crumbs]))
+        write(out_dir, path, page(site, path, title, desc, body, og, [prod, crumbs(("All pieces", "/pieces/"), (x["name"], path))]))
         urls.append((path, [absu(site, i) for i in imgs]))
     # all pieces
     groups = {}
@@ -165,7 +305,7 @@ def build(out_dir, tools_dir, site, assets):
             return None
         a = ts[0] / ts[1]; bh = 80; ih = bh / (b[3] - b[1]); iw = ih * a; bw = iw * (b[2] - b[0])
         left = bw / 2 + 2 - iw * (b[0] + b[2]) / 2; bot = 4 - ih * (1 - b[3])
-        return (f'<a href="/p/{E(x["id"])}/"><span class="eb" style="width:{bw + 4:.0f}px"><img src="/{E(x["thumb"])}" alt="{E(x["name"])} by Sa Editions" loading="lazy" '
+        return (f'<a href="/p/{E(x["id"])}/"><span class="eb" style="width:{bw + 4:.0f}px"><img src="/{E(x["thumb"])}" alt="{E(x["name"])} by {BRAND}" loading="lazy" '
                 f'style="height:{ih:.1f}px;width:{iw:.1f}px;left:{left:.1f}px;bottom:{bot:.1f}px"></span><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>')
 
     def block(c, xs):
@@ -173,24 +313,66 @@ def build(out_dir, tools_dir, site, assets):
         head = f"<h2 class='ch'><b>{E(g[0])} /</b> {E(g[1])}</h2>"
         if xs[0].get("catId") == "dining" and all(eqtile(x) for x in xs):
             return head + "<div class='eq'>" + "".join(eqtile(x) for x in xs) + "</div>"
-        return head + "<div class='grid'>" + "".join(
-            f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by Sa Editions" loading="lazy"><b>{E(x["name"])}</b><small>{E(x["edition"])}</small></a>' for x in xs) + "</div>"
+        return head + "<div class='grid'>" + "".join(tile(x) for x in xs) + "</div>"
     body = "<main><h1>All pieces</h1>" + "".join(block(c, xs) for c, xs in groups.items()) + "</main>"
-    os.makedirs(os.path.join(out_dir, "pieces"), exist_ok=True)
-    with open(os.path.join(out_dir, "pieces", "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(site, "/pieces/", "All pieces — sculptural furniture, pianos and lighting | Sa Editions",
-                     short("The full Sa Editions collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
-                     body, "og/home.jpg", [org]))
-    # about
+    write(out_dir, "/pieces/", page(site, "/pieces/", f"All pieces — sculptural furniture, pianos and lighting | {BRAND}",
+                                    short(f"The full {BRAND} collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
+                                    body, "og/home.jpg", [org, crumbs(("All pieces", "/pieces/"))]))
+    # collections (only groupings that follow from the catalogue itself)
+    letters = [x for x in pieces if is_letter(x["fa"])]
+    pianos = [x for x in pieces if x["catId"] == "piano"]
+    lt = "".join(f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by {BRAND}" loading="lazy">'
+                 f'<b>{E(x["name"])}</b><small lang="fa" dir="rtl">{E(x["fa"])}</small></a>' for x in letters)
+    body = ("<main><h1>Collections</h1>"
+            + (f"<h2 class='ch'><b>Letters</b></h2><p style='text-align:center'>Pieces named after letters of the Persian alphabet.</p><div class='grid'>{lt}</div>" if letters else "")
+            + (f"<h2 class='ch'><b>Pianos</b></h2><div class='grid'>{''.join(tile(x) for x in pianos)}</div>" if pianos else "")
+            + '<div class="cta"><a class="p" href="/pieces/">All pieces</a></div></main>')
+    write(out_dir, "/collections/", page(site, "/collections/", f"Collections — Letters and Pianos | {BRAND}",
+                                         short(f"{BRAND} collections: pieces named after letters of the Persian alphabet, and limited-edition pianos."),
+                                         body, "og/home.jpg", [org, crumbs(("Collections", "/collections/"))]))
+    # about + designers
     a = data.get("about") or {"title": "About SA", "paras": [], "bios": []}
-    bios = "".join(f'<div class="bio">{"<img src=" + chr(34) + "/" + E(b["img"]) + chr(34) + " alt=" + chr(34) + E(b["name"]) + chr(34) + ">" if b.get("img") else ""}<div><b>{E(b["name"])}</b><p>{E(b["text"])}</p></div></div>' for b in a["bios"])
-    body = f"<main><h1>{E(a['title'])}</h1>" + "".join(f"<p>{E(p)}</p>" for p in a["paras"] if p not in [b['text'] for b in a['bios']]) + (f"<h2>Founders</h2>{bios}" if bios else "") + \
-           '<div class="cta"><a class="p" href="/">Enter the catalogue</a><a href="/#/contact">Contact</a></div></main>'
-    os.makedirs(os.path.join(out_dir, "about"), exist_ok=True)
-    with open(os.path.join(out_dir, "about", "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(site, "/about/", "About Sa Editions — Alireza Emtiaz & Saqar Khakdan",
-                     short("Sa Editions is a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan, working across Objects, Collectibles and Spaces. Every piece is made by hand in a limited edition."),
-                     body, "og/home.jpg", [org]))
+    btxt = [b["text"] for b in a["bios"]]
+    bio_html = lambda b: f'<div class="bio">{"<img src=" + chr(34) + "/" + E(b["img"]) + chr(34) + " alt=" + chr(34) + E(b["name"]) + chr(34) + ">" if b.get("img") else ""}<div><b>{E(b["name"])}</b><p>{E(b["text"])}</p></div></div>'
+    bios = "".join(bio_html(b) for b in a["bios"])
+    body = (f"<main><h1>{E(a['title'])}</h1><p>{E(ABOUT_LINE)}</p>" + "".join(f"<p>{E(p)}</p>" for p in a["paras"] if p not in btxt)
+            + (f"<h2>Founders</h2>{bios}" if bios else "")
+            + '<div class="cta"><a class="p" href="/">Enter the catalogue</a><a href="/designers/">Designers</a><a href="/contact/">Contact</a></div></main>')
+    write(out_dir, "/about/", page(site, "/about/", f"About {BRAND} — Alireza Emtiaz & Saqar Khakdan",
+                                   short(f"{ABOUT_LINE} Every piece is made by hand in a limited edition."),
+                                   body, "og/home.jpg", [org, crumbs(("About", "/about/"))]))
+    people = [{"@context": "https://schema.org", "@type": "Person", "name": b["name"], "description": b["text"],
+               "worksFor": {"@type": "Organization", "name": BRAND}, **({"image": absu(site, b["img"])} if b.get("img") else {})} for b in a["bios"]]
+    body = (f"<main><h1>Designers</h1><p style='text-align:center'>Every {BRAND} piece is designed by the studio's two founders.</p>{bios}"
+            f"<h2>Pieces</h2><div class='grid'>{''.join(tile(x) for x in pieces)}</div></main>")
+    write(out_dir, "/designers/", page(site, "/designers/", f"Designers — Alireza Emtiaz & Saqar Khakdan | {BRAND}",
+                                       short(f"Alireza Emtiaz and Saqar Khakdan, the architects and designers behind {BRAND}, and the pieces they have designed."),
+                                       body, "og/home.jpg", people + [crumbs(("Designers", "/designers/"))]))
+    # editions
+    sizes = {}
+    for x in pieces:
+        m_ = re.search(r"(\d[\d,]*)", x["edition"] or "")
+        key = int(m_.group(1).replace(",", "")) if m_ and "one" not in (x["edition"] or "").lower() else 1
+        sizes.setdefault(key, []).append(x)
+    rows = "".join(f"<h2>{'One of a kind' if k == 1 else 'Edition of ' + str(k)}</h2><div class='grid'>"
+                   + "".join(f'<a href="/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} by {BRAND}" loading="lazy"><b>{E(x["name"])}</b><small>{E(x["editionNote"] or x["edition"])}</small></a>' for x in xs)
+                   + "</div>" for k, xs in sorted(sizes.items()))
+    body = (f"<main><h1>Editions</h1><p>Every {BRAND} piece is made by hand under the founders' direct supervision, using a stencil technique developed in-house. "
+            "This is what allows each work to exist in a limited, numbered edition, or as a single piece. The size of each edition is fixed and is shown on every piece, "
+            "together with how many of the edition have been sold.</p>" + rows + "</main>")
+    write(out_dir, "/editions/", page(site, "/editions/", f"Editions — limited, numbered and one-of-a-kind pieces | {BRAND}",
+                                      short(f"How {BRAND} editions work: every piece is handmade in a limited, numbered edition or as a single piece. Edition sizes and pieces sold."),
+                                      body, "og/home.jpg", [org, crumbs(("Editions", "/editions/"))]))
+    # contact
+    body = (f"<main><h1>Contact</h1><p style='text-align:center'>All prices are on request. Tell us which piece you are interested in, where you are, "
+            "and whether you are a private client, an architect or a gallery.</p>"
+            f"<dl><dt>Email</dt><dd><a href='mailto:{E(mail())}'>{E(mail())}</a></dd><dt>WhatsApp</dt><dd><a href='https://wa.me/{WHATSAPP}' rel='noopener'>+1 403 922 9905</a></dd>"
+            "<dt>Phone (Iran)</dt><dd><a href='tel:+989397133918'>+98 939 713 3918</a></dd><dt>Phone (Canada)</dt><dd><a href='tel:+14039229905'>+1 403 922 9905</a></dd>"
+            "<dt>Instagram</dt><dd><a href='https://www.instagram.com/sa_editions_/' rel='noopener'>@sa_editions_</a></dd></dl>"
+            f'<div class="cta"><a class="p" href="{E(enquiry_href("a piece"))}">Send an enquiry</a><a href="/#/contact">Contact in the catalogue</a></div></main>')
+    write(out_dir, "/contact/", page(site, "/contact/", f"Contact — enquiries and prices on request | {BRAND}",
+                                     short(f"Contact {BRAND}: enquiries, prices on request, trade and gallery requests by email, WhatsApp or Instagram."),
+                                     body, "og/home.jpg", [org, crumbs(("Contact", "/contact/"))]))
     # home preview picture: the logo on white
     lg = os.path.join(out_dir, "sa-logo.png")
     if os.path.exists(lg):
@@ -209,15 +391,20 @@ def build(out_dir, tools_dir, site, assets):
     return org, pieces
 
 
+HOME_MARK = ("<!--sa-seo-->", "<!--/sa-seo-->")
+
+
 def home_head(site, org, pieces):
-    title = "Sa — Sculptural furniture in limited editions | Sa Editions"
-    desc = "Sa Editions: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
-    web = {"@context": "https://schema.org", "@type": "WebSite", "name": "Sa Editions", "alternateName": ["Sa", "SA Editions"], "url": site.rstrip("/") + "/"}
+    title = f"{BRAND} (Sa Editions) — Sculptural furniture, handmade in limited editions"
+    desc = f"{BRAND}: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
+    web = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "alternateName": ALT_NAMES, "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
-    head = (f'<title>Sa</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
-            f'<meta property="og:type" content="website"><meta property="og:site_name" content="Sa Editions"><meta property="og:title" content="{E(title)}">'
+    head = (HOME_MARK[0] + f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
+            f'<meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}">'
             f'<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(site.rstrip("/") + "/")}"><meta property="og:image" content="{E(absu(site, "og/home.jpg"))}">'
             f'<meta name="twitter:card" content="summary_large_image"><link rel="sitemap" type="application/xml" href="/sitemap.xml">'
-            f'<script type="application/ld+json">{json.dumps(org, ensure_ascii=False)}</script><script type="application/ld+json">{json.dumps(web, ensure_ascii=False)}</script>')
-    noscript = f'<noscript><main><h1>Sa Editions — sculptural furniture in limited editions</h1><p>{E(desc)}</p><ul>{links}</ul><p><a href="/about/">About</a> · <a href="/pieces/">All pieces</a></p></main></noscript>'
+            f'<script type="application/ld+json">{json.dumps(org, ensure_ascii=False)}</script><script type="application/ld+json">{json.dumps(web, ensure_ascii=False)}</script>' + HOME_MARK[1])
+    noscript = (f'<noscript><main><h1>{BRAND}</h1><p>{E(ABOUT_LINE)}</p><p>{E(desc)}</p><ul>{links}</ul>'
+                '<p><a href="/pieces/">All pieces</a> · <a href="/collections/">Collections</a> · <a href="/designers/">Designers</a> · '
+                '<a href="/editions/">Editions</a> · <a href="/about/">About</a> · <a href="/contact/">Contact</a></p></main></noscript>')
     return head, noscript

@@ -3,6 +3,8 @@
 
 Usage:
   python3 tools/build.py APP_HTML PHOTOS_DIR FILMS_DIR
+  python3 tools/build.py --seo-only     rewrite only the search-engine pages and
+                                        the home page head, on the public/ already built
 
 APP_HTML    the app's index.html (as published in the claude.ai artifact)
 PHOTOS_DIR  folder holding the app's p/*.webp files
@@ -21,7 +23,8 @@ What it does:
   * writes the search-engine pages (tools/seo.py): one page per piece, an
     index of all pieces, About, link-preview pictures, sitemap.xml, robots.txt,
     and the home page's title, description and structured data.
-The site address used in those pages is read from state/site.json.
+The site address and the contact e-mail used in those pages are read from
+state/site.json ("url", "email"): change the e-mail there, once, to change it everywhere.
 The result is written to public/, which Cloudflare Pages serves.
 """
 import base64, hashlib, json, os, re, shutil, sys
@@ -121,18 +124,7 @@ def main(app_html, photos, films):
                 "/\n  Cache-Control: no-cache\n"
                 "/index.html\n  Cache-Control: no-cache\n")
     # 4) search-engine pages, then the home page's own head
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import seo
-    site = load_state("site.json", {}).get("url", "https://sa-editions.com")
-    brand = os.path.join(STATE, "brand")
-    org, pieces = seo.build(OUT, os.path.dirname(os.path.abspath(__file__)), site,
-                            {n: os.path.join(brand, n) for n in ("sa-logo.png", "sa-k64.png", "sa-w64.png", "sa-apple180.png")})
-    head, noscript = seo.home_head(site, org, pieces)
-    if s.count("<title>Sa</title>") != 1:
-        raise SystemExit("home <title> not found exactly once")
-    s = s.replace("<title>Sa</title>", head, 1)
-    s = re.sub(r"<html lang=\"fa\" dir=\"rtl\">", '<html lang="en" dir="ltr">', s, count=1)
-    s = s.replace("<body>", "<body>" + noscript, 1)
+    s = seo_pages(s)
     # tab icons as real files: Safari ignores data: icons and falls back to a letter in a circle
     for n, out in (("favicon.ico", "favicon.ico"), ("favicon-32.png", "favicon-32.png"), ("favicon-512.png", "favicon-512.png"), ("sa-apple180.png", "apple-touch-icon.png")):
         shutil.copy(os.path.join(brand, n), os.path.join(OUT, out))
@@ -140,12 +132,52 @@ def main(app_html, photos, films):
     s = s.replace("</head>", '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head>', 1)
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(s)
-    print(f"wrote {len(pieces)} piece pages, /pieces/, /about/, sitemap.xml, robots.txt for {site}")
     size = os.path.getsize(os.path.join(OUT, "index.html"))
     print(f"moved {moved} pictures out of the page; index.html is now {size/1e6:.1f} MB")
 
 
+def seo_pages(s):
+    """Write the static pages and put the home page's head and <noscript> into s (the app page)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import seo
+    cfg = load_state("site.json", {})
+    site = cfg.get("url", "https://sa-editions.com")
+    brand = os.path.join(STATE, "brand")
+    org, pieces = seo.build(OUT, os.path.dirname(os.path.abspath(__file__)), site,
+                            {n: os.path.join(brand, n) for n in ("sa-logo.png", "sa-k64.png", "sa-w64.png", "sa-apple180.png")},
+                            email=cfg.get("email"))
+    head, noscript = seo.home_head(site, org, pieces)
+    a, b = seo.HOME_MARK
+    if a in s:  # page built before: replace the previous head and noscript
+        s = s[:s.index(a)] + head + s[s.index(b) + len(b):]
+        s = re.sub(r"(?s)<noscript><main><h1>.*?</noscript>", lambda _: noscript, s, count=1)
+    elif s.count("<title>Sa</title>") == 1 and "<title>Sa</title><meta name=\"description\"" not in s:
+        s = s.replace("<title>Sa</title>", head, 1)
+        s = s.replace("<body>", "<body>" + noscript, 1)
+    else:  # public/ built by the older version of this script (head without markers)
+        n0 = len(s)
+        s = re.sub(r'(?s)<title>[^<]*</title><meta name="description".*?<link rel="sitemap"[^>]*>(?:<script type="application/ld\+json">.*?</script>){2}',
+                   lambda _: head, s, count=1)
+        if len(s) == n0 and head not in s:
+            raise SystemExit("home head not found")
+        s = re.sub(r"(?s)<noscript><main><h1>.*?</noscript>", lambda _: noscript, s, count=1)
+    s = re.sub(r"<html lang=\"fa\" dir=\"rtl\">", '<html lang="en" dir="ltr">', s, count=1)
+    print(f"wrote {len(pieces)} piece pages and spec sheets, /pieces/, /collections/, /designers/, /editions/, /about/, /contact/, sitemap.xml, robots.txt for {site}")
+    return s
+
+
+def seo_only():
+    p = os.path.join(OUT, "index.html")
+    s = open(p, encoding="utf-8").read()
+    s = seo_pages(s)
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(s)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if sys.argv[1:] == ["--seo-only"]:
+        seo_only()
+    elif len(sys.argv) != 4:
         raise SystemExit(__doc__)
-    main(*sys.argv[1:])
+    else:
+        main(*sys.argv[1:])
