@@ -2312,6 +2312,11 @@ body.certpg .certout figcaption{margin-top:10px}
 .hvtop.ffon{cursor:move;touch-action:none}
 .hvtop.ffon .hvmenu a{pointer-events:none}
 .hvtop.ffon .ffbtn{display:none}
+.photos .argo{width:100vw;overflow:hidden;line-height:0}
+.photos .argo .mqt{display:flex;gap:6px;width:max-content;animation:argo var(--mqd,90s) linear infinite;will-change:transform}
+.photos .argo img{flex:none;display:block;object-fit:cover;max-width:none!important;cursor:zoom-in;border-radius:0!important}
+@keyframes argo{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--mqw)))}}
+@media (prefers-reduced-motion:reduce){.photos .argo .mqt{animation-duration:calc(var(--mqd,90s) * 3)}}
 .fsoc{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;margin:16px auto 6px;direction:ltr}
 .fsoc a{display:inline-flex;align-items:center;color:#111;text-decoration:none;cursor:pointer}
 .fsoc a i{font:500 .72rem var(--latin,system-ui);font-style:normal;letter-spacing:.02em;font-stretch:85%}
@@ -3398,8 +3403,14 @@ function philWide(){const p=$("#idx .phil");if(!p||L!=="fa")return;p.style.remov
 function philAnim(){const p=$("#phil");if(!p||!p.closest("#idx")||p.classList.contains("pa"))return;p.classList.add("pa");
   const go_=()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){void p.offsetWidth;setTimeout(()=>p.classList.add("pin"),120);io.disconnect()}}),{threshold:.4});io.observe(p)};
   const fr=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();Promise.race([fr,new Promise(r=>setTimeout(r,2500))]).then(()=>setTimeout(()=>{try{fitPhil()}catch(_){}go_()},350))}
-function fsWire(){view.querySelectorAll(".photos img").forEach(im=>{if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
-  view.querySelectorAll(".photos img,.cphoto img").forEach(im=>{const o=()=>{const w=im.closest(".kbw,.fsw,.cphoto");if(w&&im.naturalWidth)w.classList.toggle("pt",im.naturalHeight>im.naturalWidth*1.05)};if(im.complete)o();else im.addEventListener("load",o,{once:true})})}
+function argoStrip(){const ims=[...view.querySelectorAll(".photos img")].filter(im=>PHLOC[im.dataset.k]);if(!ims.length||view.querySelector(".argo"))return;
+  const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,ks=ims.map(im=>im.dataset.k),ws=ks.map(k=>Math.round(H*DIM[k][0]/DIM[k][1])),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1);
+  const one=ims.map((im,i)=>`<img src="${im.src}" alt="${esc(im.alt)}" data-j="${im.dataset.j}" data-k="${im.dataset.k}" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
+  const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.style.setProperty("--mqd",Math.round(setW/16)+"s");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
+  ims[0].before(box);const al=()=>{box.style.marginLeft="0px";box.style.marginLeft=(-box.getBoundingClientRect().left)+"px"};al();addEventListener("resize",al);ims.forEach(im=>{const nx=im.nextElementSibling;if(nx&&nx.classList.contains("phloc")&&im!==ims[ims.length-1])nx.remove();im.remove()});
+  box.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{const o=view.querySelector(`.photos img[data-j="${im.dataset.j}"]`);if(o&&o!==im)o.click()}))}
+function fsWire(){try{argoStrip()}catch(_){}view.querySelectorAll(".photos img").forEach(im=>{if(im.closest(".argo"))return;if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
+  view.querySelectorAll(".photos img,.cphoto img").forEach(im=>{if(im.closest(".argo"))return;const o=()=>{const w=im.closest(".kbw,.fsw,.cphoto");if(w&&im.naturalWidth)w.classList.toggle("pt",im.naturalHeight>im.naturalWidth*1.05)};if(im.complete)o();else im.addEventListener("load",o,{once:true})})}
 /* v123: slow push-in on each photograph (Barto) */
 const KBP={barto:1};
 function kbWire(id){if(!KBP[id])return;const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(e=>{e.target.classList.toggle("kbon",e.isIntersecting)}),{threshold:.25}):null;
@@ -4929,7 +4940,7 @@ function renderLove(i){
 /* ---------- menu & search ---------- */
 /* v116: a plain word with an arrow to go back or home */
 const NAVW={back:{fa:"بازگشت",en:"Back",es:"Volver",it:"Indietro",fr:"Retour",de:"Zurück",zh:"返回",ja:"戻る",ar:"رجوع"},home:{fa:"خانه",en:"Home",es:"Inicio",it:"Home",fr:"Accueil",de:"Start",zh:"首页",ja:"ホーム",ar:"الرئيسية"}};
-function navTxt(k,href){return `<a class="back navt" href="${href}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg><span>${NAVW[k][L]||NAVW[k].en}</span></a>`}
+function navTxt(k,href){if(k==="back"){k="home";href="#/"}return `<a class="back navt" href="${href}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg><span>${NAVW[k][L]||NAVW[k].en}</span></a>`}
 function menuBtn(){const h=location.hash.replace(/^#\/?/,"").split("/"),k=h[0];if(!k||k==="i"||k==="c")return "";if(k==="color"&&h[1])return navTxt("back","#/p/"+h[1]);if(k==="set")return "";if(k==="love")return navTxt("back","#/sculpture");return navTxt("home","#/");return `<button type="button" class="iconbtn menuicon" id="menuB" aria-label="${t().menu}"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button>`}
 document.addEventListener("click",e=>{const b=e.target.closest("#menuB");if(b)openMenu();if(!e.target.closest("#langtab")){const lt=$("#langtab");if(lt)lt.classList.remove("open")}});
 const CATALOGUE=[["dining","design"],["desk","design"],["side","design"],["coffee","design"],["console","design"],["light","light"],["lounge","seat"],["bench","seat"],["chair","seat"],["armchair","seat"],["sofa","seat"],["piano","piano"]];
