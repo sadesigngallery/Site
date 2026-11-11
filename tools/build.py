@@ -12,7 +12,7 @@ FILMS_DIR   folder holding the app's v/*.mp4 files
 
 What it does:
   * bakes the studio settings kept in state/*.json (room, lights, editions,
-    Subjects layout, edition sales) into the page, because the public site
+    Subjects layout, edition sales, photo order) into the page, because the public site
     has no access to the app's shared store;
   * moves the large embedded pictures (IMG and AL in the asset pack) out of
     the page into separate, content-hashed files under public/i and public/a,
@@ -79,7 +79,8 @@ def main(app_html, photos, films):
             "}catch(_){}"
             f"try{{Object.assign(FILMFIT,{js(load_state('filmfit.json', {}))});filmFitApply()}}catch(_){{}}"
             f"try{{Object.assign(IXS,{js(load_state('ixscale.json', {}))})}}catch(_){{}}"
-            f"try{{Object.assign(LAY,{js(load_state('layout.json', {}))});layApply()}}catch(_){{}}\n")
+            f"try{{Object.assign(LAY,{js(load_state('layout.json', {}))});layApply()}}catch(_){{}}"
+            f"try{{Object.assign(ORD,{js(load_state('photoord.json', {}))});ordAll()}}catch(_){{}}\n")
     anchor = "renderChrome(); route();"
     if s.count(anchor) != 1:
         raise SystemExit("render anchor not found exactly once")
