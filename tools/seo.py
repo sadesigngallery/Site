@@ -120,7 +120,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
 <header class="sb"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a></nav>
+<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a><a href="/privacy/">Privacy</a></nav>
 <p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
 
 
@@ -384,6 +384,24 @@ def build(out_dir, tools_dir, site, assets, email=None):
     write(out_dir, "/contact/", page(site, "/contact/", f"Contact — enquiries and prices on request | {BRAND}",
                                      short(f"Contact {BRAND}: enquiries, prices on request, trade and gallery requests by email, WhatsApp or Instagram."),
                                      body, "og/home.jpg", [org, crumbs(("Contact", "/contact/"))]))
+    # privacy page
+    body = ("<main><h1>Privacy</h1><p class='crumb'>Last updated: " + time.strftime("%d %B %Y") + "</p>"
+            f"<p>This notice explains what happens to information when you visit sa-editions.com, the website of {BRAND}.</p>"
+            "<h2>What we collect</h2><p>The website has no accounts, no sign-up and no forms that send your details to us. "
+            "We only receive what you choose to send: an e-mail or a WhatsApp message you write to us, which we use to answer your enquiry.</p>"
+            "<h2>Stored in your browser</h2><p>To remember your choices, the catalogue keeps a few small settings in your own browser's storage: "
+            "the language, the unit (cm or inches), the pieces you mark as favourites, and the details you type into the trade form so you do not have to type them again. "
+            "They never leave your device, and you can delete them at any time by clearing this site's data in your browser. The website sets no advertising or tracking cookies.</p>"
+            "<h2>Services we use</h2><ul>"
+            "<li><b>Cloudflare</b> hosts and delivers the website. Like any web host, it processes your IP address and basic request data to deliver pages and protect the site.</li>"
+            "<li><b>Google Fonts</b> supplies some typefaces; your browser requests them from Google's servers.</li>"
+            "<li><b>YouTube (privacy-enhanced mode)</b> shows the films on some piece pages, through youtube-nocookie.com.</li>"
+            "<li><b>WhatsApp, e-mail and Instagram</b> open only when you tap their links; what you send there is covered by those services' own terms.</li></ul>"
+            "<h2>Certificates</h2><p>When you fill in a certificate of authenticity, the certificate is drawn in your browser; the name you type is not sent to us.</p>"
+            f"<h2>Contact</h2><p>For any question about your information, or to ask us to delete an enquiry you sent, write to <a href='mailto:{E(mail())}'>{E(mail())}</a>.</p></main>")
+    write(out_dir, "/privacy/", page(site, "/privacy/", f"Privacy | {BRAND}", short(f"How {BRAND} handles information on sa-editions.com: no accounts or tracking cookies; settings kept in your browser; Cloudflare, Google Fonts and YouTube."),
+                                     body, "og/home.jpg", [org, crumbs(("Privacy", "/privacy/"))]))
+    urls.append(("/privacy/", []))
     # 404 page (served by Cloudflare for any unknown address; wrangler.jsonc not_found_handling = "404-page")
     nf = page(site, "/404.html", f"Page not found | {BRAND}", f"This page does not exist on {BRAND}.",
               "<main style='text-align:center'><h1>Page not found</h1><p>The address may be mistyped, or the page has moved.</p>"
