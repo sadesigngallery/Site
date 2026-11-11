@@ -2402,29 +2402,12 @@ body.certpg .certout figcaption{margin-top:10px}
 /* menu: no dot before Trade and Download */
 .mlist>a.mtrade::before,.ov.menu .mlist>a.mtrade>i.ar{display:none!important}.mlist>a.mtrade{padding-inline-start:19px!important}
 /* menu: what a + opens is laid out across, not down; each stays open */
-.mlist .msub{display:flex!important;flex-wrap:wrap;align-items:flex-start;column-gap:6px;row-gap:2px;padding-inline-start:19px}
-.mlist .msub>.dz{width:auto!important;padding:6px 14px 6px 0!important;order:1}
-.mlist .msub>a{order:1}
-.mlist .msub>.msub{order:2;position:relative;flex:0 0 100%;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0 10px!important;gap:14px}
-.mlist .msub>.msub::-webkit-scrollbar{display:none}
-.mlist .msub>.msub{padding-top:0!important;padding-bottom:0!important}
-.mlist .msub>.dz.open+.msub{padding-top:24px!important;padding-bottom:10px!important}
-.mlist .msub>.dz:not(.open)+.msub::before{display:none}
-.ov.menu .mlist .msub>.dz{padding-left:20px!important;padding-right:16px!important}
-.ov.menu .mlist .msub>.dz>.pm{left:0!important;right:auto!important}
-.ov.menu .mlist .msub>.dz{padding-top:5px!important;padding-bottom:5px!important;align-items:center!important}
-.ov.menu .mlist .msub>.dz .dzl{line-height:1.45!important}
-.ov.menu .mlist .msub>.msub{padding-inline-start:0!important;margin-inline-start:0!important}
-.ov.menu .mlist .msub>.msub>a{padding-inline-start:0!important;margin-inline-start:0!important}
-.ov.menu .mlist .msub>.dz{min-height:0!important;line-height:1.45!important}
-.ov.menu .mlist .msub>.dz>.pm{top:calc(50% - 1px)!important;margin-top:0!important}
-html[lang=fa] .ov.menu .mlist .msub>.dz{padding-left:16px!important;padding-right:20px!important}
-html[lang=fa] .ov.menu .mlist .msub>.dz>.pm{right:0!important;left:auto!important}
-.mlist .msub>.msub::before{content:attr(data-lab);position:absolute;left:0;top:2px;font:500 .58rem var(--latin);letter-spacing:.2em;text-transform:uppercase;color:#888;white-space:nowrap}
-html[lang=fa] .mlist .msub>.msub::before{left:auto;right:0;letter-spacing:0;font:500 .78rem var(--fa-body)}
-.mlist .msub>.msub>a{flex:0 0 auto;display:flex!important;flex-direction:column-reverse;align-items:flex-start;gap:6px;padding:4px 0!important}
-.mlist .msub>.msub>a .tb{position:relative}
-.mlist .msub>a{flex:0 0 auto;padding:6px 14px 6px 0!important}
+/* v235: categories stack one under another; the pieces of an opened category sit side by side */
+.ov.menu .mlist .msub:has(>a>.tb){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start;gap:18px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;padding-inline-start:calc(var(--pmx,3px) + 40px)!important;padding-inline-end:16px!important}
+.ov.menu .mlist .msub:has(>a>.tb)::-webkit-scrollbar{display:none}
+.ov.menu .mlist .msub:has(>a>.tb)>a{flex:0 0 auto!important;display:flex!important;flex-direction:column-reverse!important;align-items:flex-start!important;justify-content:flex-start!important;gap:6px!important;width:auto!important;padding:8px 0 12px!important;margin:0!important;border:0!important}
+.ov.menu .mlist .msub:has(>a>.tb)>a>span{padding:0!important;margin:0!important;white-space:nowrap}
+.ov.menu .mlist .msub:has(>a>.tb)>a>.tb{position:relative;margin:0!important}
 body.home #bag{display:none!important}
 #idx .intro a.discv{display:none!important}
 .laybtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:9000;border:0;background:#111;color:#fff;border-radius:999px;padding:9px 16px;font:600 .78rem var(--latin);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
@@ -5233,7 +5216,7 @@ function openMenu(){
    :`${grp(T_.seating,"#/c/lounge",["lounge","bench","chair","armchair","sofa"].filter(catOf).map(id=>catItems(catOf(id))))}
    ${grp(TBLN[L]||TBLN.en,"#/c/dining",["dining","desk","side","coffee","console","mirror"].filter(catOf).map(id=>catItems(catOf(id))))}
    ${grp(T_.lighting,"#/c/light",["light"].filter(catOf).map(id=>catItems(catOf(id))))}
-   ${grp(T_.piano,"#/k/piano",P.filter(x=>x.cat==="piano").map(x=>[`#/p/${x.id}`,mName(x)]))}
+   ${grp(T_.piano,"#/k/piano",P.filter(x=>x.cat==="piano").map(x=>[`#/p/${x.id}`,mName(x),thumb(x.id),x.id,""]))}
    ${grp(MIXN[L]||MIXN.en,"#/sets",SETS.map(q=>[`#/set/${q.id}`,sN(q)]))}`}
    <a class="mmain" href="#/subjects" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/subjects'},1350)"><i class="ar"><s></s><s></s></i><span>${SUBJN[L]||SUBJN.en}</span></a>
    <a class="mmain" href="#/editions" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/editions'},1350)"><i class="ar"><s></s><s></s></i><span>${EDTN[L]||EDTN.en}</span></a>
