@@ -2402,12 +2402,7 @@ body.certpg .certout figcaption{margin-top:10px}
 /* menu: no dot before Trade and Download */
 .mlist>a.mtrade::before,.ov.menu .mlist>a.mtrade>i.ar{display:none!important}.mlist>a.mtrade{padding-inline-start:19px!important}
 /* menu: what a + opens is laid out across, not down; each stays open */
-/* v235: categories stack one under another; the pieces of an opened category sit side by side */
-.ov.menu .mlist .msub:has(>a>.tb){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start;gap:18px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;padding-inline-start:calc(var(--pmx,3px) + 40px)!important;padding-inline-end:16px!important}
-.ov.menu .mlist .msub:has(>a>.tb)::-webkit-scrollbar{display:none}
-.ov.menu .mlist .msub:has(>a>.tb)>a{flex:0 0 auto!important;display:flex!important;flex-direction:column-reverse!important;align-items:flex-start!important;justify-content:flex-start!important;gap:6px!important;width:auto!important;padding:8px 0 12px!important;margin:0!important;border:0!important}
-.ov.menu .mlist .msub:has(>a>.tb)>a>span{padding:0!important;margin:0!important;white-space:nowrap}
-.ov.menu .mlist .msub:has(>a>.tb)>a>.tb{position:relative;margin:0!important}
+
 body.home #bag{display:none!important}
 #idx .intro a.discv{display:none!important}
 .laybtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:9000;border:0;background:#111;color:#fff;border-radius:999px;padding:9px 16px;font:600 .78rem var(--latin);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
@@ -5216,7 +5211,7 @@ function openMenu(){
    :`${grp(T_.seating,"#/c/lounge",["lounge","bench","chair","armchair","sofa"].filter(catOf).map(id=>catItems(catOf(id))))}
    ${grp(TBLN[L]||TBLN.en,"#/c/dining",["dining","desk","side","coffee","console","mirror"].filter(catOf).map(id=>catItems(catOf(id))))}
    ${grp(T_.lighting,"#/c/light",["light"].filter(catOf).map(id=>catItems(catOf(id))))}
-   ${grp(T_.piano,"#/k/piano",P.filter(x=>x.cat==="piano").map(x=>[`#/p/${x.id}`,mName(x),thumb(x.id),x.id,""]))}
+   ${grp(T_.piano,"#/k/piano",P.filter(x=>x.cat==="piano").map(x=>[`#/p/${x.id}`,mName(x)]))}
    ${grp(MIXN[L]||MIXN.en,"#/sets",SETS.map(q=>[`#/set/${q.id}`,sN(q)]))}`}
    <a class="mmain" href="#/subjects" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/subjects'},1350)"><i class="ar"><s></s><s></s></i><span>${SUBJN[L]||SUBJN.en}</span></a>
    <a class="mmain" href="#/editions" onclick="event.preventDefault();event.stopImmediatePropagation();this.classList.add('go');setTimeout(()=>{try{closeOv()}catch(_){}location.hash='#/editions'},1350)"><i class="ar"><s></s><s></s></i><span>${EDTN[L]||EDTN.en}</span></a>
@@ -5231,12 +5226,11 @@ function openMenu(){
   const setSub=(m,open)=>{if(m._t){m.removeEventListener("transitionend",m._t);m._t=null}
     if(open){m.classList.remove("closing");m.style.maxHeight=m.scrollHeight+"px";m._t=e=>{if(e.target===m&&m.style.maxHeight!=="0px"){m.style.maxHeight="none"}};m.addEventListener("transitionend",m._t)}
     else{m.style.maxHeight=m.scrollHeight+"px";void m.offsetHeight;m.classList.add("closing");m.style.maxHeight="0px"}};
-  ov.querySelectorAll(".msub>.dz").forEach(d=>{const m=d.nextElementSibling;if(m&&m.classList.contains("msub"))m.dataset.lab=(d.querySelector(".dzl")||d).textContent.trim()});
   let lastTg=0;
   ov.querySelectorAll(".dz").forEach(b=>b.onclick=e=>{e.stopPropagation();
     /* v70: the category name opens its place in the index; the + still opens the list */
     
-    const now=Date.now();if(now-lastTg<500)return;lastTg=now;const o=!b.classList.contains("open");b.classList.toggle("open",o);setSub(b.nextElementSibling,o)});
+    const now=Date.now();if(now-lastTg<500)return;lastTg=now;const o=!b.classList.contains("open");[...b.parentElement.children].filter(q=>q.classList.contains("dz")&&q!==b&&q.classList.contains("open")).forEach(q=>{q.classList.remove("open");setSub(q.nextElementSibling,false)});b.classList.toggle("open",o);setSub(b.nextElementSibling,o)});
   ov.querySelectorAll(".mlang button").forEach(b=>b.onclick=()=>{if(b.dataset.l==="more"){const m2=b.parentElement,o=!m2.classList.contains("open");m2.classList.toggle("open",o);b.setAttribute("aria-expanded",String(o));return}if(b.dataset.l==="other"){otherLangs();return}setLang(b.dataset.l);closeOv()});
 }
 function openSearch(){
