@@ -111,6 +111,24 @@ def main(app_html, photos, films):
             moved += 1
     s = s[:i] + "const PACK=" + json.dumps(pack, separators=(",", ":"), ensure_ascii=False) + ";" + s[j:]
 
+    # 2b) every other large inline file (films, posters, fonts, logo, pattern tiles) -> its own hashed file,
+    #     so the page itself stays small and the browser caches and streams these separately
+    big_ext = dict(EXT, **{"video/mp4": "mp4", "font/woff": "woff", "font/woff2": "woff2", "font/ttf": "ttf", "application/font-woff": "woff"})
+    def _out(m):
+        nonlocal moved
+        mime, b64 = m.group(1), m.group(2)
+        if mime not in big_ext:
+            return m.group(0)
+        raw = base64.b64decode(b64)
+        name = f"i/x.{hashlib.sha1(raw).hexdigest()[:12]}.{big_ext[mime]}"
+        p = os.path.join(OUT, name)
+        if not os.path.exists(p):
+            with open(p, "wb") as f:
+                f.write(raw)
+        moved += 1
+        return name
+    s = re.sub(r"data:([a-z]+/[a-z0-9.+-]+);base64,([A-Za-z0-9+/=]{4000,})", _out, s)
+
     s = unwrap(s)
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(s)
