@@ -14,7 +14,7 @@
 :root:root{--latin:"SA Plex Var","IBM Plex Sans","SA Plex",Arial,sans-serif!important;--fa-body:"SA Plex Arabic","IBM Plex Sans Arabic","Vazirmatn",Tahoma,sans-serif!important}
 
 /* Editions: a quiet ledger of numbered pieces */
-body.edx{background:#fff}
+body.edx{background:#f3f3f3}
 main.page.expage{max-width:1180px!important;width:100%!important;box-sizing:border-box;margin:0 auto!important;padding:0 clamp(18px,5vw,56px) 12vh!important}
 .exhd{text-align:center;max-width:660px;margin:0 auto clamp(44px,8vw,88px)}
 .exhd h1{margin:0 0 18px;font:100 clamp(2.6rem,9vw,4.6rem)/1 var(--latin);font-stretch:85%;text-transform:uppercase;letter-spacing:.02em;color:#111}
@@ -2364,7 +2364,7 @@ body.certpg .certf input,body.certpg .certf select{font-family:"Cormorant Garamo
 body.certpg .certf input::placeholder{font-style:italic;color:rgba(74,74,71,.45)}
 body.certpg .certf input:focus,body.certpg .certf select:focus{border-bottom-color:var(--ink)!important}
 body.certpg .certf .addbtn,body.certpg .certout .addbtn{color:var(--gph)!important;-webkit-text-fill-color:var(--gph)!important;border-color:rgba(74,74,71,.55)!important;background:transparent!important;margin-top:6px}
-body.certpg{background:#e6e2d9!important}
+body.certpg{background:#f3f3f3!important}
 body.certpg .certp{align-items:center;justify-content:center!important}
 body.certpg .sheet{position:relative;box-sizing:border-box;height:100%;max-width:100%;aspect-ratio:1/1.414;margin:0 auto;display:flex;flex-direction:column;padding:clamp(26px,5.5svh,54px) clamp(24px,7%,56px) clamp(20px,4svh,40px);background-color:#fbf8f1;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .32  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),radial-gradient(120% 90% at 50% 40%,rgba(255,255,255,.55),rgba(232,224,206,.35));box-shadow:0 1px 1px rgba(60,48,28,.08),0 2px 6px rgba(60,48,28,.06),0 22px 44px -22px rgba(60,48,28,.38);overflow:hidden}
 body.certpg .sheet::before{content:"";position:absolute;inset:12px;border:1px solid rgba(124,108,80,.5);pointer-events:none}
@@ -2397,6 +2397,14 @@ body.certpg .sheet .certfoot .certsign span{min-width:84px!important}
 body.certpg main.certp .sheet{padding-top:max(30px,4.5svh)!important;padding-bottom:28px!important}
 @media (max-height:720px){body.certpg .sheet .certf{margin-top:8px!important}body.certpg .certfoot{margin-top:10px!important}body.certpg main.certp .sheet{padding-top:24px!important;padding-bottom:24px!important}}
 body.certpg .certp.issued .sheet{background:none;box-shadow:none;padding:0;aspect-ratio:auto}
+/* v239: Editions takes the grey of its photographs; the certificate sits on the same grey, its paper dead centre */
+html body.edx,html body.edx #homebar,html body.edx main.page,html body.edx #foot{background-color:#f3f3f3!important}
+html:root body.edx.scl:not(.dark):not(.a3):not(.ontop) header.bar,html:root body.edx header.bar{background:rgba(243,243,243,.6)!important}
+html body.certpg{background-color:#f3f3f3!important}
+html body.certpg .bar,html body.certpg #homebar{background:transparent!important}
+body.certpg main.certp:not(.issued){position:fixed!important;inset:0!important;z-index:1;height:100svh!important;max-width:none!important;width:100%!important;margin:0!important;padding:16px 18px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden}
+body.certpg main.certp:not(.issued) .sheet{flex:none;max-height:calc(100svh - 32px)!important;margin:0 auto!important}
+body.certpg .bar,body.certpg #left,body.certpg #menuB2,body.certpg #searchB2{position:relative;z-index:5}
 body.certpg .certp.issued .sheet::before,body.certpg .certp.issued .sheet::after,body.certpg .certp.issued .cmark,body.certpg .certp.issued .cpiece,body.certpg .certp.issued .certfoot{display:none}
 body.certpg .certsign img{width:min(120px,30vw)!important;height:auto!important;opacity:1}
 @media (max-height:720px){body.certpg .certp .lead2{display:none}body.certpg .certf label{font-size:.58rem!important}body.certpg .certf input,body.certpg .certf select{font-size:1.1rem!important;padding:2px 2px 3px!important}body.certpg .certsign img{width:96px!important}body.certpg .certf .addbtn{padding-top:8px!important;padding-bottom:8px!important}}
