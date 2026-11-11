@@ -2360,11 +2360,14 @@ body.certpg .certout figcaption{margin-top:10px}
 .hvtop.ffon .ffbtn{display:none}
 body.home #bag{display:none!important}
 .laybtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:9000;border:0;background:#111;color:#fff;border-radius:999px;padding:9px 16px;font:600 .78rem var(--latin);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-body.layon .laybtn,body.home .laybtn,body.ixon .laybtn{display:none}
+body.layon .laybtn,body.ixon .laybtn{display:none}
+body.home .laybtn{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 14px);left:auto;right:14px;transform:none;background:rgba(17,17,17,.82)}
 body:has(.ixbtn) .laybtn{bottom:calc(env(safe-area-inset-bottom,0px) + 66px)}
 body.layon [data-lk]{outline:1px dashed rgba(0,0,0,.28);outline-offset:3px;cursor:move;touch-action:none}
 body.layon [data-lk].laysel{outline:2px solid #111}
-body.layon a[data-lk],body.layon [data-lk] a{pointer-events:auto}
+body.layon [data-lk],body.layon [data-lk] a{pointer-events:auto!important}
+body.home .laybar{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 10px)}
+body.home.layon [data-lk]{outline-color:rgba(0,0,0,.45)}
 .laybar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:9100;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;background:rgba(17,17,17,.9);color:#fff;border-radius:16px;padding:10px 12px;max-width:calc(100vw - 20px);font:400 .74rem var(--latin);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .laybar .lh{width:100%;text-align:center;opacity:.8}
 .laybar .lp{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;width:100%}
@@ -3318,26 +3321,27 @@ function layPage(){if(document.body.classList.contains("home"))return "home";ret
 function layTargets(){const out=[],seen=new Set(),pg=layPage();
   const roots=[view.querySelector("main"),document.getElementById("foot")].filter(Boolean);
   roots.forEach(root=>{const isF=root.id==="foot";const cnt={};
-    root.querySelectorAll("h1,h2,h3,p,nav,.lead2,.crumb,blockquote,.copy,.cta,.crow,dl").forEach(el=>{
+    root.querySelectorAll("h1,h2,h3,p,nav,.lead2,.crumb,blockquote,.copy,.cta,.crow,dl,.hvmenu,a.discv").forEach(el=>{
       if(el.closest(".ixb,.sslide,.argo,.photos,.cphoto,form,.trform,.laybar,.ixbar,[data-lk-skip]"))return;
       if(!el.textContent.trim())return;let pa=el.parentElement,inner=false;while(pa&&pa!==root){if(seen.has(pa)){inner=true;break}pa=pa.parentElement}if(inner)return;
       const sig=el.tagName.toLowerCase()+"."+((el.className&&typeof el.className==="string")?el.className.split(" ").filter(c=>c&&!/^(rv|in|on|laysel)$/.test(c))[0]||"":"");cnt[sig]=(cnt[sig]||0)+1;
       el.dataset.lk=(isF?"foot":pg)+"|"+sig+"|"+cnt[sig];seen.add(el);out.push(el)})});return out}
 function layApply(){layTargets().forEach(el=>{const v=LAY[el.dataset.lk];
   if(el.dataset.lm0===undefined){const c=getComputedStyle(el);el.dataset.lm0=parseFloat(c.marginTop)||0;el.dataset.ll0=parseFloat(c.marginLeft)||0;el.dataset.lr0=parseFloat(c.marginRight)||0}
-  if(!v){if(el.dataset.lset){el.style.marginTop="";el.style.marginLeft="";el.style.marginRight="";el.style.position="";el.style.left="";delete el.dataset.lset}return}
+  if(!v){if(el.dataset.lset){el.style.marginTop="";el.style.marginLeft="";el.style.marginRight="";el.style.translate="";delete el.dataset.lset}return}
   el.dataset.lset=1;el.style.setProperty("margin-top",(+el.dataset.lm0+(v.y||0))+"px","important");
   if(v.m){el.style.setProperty("margin-left",`calc(${el.dataset.ll0}px + ${v.m}vw)`,"important");el.style.setProperty("margin-right",`calc(${el.dataset.lr0}px + ${v.m}vw)`,"important")}else{el.style.marginLeft="";el.style.marginRight=""}
-  if(v.x){el.style.position="relative";el.style.left=v.x+"vw"}else{el.style.position="";el.style.left=""}})}
+  let ab=false;for(let a=el;a&&a!==view&&a.id!=="foot";a=a.parentElement){if(/absolute|fixed/.test(getComputedStyle(a).position)){ab=true;break}}
+  if(ab){el.style.marginTop="";el.style.setProperty("translate",`${v.x||0}vw ${v.y||0}px`)}else{el.style.setProperty("translate",v.x?`${v.x}vw 0`:"none")}})}
 function laySave(now){try{localStorage.setItem("sa-lay",JSON.stringify(LAY))}catch(_){}clearTimeout(window.__lst);const go=()=>{try{if(typeof EDDB!=="undefined"&&EDDB)EDDB.doc("layout/main").set(JSON.parse(JSON.stringify(LAY))).catch(()=>{})}catch(_){}};if(now)go();else window.__lst=setTimeout(go,500)}
 function layCanEdit(){return !window.SA_SITE||/[?&]layedit\b/.test(location.search)}
-function layBtn(){document.querySelectorAll(".laybtn").forEach(b=>b.remove());if(!layCanEdit()||document.body.classList.contains("home"))return;const b=document.createElement("button");b.type="button";b.className="laybtn";b.textContent=L==="fa"?"چیدمان متن‌ها":"Arrange text";document.body.appendChild(b);b.onclick=layOpen}
+function layBtn(){document.querySelectorAll(".laybtn").forEach(b=>b.remove());if(!layCanEdit())return;const b=document.createElement("button");b.type="button";b.className="laybtn";b.textContent=L==="fa"?"چیدمان متن‌ها":"Arrange text";document.body.appendChild(b);b.onclick=layOpen}
 function layOpen(){if(LAYON)return;LAYON=true;const before=JSON.stringify(LAY),FA2=L==="fa";let sel=null;document.body.classList.add("layon");layApply();
   const bar=document.createElement("div");bar.className="laybar";
   bar.innerHTML=`<span class="lh">${FA2?"روی یک متن بزنید، بعد جابه‌جا کنید یا فاصلهٔ دو طرفش را کم و زیاد کنید":"Tap a text, then move it or change its side margins"}</span>
    <div class="lp"><b class="ln">—</b><button data-a="u" aria-label="up">↑</button><button data-a="d" aria-label="down">↓</button><button data-a="l" aria-label="left">←</button><button data-a="r" aria-label="right">→</button><button data-a="n" title="${FA2?"حاشیهٔ بیشتر":"More side margin"}">⇥⇤</button><button data-a="w" title="${FA2?"حاشیهٔ کمتر":"Less side margin"}">⇤⇥</button><button data-a="z" title="${FA2?"به حالت اول":"Reset this"}">↺</button></div>
    <div class="la"><button class="lr">${FA2?"همه به حالت اول":"Reset page"}</button><button class="lc">${FA2?"انصراف":"Cancel"}</button><button class="lo">${FA2?"تمام":"Done"}</button></div>`;document.body.appendChild(bar);
-  const show=()=>{document.querySelectorAll(".laysel").forEach(e=>e.classList.remove("laysel"));bar.classList.toggle("has",!!sel);const el=sel&&document.querySelector(`[data-lk="${CSS.escape(sel)}"]`);if(el){el.classList.add("laysel");const r=el.getBoundingClientRect();bar.classList.toggle("top",r.top+r.height/2>innerHeight*.5)}bar.querySelector(".ln").textContent=el?el.textContent.trim().slice(0,40):"—"};
+  const show=()=>{document.querySelectorAll(".laysel").forEach(e=>e.classList.remove("laysel"));bar.classList.toggle("has",!!sel);const el=sel&&document.querySelector(`[data-lk="${CSS.escape(sel)}"]`);if(el){el.classList.add("laysel");const r=el.getBoundingClientRect();bar.classList.toggle("top",document.body.classList.contains("home")||r.top+r.height/2>innerHeight*.5)}bar.querySelector(".ln").textContent=el?el.textContent.trim().slice(0,40):"—"};
   const upd=f=>{if(!sel)return;const v=Object.assign({y:0,x:0,m:0},LAY[sel]||{});f(v);v.y=Math.round(v.y);v.x=+v.x.toFixed(2);v.m=+v.m.toFixed(2);if(!v.y&&!v.x&&!v.m)delete LAY[sel];else LAY[sel]=v;layApply();laySave();show()};
   const act={u:v=>v.y-=4,d:v=>v.y+=4,l:v=>v.x-=.5,r:v=>v.x+=.5,n:v=>v.m=Math.min(30,v.m+.5),w:v=>v.m=Math.max(-10,v.m-.5),z:v=>{v.y=0;v.x=0;v.m=0}};
   bar.querySelectorAll(".lp button").forEach(bt=>{let t=0,r=0;const go=()=>upd(act[bt.dataset.a]);const stop=()=>{clearTimeout(t);clearInterval(r)};bt.addEventListener("pointerdown",e=>{e.preventDefault();go();if(bt.dataset.a!=="z")t=setTimeout(()=>{r=setInterval(go,70)},380)});["pointerup","pointerleave","pointercancel"].forEach(ev=>bt.addEventListener(ev,stop))});
