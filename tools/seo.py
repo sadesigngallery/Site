@@ -19,13 +19,13 @@ E = html.escape
 
 # Brand names. BRAND is the name Google should show; ALT_NAMES are the other
 # spellings people search for (WebSite / Organization "alternateName").
-BRAND = "Sa-editions"
-ALT_NAMES = ["Sa Editions", "Sa Edition", "Sa-edition", "Sa Design", "Sa"]
+BRAND = "Sa Editions"
+ALT_NAMES = ["Sa-editions", "Sa Edition", "Sa-edition", "Sa"]
 FOUNDERS = ["Alireza Emtiaz", "Saqar Khakdan"]
 WHATSAPP = "14039229905"
 # The contact e-mail is read once from state/site.json ("email") by build().
 CFG = {"email": "Sadesigngallery@gmail.com"}
-ABOUT_LINE = ("Sa-editions — also known as Sa Editions, or simply Sa — is the work of SA, "
+ABOUT_LINE = ("Sa Editions — also written Sa-editions, or simply Sa — is the work of SA, "
               "a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan.")
 # Persian letter names; a piece whose Persian name is one letter, or one of these names, belongs to "Letters".
 LETTER_NAMES = {"سین", "میم", "نون", "صاد", "واو", "کاف", "عین", "طا", "رِ", "جیم", "شین", "ضاد", "ظا", "غین", "قاف", "گاف", "لام", "دال", "ذال", "الف"}
@@ -120,7 +120,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
 <header class="sb"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">Sculptural furniture, handmade in limited editions</p>
 {body}
-<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/discover">Discover</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a></nav>
+<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a></nav>
 <p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
 
 
@@ -384,6 +384,12 @@ def build(out_dir, tools_dir, site, assets, email=None):
     write(out_dir, "/contact/", page(site, "/contact/", f"Contact — enquiries and prices on request | {BRAND}",
                                      short(f"Contact {BRAND}: enquiries, prices on request, trade and gallery requests by email, WhatsApp or Instagram."),
                                      body, "og/home.jpg", [org, crumbs(("Contact", "/contact/"))]))
+    # 404 page (served by Cloudflare for any unknown address; wrangler.jsonc not_found_handling = "404-page")
+    nf = page(site, "/404.html", f"Page not found | {BRAND}", f"This page does not exist on {BRAND}.",
+              "<main style='text-align:center'><h1>Page not found</h1><p>The address may be mistyped, or the page has moved.</p>"
+              "<div class='cta'><a class='p' href='/'>Open the catalogue</a><a href='/pieces/'>All pieces</a><a href='/contact/'>Contact</a></div></main>")
+    nf = re.sub(r'<link rel="canonical"[^>]*>', "", nf).replace("<head>", '<head><meta name="robots" content="noindex">', 1)
+    with open(os.path.join(out_dir, "404.html"), "w", encoding="utf-8") as f: f.write(nf)
     # home preview picture: the logo on white
     lg = os.path.join(out_dir, "sa-logo.png")
     if os.path.exists(lg):
@@ -406,7 +412,7 @@ HOME_MARK = ("<!--sa-seo-->", "<!--/sa-seo-->")
 
 
 def home_head(site, org, pieces):
-    title = f"{BRAND} (Sa Editions) — Sculptural furniture, handmade in limited editions"
+    title = f"{BRAND} — Sculptural furniture, handmade in limited editions"
     desc = f"{BRAND}: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "alternateName": ALT_NAMES, "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)

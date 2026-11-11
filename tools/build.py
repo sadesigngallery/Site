@@ -124,7 +124,11 @@ def main(app_html, photos, films):
                 "/p/*\n  Cache-Control: public, max-age=86400\n"
                 "/v/*\n  Cache-Control: public, max-age=604800\n"
                 "/\n  Cache-Control: no-cache\n"
-                "/index.html\n  Cache-Control: no-cache\n")
+                "/index.html\n  Cache-Control: no-cache\n"
+                "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n"
+                "  X-Frame-Options: SAMEORIGIN\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()\n"
+                "  Strict-Transport-Security: max-age=15552000\n"
+                "  Content-Security-Policy: upgrade-insecure-requests; frame-ancestors 'self'; object-src 'none'; base-uri 'self'\n")
     # 4) search-engine pages, then the home page's own head
     s = seo_pages(s)
     # tab icons as real files: Safari ignores data: icons and falls back to a letter in a circle
