@@ -12,6 +12,46 @@
 @font-face{font-family:"SA Plex Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("p/f/plexar-semibold.woff2") format("woff2")}
 @font-face{font-family:"SA Plex Arabic";font-style:normal;font-weight:700;font-display:swap;src:url("p/f/plexar-bold.woff2") format("woff2")}
 :root:root{--latin:"SA Plex Var","IBM Plex Sans","SA Plex",Arial,sans-serif!important;--fa-body:"SA Plex Arabic","IBM Plex Sans Arabic","Vazirmatn",Tahoma,sans-serif!important}
+
+/* Editions: a quiet ledger of numbered pieces */
+body.edx{background:#fff}
+main.page.expage{max-width:1180px!important;width:100%!important;box-sizing:border-box;margin:0 auto!important;padding:0 clamp(18px,5vw,56px) 12vh!important}
+.exhd{text-align:center;max-width:660px;margin:0 auto clamp(44px,8vw,88px)}
+.exhd h1{margin:0 0 18px;font:100 clamp(2.6rem,9vw,4.6rem)/1 var(--latin);font-stretch:85%;text-transform:uppercase;letter-spacing:.02em;color:#111}
+.exlead{margin:0 auto;font:300 clamp(.95rem,2.6vw,1.08rem)/1.75 var(--latin);color:#444}
+html[lang=fa] .exlead{font-family:var(--fa-body)}
+.exstat{display:flex;justify-content:center;gap:clamp(22px,7vw,64px);margin:34px 0 0;padding:22px 0;border-top:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6}
+.exstat div{display:flex;flex-direction:column;align-items:center;gap:4px;margin:0}
+.exstat dt{font:200 clamp(1.8rem,6vw,2.6rem)/1 var(--latin);font-stretch:85%;color:#111}
+.exstat dd{margin:0;font:500 .6rem var(--latin);letter-spacing:.22em;text-transform:uppercase;color:#888}
+html[lang=fa] .exstat dd{letter-spacing:0;font:400 .78rem var(--fa-body)}
+.exkey{display:flex;justify-content:center;gap:22px;margin:18px 0 0;font:400 .7rem var(--latin);letter-spacing:.08em;color:#777}
+.exkey span{display:inline-flex;align-items:center;gap:7px}
+.exkey i,.exdots i{width:7px;height:7px;border-radius:50%;border:1px solid #111;box-sizing:border-box;display:inline-block}
+.exkey i.f,.exdots i.f{background:#111}
+.exgrp{display:grid;grid-template-columns:200px minmax(0,1fr);gap:clamp(18px,4vw,48px);padding:clamp(34px,6vw,56px) 0;border-top:1px solid #111}
+.exgh{margin:0;align-self:start;position:sticky;top:calc(var(--hdh,110px) + 18px);display:flex;flex-direction:column;gap:8px}
+.exbig{font:100 clamp(3.4rem,9vw,5.6rem)/.9 var(--latin);font-stretch:85%;color:#111}
+.exlab{font:500 .62rem var(--latin);letter-spacing:.24em;text-transform:uppercase;color:#555}
+html[lang=fa] .exlab{letter-spacing:0;font:500 .85rem var(--fa-body)}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr));gap:clamp(22px,3.5vw,40px) clamp(16px,2.5vw,28px)}
+.exc{display:flex;flex-direction:column;gap:10px;color:#111;text-decoration:none}
+.exim{display:block;aspect-ratio:1;background:#f3f3f3;overflow:hidden;line-height:0}
+.exim img{width:100%;height:100%;object-fit:contain;padding:12%;box-sizing:border-box;mix-blend-mode:multiply;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.exc:hover .exim img{transform:scale(1.05)}
+.exnm{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.exnm b{font:300 1.15rem var(--latin);font-stretch:85%;text-transform:uppercase;letter-spacing:.06em}
+.exnm i{font-style:normal;font:400 .95rem var(--name);color:#666}
+.exdots{display:flex;flex-wrap:wrap;gap:5px;direction:ltr}
+.exbar{display:block;height:2px;background:#e3e3e3;direction:ltr}.exbar i{display:block;height:100%;background:#111}
+.exst{font:400 .7rem var(--latin);letter-spacing:.06em;color:#777}
+.exst em{font-style:normal;color:#111;font-weight:500}
+.exc.out .exim img{filter:grayscale(1);opacity:.45}
+.exc.out .exnm b,.exc.out .exnm i{color:#9a9a9a}
+.exc.out .exdots i{border-color:#bdbdbd;background:#bdbdbd}
+.exc.out .exbar i{background:#bdbdbd}
+.exgrp.out .exbig,.exgrp.out .exlab{color:#9a9a9a}
+@media (max-width:760px){.exgrp{grid-template-columns:1fr;gap:20px}.exgh{position:static;flex-direction:row;align-items:baseline;gap:14px}.exgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.exnm{flex-direction:column;gap:2px}.exnm b{font-size:1rem}}
 </style>
 <meta charset="utf-8">
 <meta name="color-scheme" content="light only"><meta name="theme-color" content="#FFFFFF"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -3647,7 +3687,7 @@ const box_=r=>({left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.heig
 
 /* v149: on the index, a table's glass is sketched and becomes real before its page opens */
 /* v153: index glass — built from the piece's own silhouette in the image; appears softly when its category scrolls in */
-function sjIdxMake(a){try{return null;/* glass removed from the index */if(sortMode==="ed"||document.body.classList.contains("edp"))return null;if(a._sv&&a._sv.isConnected)return a._sv._d;const id=a&&a.dataset.id,x=id&&byId(id),gd=x&&(x.glass||((x.variants||[])[0]||{}).glass);if(!gd)return null;
+function sjIdxMake(a){try{return null;/* glass removed from the index */if(sortMode==="ed"||document.body.classList.contains("edp")||document.body.classList.contains("edx"))return null;if(a._sv&&a._sv.isConnected)return a._sv._d;const id=a&&a.dataset.id,x=id&&byId(id),gd=x&&(x.glass||((x.variants||[])[0]||{}).glass);if(!gd)return null;
   let im,host,box;const zn=a.classList.contains("zone");if(zn){host=a.closest(".ixb");im=host&&host.querySelector("img");if(!im)return null;box=["left","top","width","height"].map(k=>parseFloat(a.style[k])/100)}
   else{im=a.querySelector("img");host=im&&im.parentElement;box=[0,0,1,1]}
   if(!im||!im.complete||!im.naturalWidth)return null;let ar=(zn?a:im).getBoundingClientRect();
@@ -4699,12 +4739,21 @@ const edLab=N=>N===1?(ONEK[L]||ONEK.en):(EDF[L]||EDF.en)(n(N));
 const EDOF={fa:k=>`تیراژ ${n(k)}`,en:k=>`Edition of ${k}`,es:k=>`Edición de ${k}`,it:k=>`Edizione di ${k}`,fr:k=>`Édition de ${k}`,de:k=>`Edition von ${k}`,zh:k=>`限量 ${k} 件`,ja:k=>`${k}点限定`,ar:k=>`إصدار من ${k}`};
 /* sold out first, then the rarest editions, up to the largest */
 const edRank=list=>list.map((x,i)=>{const N=edTotal(x),s_=edSoldOf(x);return {x,N,s:s_,out:s_!=null&&s_>=N,i}}).sort((a,b)=>(b.out-a.out)||(a.N-b.N)||((b.s!=null?b.s/b.N:-1)-(a.s!=null?a.s/a.N:-1))||(a.i-b.i));
-function renderEditions(keep){onIndex=false;edSoldLoad();document.body.classList.add("edp");const ST=EDST[L]||EDST.en,own=(typeof EDCAN!=="undefined"&&EDCAN)||localStorage.getItem("sa-sjedit")==="1";
-  const items=edRank(order.filter(x=>APP!==3&&edTotal(x)>0)),groups=[];items.forEach(it=>{const key=it.out?"out":"n"+it.N;let g=groups[groups.length-1];if(!g||g.key!==key){g={key,N:it.N,out:it.out,items:[]};groups.push(g)}g.items.push(it)});
-  const y0=scrollY,card=({x,N,s:s_,out})=>`<a class="edc${out?" out":""}" href="#/p/${x.id}" data-id="${x.id}"><div class="edim"><img src="${(typeof AL!=="undefined"&&AL[x.id])||thumb(x.id)}" alt="${esc(x.en)}" loading="lazy">${out?`<span class="edso"><i></i>${ST[1]}<i></i></span>`:""}</div><b class="edn">${esc(x.en)}</b>
-      ${!out&&s_!=null?`<small class="eds"><em dir="ltr">${n(s_)}<u>/</u>${n(N)}</em></small><i class="edbar"><i style="width:${Math.max(1.5,s_/N*100).toFixed(1)}%"></i></i>`:""}
+function renderEditions(keep){onIndex=false;edSoldLoad();document.body.classList.add("edx");const ST=EDST[L]||EDST.en,own=(typeof EDCAN!=="undefined"&&EDCAN)||localStorage.getItem("sa-sjedit")==="1",FAe=L==="fa";
+  const items=edRank(order.filter(x=>APP!==3&&edTotal(x)>0)),gm={};items.forEach(it=>{const key=it.out?"out":"n"+it.N;(gm[key]=gm[key]||{key,N:it.N,out:it.out,items:[]}).items.push(it)});
+  const groups=Object.values(gm).sort((a,b)=>(a.out-b.out)||(a.N-b.N));
+  const T=FAe?{lead:"هر اثر Sa با دست و در تعدادی ثابت در استودیوی ما ساخته می‌شود. هر نسخه شماره می‌خورد و با شناسنامهٔ خودش تحویل داده می‌شود؛ وقتی تیراژ یک اثر کامل شد، دیگر هرگز ساخته نمی‌شود.",pieces:"اثر",ook:"تک‌نسخه",closed:"تیراژ بسته",placed:"واگذار شده",avail:"در دسترس",closedT:"تیراژ کامل شد",of:"از"}:{lead:"Every Sa piece is made by hand in our studio, in a fixed number. Each one is numbered and leaves with its own certificate; once an edition is complete, the piece is never made again.",pieces:"pieces",ook:"one of a kind",closed:"closed editions",placed:"placed",avail:"available",closedT:"Edition closed",of:"of"};
+  const nOOK=items.filter(i=>i.N===1).length,nOut=items.filter(i=>i.out).length;
+  const dots=(N,s_,out)=>{const k=out?N:(s_==null?0:Math.min(N,s_));if(N<=40)return `<span class="exdots" aria-hidden="true">${Array.from({length:N},(_,i)=>`<i class="${i<k?"f":""}"></i>`).join("")}</span>`;return `<span class="exbar" aria-hidden="true"><i style="width:${(k/N*100).toFixed(1)}%"></i></span>`};
+  const y0=scrollY,card=({x,N,s:s_,out})=>`<a class="exc${out?" out":""}" href="#/p/${x.id}" data-id="${x.id}"><span class="exim"><img src="${(typeof AL!=="undefined"&&AL[x.id])||thumb(x.id)}" alt="${esc(x.en)}" loading="lazy"></span>
+      <span class="exnm"><b>${esc(x.en)}</b><i>${x.fa}</i></span>${dots(N,s_,out)}
+      <small class="exst" dir="ltr">${out?T.closedT:N===1?(s_?T.closedT:T.avail):s_!=null?`<em>${n(s_)}</em> ${T.of} ${n(N)} ${T.placed}`:`${FAe?"تیراژ":"Edition of"} ${n(N)}`}</small>
       ${own?`<span class="edown" data-id="${x.id}"><input type="number" min="0" max="${N}" value="${s_!=null?s_:""}" placeholder="—" aria-label="sold"><button type="button" class="edout${out?" on":""}">${ST[1]}</button></span>`:""}</a>`;
-  view.innerHTML=`<main class="page edpage"><header class="edhd"><h1>${EDTN[L]||EDTN.en}</h1><p>${EDSUB[L]||EDSUB.en}</p></header>${groups.map(g=>`<section class="edgrp${g.out?" out":""}"><h2><span>${g.out?ST[1]:g.N===1?(ONEK[L]||ONEK.en):(EDOF[L]||EDOF.en)(n(g.N))}</span></h2><div class="edgrid">${g.items.map(card).join("")}</div></section>`).join("")}</main>`;
+  const gh=g=>g.out?`<span class="exbig">—</span><span class="exlab">${T.closedT}</span>`:`<span class="exbig" dir="ltr">${String(g.N).padStart(2,"0")}</span><span class="exlab">${g.N===1?(ONEK[L]||ONEK.en):(EDOF[L]||EDOF.en)(n(g.N))}</span>`;
+  view.innerHTML=`<main class="page expage"><header class="exhd"><h1>${EDTN[L]||EDTN.en}</h1><p class="exlead">${T.lead}</p>
+    <dl class="exstat"><div><dt dir="ltr">${n(items.length)}</dt><dd>${T.pieces}</dd></div><div><dt dir="ltr">${n(nOOK)}</dt><dd>${T.ook}</dd></div><div><dt dir="ltr">${n(nOut)}</dt><dd>${T.closed}</dd></div></dl>
+    <p class="exkey"><span><i class="f"></i>${T.placed}</span><span><i></i>${T.avail}</span></p></header>
+   ${groups.map(g=>`<section class="exgrp${g.out?" out":""}"><h2 class="exgh">${gh(g)}</h2><div class="exgrid">${g.items.map(card).join("")}</div></section>`).join("")}</main>`;
   left.innerHTML=menuBtn();rail.style.display="none";langrow.style.display="none";if(keep)scrollTo(0,y0);
   view.querySelectorAll(".edown").forEach(sp=>{const id=sp.dataset.id;["click","pointerdown","touchstart"].forEach(ev=>sp.addEventListener(ev,e=>{e.stopPropagation();if(ev==="click"&&e.target.tagName!=="INPUT")e.preventDefault()},{passive:ev!=="click"}));
     const inp=sp.querySelector("input");inp.addEventListener("click",e=>{e.preventDefault();e.stopPropagation()});inp.addEventListener("change",()=>{const v=inp.value.trim();if(v==="")delete EDSOLD[id];else EDSOLD[id]=Math.max(0,+v);edSoldSave();renderEditions(true)});
@@ -5194,7 +5243,7 @@ function route(){
   const tr_=$("#tray"); if(tr_) tr_.classList.remove("on");
   const h=location.hash.replace(/^#\/?/,"").split("/");
   if(ov.classList.contains("ss")||ov.classList.contains("menu")) closeOv();
-  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp","setsp","certpg");
+  document.body.classList.remove("dark","ffb","lit","jw","subjp","edp","edx","setsp","certpg");
   if(APP===3)document.body.classList.add("dark","a3");
   if(APP===3&&!["jewellery","sculpture","love","care","about","contact"].includes(h[0])){renderApp3Home();scrollTo(0,0);activeCat=null;return}
   if(APP!==3&&["jewellery","sculpture","love"].includes(h[0])){location.replace("#/");return}
