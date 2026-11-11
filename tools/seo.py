@@ -108,20 +108,62 @@ footer{border-top:1px solid #e6e6e6;max-width:860px;margin:10px auto 0;padding:2
 .crumb{font-size:.8rem;color:#555;margin:0 0 4px}.crumb a{text-decoration:none}.ed .por{font-weight:500;color:#111}"""
 
 
-def page(site, path, title, desc, body, og=None, jsonld=None, lang="en"):
+def page(site, path, title, desc, body, og=None, jsonld=None, lang="en", alts=None, ui=None):
     canon = site.rstrip("/") + path
+    rtl = lang in ("fa", "ar")
+    hl = "".join(f'<link rel="alternate" hreflang="{a}" href="{E(u)}">' for a, u in (alts or []))
+    if alts: hl += f'<link rel="alternate" hreflang="x-default" href="{E(dict(alts).get("en", alts[0][1]))}">'
+    tag = (ui or {}).get("tag") or "Sculptural furniture, handmade in limited editions"
+    if ui:
+        fnav = (f'<a href="/{lang}/pieces/">{E(ui.get("all") or "All pieces")}</a><a href="/contact/">{E(ui.get("contact") or "Contact")}</a>'
+                f'<a href="/about/">{E(ui.get("about") or "About")}</a><a href="mailto:{E(mail())}">{E(ui.get("email") or "Email")}</a>'
+                '<a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/privacy/">Privacy</a>')
+    else:
+        fnav = None
     j = "".join(f'<script type="application/ld+json">{json.dumps(o, ensure_ascii=False)}</script>' for o in (jsonld or []))
     ogi = f'<meta property="og:image" content="{E(absu(site, og))}"><meta name="twitter:image" content="{E(absu(site, og))}">' if og else ""
-    return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">
+    return f"""<!doctype html><html lang="{lang}"{' dir="rtl"' if rtl else ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">{hl}
 <meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>{CSS}</style>{j}</head><body>
-<header class="sb"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
-<p class="tg">Sculptural furniture, handmade in limited editions</p>
+<header class="sb" dir="ltr"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
+<p class="tg">{E(tag)}</p>
 {body}
-<footer><nav><a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a><a href="/privacy/">Privacy</a></nav>
+<footer><nav>{fnav if fnav else f'''<a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Trade</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="/#/social">Social media</a><a href="/privacy/">Privacy</a>'''}</nav>
 <p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
+
+
+LANGS = ["fa", "ar", "it", "fr", "de", "es", "ja", "zh"]
+LANGN = {"en": "English", "fa": "فارسی", "ar": "العربية", "it": "Italiano", "fr": "Français", "de": "Deutsch", "es": "Español", "ja": "日本語", "zh": "中文"}
+UIX = {
+    "fa": {"por": "قیمت با درخواست", "enq": "درخواست", "view": "دیدن در کاتالوگ", "rel": "قطعه‌های مرتبط",
+           "intro": "مجموعهٔ کامل Sa Editions: مبلمان تندیس‌گونه، پیانو و نور، ساخت دست در تیراژ محدود و شماره‌دار."},
+    "ar": {"por": "السعر عند الطلب", "enq": "استفسار", "view": "عرض في الكتالوج", "rel": "قطع ذات صلة",
+           "intro": "مجموعة Sa Editions الكاملة: أثاث نحتي وبيانوهات وإضاءة، مصنوعة يدوياً بإصدارات محدودة ومرقّمة."},
+    "it": {"por": "Prezzo su richiesta", "enq": "Richiedi informazioni", "view": "Vedi nel catalogo", "rel": "Pezzi correlati",
+           "intro": "La collezione completa di Sa Editions: arredi scultorei, pianoforti e luci, fatti a mano in edizioni limitate e numerate."},
+    "fr": {"por": "Prix sur demande", "enq": "Demander", "view": "Voir dans le catalogue", "rel": "Pièces associées",
+           "intro": "La collection complète de Sa Editions : mobilier sculptural, pianos et luminaires, faits main en éditions limitées et numérotées."},
+    "de": {"por": "Preis auf Anfrage", "enq": "Anfragen", "view": "Im Katalog ansehen", "rel": "Verwandte Stücke",
+           "intro": "Die gesamte Kollektion von Sa Editions: skulpturale Möbel, Klaviere und Leuchten, handgefertigt in limitierten, nummerierten Editionen."},
+    "es": {"por": "Precio a consultar", "enq": "Consultar", "view": "Ver en el catálogo", "rel": "Piezas relacionadas",
+           "intro": "La colección completa de Sa Editions: mobiliario escultórico, pianos e iluminación, hechos a mano en ediciones limitadas y numeradas."},
+    "ja": {"por": "価格はお問い合わせください", "enq": "お問い合わせ", "view": "カタログで見る", "rel": "関連作品",
+           "intro": "Sa Editions の全作品：彫刻的な家具、ピアノ、照明。限定・ナンバー入りのエディションで手作りされています。"},
+    "zh": {"por": "价格面议", "enq": "咨询", "view": "在目录中查看", "rel": "相关作品",
+           "intro": "Sa Editions 全部作品：雕塑感家具、钢琴与灯具，以限量编号版次手工制作。"},
+}
+
+
+def alts_for(site, tail, langs):
+    root = site.rstrip("/")
+    return [("en", root + tail)] + [(l, f"{root}/{l}{tail}") for l in langs]
+
+
+def lang_row(alts, here):
+    return ("<p class='langs' style='text-align:center;font-size:.8rem;margin:26px 0 0'>"
+            + " · ".join(f'<a href="{E(u)}" hreflang="{a}" lang="{a}"{" aria-current=page" if a == here else ""}>{E(LANGN[a])}</a>' for a, u in alts) + "</p>")
 
 
 def short(text, n=155):
@@ -302,7 +344,10 @@ def build(out_dir, tools_dir, site, assets, email=None):
                 "category": cat1, "description": d0 or desc, "image": [absu(site, i) for i in imgs], "url": site.rstrip("/") + path,
                 "brand": {"@type": "Brand", "name": BRAND}, "manufacturer": {"@type": "Organization", "name": BRAND}}
         if mat: prod["material"] = mat
-        write(out_dir, path, page(site, path, title, desc, body, og, [prod, crumbs(("All pieces", "/pieces/"), (x["name"], path))]))
+        langs_here = [l for l in LANGS if l in data.get("langs", {})]
+        alts = alts_for(site, path, langs_here) if langs_here else None
+        if alts: body = body.replace("</main>", lang_row(alts, "en") + "</main>", 1)
+        write(out_dir, path, page(site, path, title, desc, body, og, [prod, crumbs(("All pieces", "/pieces/"), (x["name"], path))], alts=alts))
         urls.append((path, [absu(site, i) for i in imgs]))
     book.save()
     # all pieces
@@ -328,7 +373,57 @@ def build(out_dir, tools_dir, site, assets, email=None):
     body = "<main><h1>All pieces</h1>" + "".join(block(c, xs) for c, xs in groups.items()) + "</main>"
     write(out_dir, "/pieces/", page(site, "/pieces/", f"All pieces — sculptural furniture, pianos and lighting | {BRAND}",
                                     short(f"The full {BRAND} collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
-                                    body, "og/home.jpg", [org, crumbs(("All pieces", "/pieces/"))]))
+                                    body, "og/home.jpg", [org, crumbs(("All pieces", "/pieces/"))],
+                                    alts=alts_for(site, "/pieces/", [l for l in LANGS if l in data.get("langs", {})]) if data.get("langs") else None))
+    # the same piece pages and pieces index in the catalogue's other languages, linked to each other with hreflang
+    by_id = {x["id"]: x for x in pieces}
+    for L, ld in (data.get("langs") or {}).items():
+        ui = dict(ld.get("ui") or {}, **UIX.get(L, {}))
+        lp = {y["id"]: y for y in ld.get("pieces", []) if y["id"] in by_id}
+        langs_here = [l for l in LANGS if l in data["langs"]]
+
+        def ltile(x, L=L, lp=lp):
+            y = lp.get(x["id"], {})
+            return (f'<a href="/{L}/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} — {BRAND}" loading="lazy">'
+                    f'<b>{E(x["name"])}</b><small>{E(y.get("edition", ""))}</small></a>')
+        for pid, y in lp.items():
+            x = by_id[pid]; path = f"/{L}/p/{pid}/"
+            fa_first = L in ("fa", "ar")
+            nm = f"{x['fa']} ({x['name']})" if fa_first else x["name"]
+            d0 = " ".join(y.get("desc") or [])
+            title = f"{nm} — {y.get('cat', '')} | {BRAND}"
+            desc = short(f"{nm}: {d0}" if d0 else nm)
+            dims = "".join(f"<div><small>{E(k)}</small><b>{E(v)}</b></div>" for k, v in y.get("dims", []))
+            spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in y.get("spec", []))
+            ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} — {E(y.get("cat", ""))} — {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
+            hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} — {E(y.get("cat", ""))}" width="1600" height="1600">' if x["hero"] else ""
+            ed = (f'<div class="ed">{"<b>" + E(y["edition"]) + "</b>" if y.get("edition") else ""}{"<span>" + E(y["editionNote"]) + "</span>" if y.get("editionNote") else ""}'
+                  f'<span class="por">{E(ui["por"])}</span></div>')
+            rel = [z for z in pieces if z["catId"] == x["catId"] and z["id"] != pid][:4]
+            related = (f"<h2>{E(ui['rel'])}</h2><div class='grid'>{''.join(ltile(z) for z in rel)}</div>") if rel else ""
+            alts = alts_for(site, f"/p/{pid}/", langs_here)
+            body = (f"<main><p class='crumb'><a href='/{L}/pieces/'>{E(ui.get('all', ''))}</a> / {E(y.get('cat', ''))}</p><h1>{E(x['name'])}</h1>"
+                    f"<p class='fa' lang='fa' dir='rtl'>{E(x['fa'])}</p><p class='cat'>{E(y.get('cat', ''))}{' · ' + str(x['year']) if x['year'] else ''}</p>"
+                    f"{hero}<div class='dims'>{dims}</div>{ed}<div class='desc'>{''.join('<p>' + E(p) + '</p>' for p in (y.get('desc') or []))}</div><dl>{spec}</dl>"
+                    f"<div class='cta'><a class='p' href='{E(enquiry_href(x['name']))}'>{E(ui['enq'])}</a><a href='https://wa.me/{WHATSAPP}?text={E(('Sa Editions - ' + x['name']).replace(' ', '%20'))}' rel='noopener'>WhatsApp</a>"
+                    f"<a href='/#/p/{E(pid)}'>{E(ui['view'])}</a></div><div class='ph'>{ph}</div>{related}{lang_row(alts, L)}</main>")
+            prod = {"@context": "https://schema.org", "@type": "Product", "name": x["name"], "alternateName": x["fa"], "sku": pid,
+                    "category": y.get("cat", ""), "description": d0 or desc, "inLanguage": L,
+                    "image": [absu(site, i) for i in [x["hero"]] + x["photos"] if i], "url": site.rstrip("/") + path,
+                    "brand": {"@type": "Brand", "name": BRAND}, "manufacturer": {"@type": "Organization", "name": BRAND}}
+            write(out_dir, path, page(site, path, title, desc, body, f"og/{pid}.jpg" if os.path.exists(os.path.join(out_dir, "og", pid + ".jpg")) else "og/home.jpg",
+                                      [prod], lang=L, alts=alts, ui=ui))
+            urls.append((path, []))
+        # pieces index in this language
+        grp = {}
+        for x in pieces:
+            if x["id"] in lp: grp.setdefault(lp[x["id"]].get("cat", ""), []).append(x)
+        body = (f"<main><h1>{E(ui.get('all', ''))}</h1><p style='text-align:center'>{E(ui['intro'])}</p>"
+                + "".join(f"<h2 class='ch'><b>{E(c)}</b></h2><div class='grid'>{''.join(ltile(x) for x in xs)}</div>" for c, xs in grp.items())
+                + lang_row(alts_for(site, "/pieces/", langs_here), L) + "</main>")
+        write(out_dir, f"/{L}/pieces/", page(site, f"/{L}/pieces/", f"{ui.get('all', '')} | {BRAND}", short(ui["intro"]), body, "og/home.jpg",
+                                             [org], lang=L, alts=alts_for(site, "/pieces/", langs_here), ui=ui))
+        urls.append((f"/{L}/pieces/", []))
     # collections (only groupings that follow from the catalogue itself)
     letters = [x for x in pieces if is_letter(x["fa"])]
     pianos = [x for x in pieces if x["catId"] == "piano"]
