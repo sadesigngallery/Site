@@ -2422,6 +2422,13 @@ body.home.layon [data-lk]{outline-color:rgba(0,0,0,.45)}
 .laybar:not(.has) .lp button{opacity:.35;pointer-events:none}
 .laybar .la{display:flex;gap:8px;justify-content:center;width:100%;flex-wrap:wrap}
 .laybar .lo{background:#fff;color:#111;font-weight:600}
+.laycode{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10050;width:min(92vw,520px);box-sizing:border-box;background:#fff;color:#111;border-radius:16px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);font:400 .85rem var(--latin)}
+html[lang=fa] .laycode{font-family:var(--fa-body);direction:rtl}
+.laycode p{margin:0 0 10px;line-height:1.6}
+.laycode textarea{width:100%;box-sizing:border-box;font:400 .78rem/1.5 ui-monospace,Menlo,monospace;border:1px solid #ccc;border-radius:10px;padding:10px;resize:vertical;-webkit-user-select:text;user-select:text;background:#fafafa;color:#111}
+.laycode div{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.laycode button,.laycode a{border:1px solid #111;background:#fff;color:#111;border-radius:999px;padding:9px 16px;font:500 .8rem var(--latin);text-decoration:none;cursor:pointer}
+.laycode .lcp{background:#111;color:#fff}
 .socp{max-width:640px;margin:0 auto;padding-bottom:12vh}
 .socp h1.pt{text-align:center;font-family:"SA Plex Var","IBM Plex Sans","SA Plex",Arial,sans-serif!important;font-weight:100!important;text-transform:uppercase;font-stretch:85%;letter-spacing:.02em;font-size:clamp(2.2rem,8vw,3.4rem)!important;margin-bottom:8px!important}
 .socp .socg{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:42px 0 0;direction:ltr}
@@ -3359,7 +3366,7 @@ const LAY={};try{if(!window.SA_SITE||/[?&]layedit\b/.test(location.search)){cons
 let LAYON=false;
 function layPage(){if(document.body.classList.contains("home"))return "home";return (location.hash.replace(/^#\/?/,"").split("/")[0]||"home")}
 function layTargets(){const out=[],seen=new Set(),pg=layPage();
-  const roots=[view.querySelector("main"),document.getElementById("foot")].filter(Boolean);
+  const roots=[view.querySelector("main")||view,document.getElementById("foot")].filter(Boolean);
   roots.forEach(root=>{const isF=root.id==="foot";const cnt={};
     root.querySelectorAll("h1,h2,h3,p,nav,.lead2,.crumb,blockquote,.copy,.cta,.crow,dl,.hvmenu,a.discv").forEach(el=>{
       if(el.closest(".ixb,.sslide,.argo,.photos,.cphoto,form,.trform,.laybar,.ixbar,[data-lk-skip]"))return;
@@ -3374,13 +3381,18 @@ function layApply(){layTargets().forEach(el=>{const v=LAY[el.dataset.lk];
   let ab=false;for(let a=el;a&&a!==view&&a.id!=="foot";a=a.parentElement){if(/absolute|fixed/.test(getComputedStyle(a).position)){ab=true;break}}
   if(ab){el.style.marginTop="";el.style.setProperty("translate",`${v.x||0}vw ${v.y||0}px`)}else{el.style.setProperty("translate",v.x?`${v.x}vw 0`:"none")}})}
 function laySave(now){try{localStorage.setItem("sa-lay",JSON.stringify(LAY))}catch(_){}clearTimeout(window.__lst);const go=()=>{try{if(typeof EDDB!=="undefined"&&EDDB)EDDB.doc("layout/main").set(JSON.parse(JSON.stringify(LAY))).catch(()=>{})}catch(_){}};if(now)go();else window.__lst=setTimeout(go,500)}
+function layCode(FA2){document.querySelectorAll(".laycode").forEach(b=>b.remove());const code=JSON.stringify(LAY);const box=document.createElement("div");box.className="laycode";
+  box.innerHTML=`<p>${FA2?"این کد را کپی کنید و برای Claude بفرستید تا برای همیشه ثابت شود:":"Copy this code and send it to Claude to keep it for good:"}</p><textarea readonly dir="ltr" rows="5">${esc(code)}</textarea><div><button type="button" class="lcp">${FA2?"کپی":"Copy"}</button><a class="lml" href="mailto:?subject=${encodeURIComponent("Sa layout")}&body=${encodeURIComponent(code)}">${FA2?"ایمیل":"Email"}</a><button type="button" class="lcx">${FA2?"بستن":"Close"}</button></div>`;
+  document.body.appendChild(box);const ta=box.querySelector("textarea");setTimeout(()=>{try{ta.focus();ta.select();ta.setSelectionRange(0,code.length)}catch(_){}},50);
+  box.querySelector(".lcp").onclick=async()=>{let ok=false;try{await navigator.clipboard.writeText(code);ok=true}catch(_){}if(!ok){try{ta.removeAttribute("readonly");ta.select();ta.setSelectionRange(0,code.length);ok=document.execCommand("copy");ta.setAttribute("readonly","")}catch(_){}}box.querySelector(".lcp").textContent=ok?(FA2?"کپی شد ✓":"Copied ✓"):(FA2?"متن را نگه دارید و Copy بزنید":"Long-press the text to copy")};
+  box.querySelector(".lcx").onclick=()=>box.remove()}
 function layCanEdit(){return !window.SA_SITE||/[?&]layedit\b/.test(location.search)}
 function layBtn(){document.querySelectorAll(".laybtn").forEach(b=>b.remove());if(!layCanEdit())return;const b=document.createElement("button");b.type="button";b.className="laybtn";b.textContent=L==="fa"?"چیدمان متن‌ها":"Arrange text";document.body.appendChild(b);b.onclick=layOpen}
 function layOpen(){if(LAYON)return;LAYON=true;const before=JSON.stringify(LAY),FA2=L==="fa";let sel=null;document.body.classList.add("layon");layApply();
   const bar=document.createElement("div");bar.className="laybar";
   bar.innerHTML=`<span class="lh">${FA2?"روی یک متن بزنید، بعد جابه‌جا کنید یا فاصلهٔ دو طرفش را کم و زیاد کنید":"Tap a text, then move it or change its side margins"}</span>
    <div class="lp"><b class="ln">—</b><button data-a="u" aria-label="up">↑</button><button data-a="d" aria-label="down">↓</button><button data-a="l" aria-label="left">←</button><button data-a="r" aria-label="right">→</button><button data-a="n" title="${FA2?"حاشیهٔ بیشتر":"More side margin"}">⇥⇤</button><button data-a="w" title="${FA2?"حاشیهٔ کمتر":"Less side margin"}">⇤⇥</button><button data-a="z" title="${FA2?"به حالت اول":"Reset this"}">↺</button></div>
-   <div class="la"><button class="lr">${FA2?"همه به حالت اول":"Reset page"}</button><button class="lc">${FA2?"انصراف":"Cancel"}</button><button class="lo">${FA2?"تمام":"Done"}</button></div>`;document.body.appendChild(bar);
+   <div class="la"><button class="lk">${FA2?"کد":"Code"}</button><button class="lr">${FA2?"همه به حالت اول":"Reset page"}</button><button class="lc">${FA2?"انصراف":"Cancel"}</button><button class="lo">${FA2?"تمام":"Done"}</button></div>`;document.body.appendChild(bar);
   const show=()=>{document.querySelectorAll(".laysel").forEach(e=>e.classList.remove("laysel"));bar.classList.toggle("has",!!sel);const el=sel&&document.querySelector(`[data-lk="${CSS.escape(sel)}"]`);if(el){el.classList.add("laysel");const r=el.getBoundingClientRect();bar.classList.toggle("top",document.body.classList.contains("home")||r.top+r.height/2>innerHeight*.5)}bar.querySelector(".ln").textContent=el?el.textContent.trim().slice(0,40):"—"};
   const upd=f=>{if(!sel)return;const v=Object.assign({y:0,x:0,m:0},LAY[sel]||{});f(v);v.y=Math.round(v.y);v.x=+v.x.toFixed(2);v.m=+v.m.toFixed(2);if(!v.y&&!v.x&&!v.m)delete LAY[sel];else LAY[sel]=v;layApply();laySave();show()};
   const act={u:v=>v.y-=4,d:v=>v.y+=4,l:v=>v.x-=.5,r:v=>v.x+=.5,n:v=>v.m=Math.min(30,v.m+.5),w:v=>v.m=Math.max(-10,v.m-.5),z:v=>{v.y=0;v.x=0;v.m=0}};
@@ -3390,9 +3402,10 @@ function layOpen(){if(LAYON)return;LAYON=true;const before=JSON.stringify(LAY),F
   const onClick=e=>{if(LAYON&&!e.target.closest(".laybar")&&e.target.closest("[data-lk]")){e.preventDefault();e.stopPropagation()}};
   document.addEventListener("pointerdown",onDown,true);document.addEventListener("click",onClick,true);
   const close=()=>{LAYON=false;sel=null;document.removeEventListener("pointerdown",onDown,true);document.removeEventListener("click",onClick,true);document.body.classList.remove("layon");document.querySelectorAll(".laysel").forEach(e=>e.classList.remove("laysel"));bar.remove();layApply()};
+  bar.querySelector(".lk").onclick=e=>{e.preventDefault();e.stopPropagation();layCode(FA2)};
   bar.querySelector(".lr").onclick=()=>{const pg=layPage();for(const k in LAY)if(k.startsWith(pg+"|")||k.startsWith("foot|"))delete LAY[k];layApply();laySave(1);show()};
   bar.querySelector(".lc").onclick=()=>{for(const k in LAY)delete LAY[k];Object.assign(LAY,JSON.parse(before));layApply();laySave(1);close()};
-  bar.querySelector(".lo").onclick=()=>{laySave(1);close();if(window.SA_SITE){const code=JSON.stringify(LAY);const box=document.createElement("div");box.className="ffcode";box.innerHTML=`<p>${FA2?"برای اینکه برای همهٔ بازدیدکننده‌ها ثابت شود، این خط را برای Claude بفرستید:":"To keep it for every visitor, send this line to Claude:"}</p><textarea readonly dir="ltr">${code}</textarea><button type="button">${FA2?"کپی":"Copy"}</button><button type="button" class="ffx">${FA2?"بستن":"Close"}</button>`;document.body.appendChild(box);box.querySelector("button").onclick=()=>{try{navigator.clipboard.writeText(code)}catch(_){}box.querySelector("textarea").select()};box.querySelector(".ffx").onclick=()=>box.remove()}};
+  bar.querySelector(".lo").onclick=e=>{e.preventDefault();e.stopPropagation();laySave(1);close();setTimeout(()=>layCode(FA2),60)};
   show()}
 (()=>{let t=0;const run=()=>{clearTimeout(t);t=setTimeout(()=>{try{layApply();if(!LAYON)layBtn()}catch(_){}},120)};const mo=new MutationObserver(m=>{if(LAYON)return;if(m.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&!n.classList?.contains("laybtn"))))run()});const st=()=>{const v=document.getElementById("view"),f=document.getElementById("foot");if(v)mo.observe(v,{childList:true});if(f)mo.observe(f,{childList:true});run()};if(document.readyState==="loading")addEventListener("DOMContentLoaded",st);else st();addEventListener("hashchange",run);addEventListener("resize",()=>{document.querySelectorAll("[data-lk]").forEach(e=>{e.style.marginTop="";e.style.marginLeft="";e.style.marginRight="";delete e.dataset.lm0;delete e.dataset.lset});run()})})();
 function ffCanEdit(){return /[?&]filmedit\b/.test(location.search)}
