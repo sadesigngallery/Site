@@ -117,7 +117,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en", alts=No
     if ui:
         fnav = (f'<a href="/{lang}/pieces/">{E(ui.get("all") or "All pieces")}</a><a href="/contact/">{E(ui.get("contact") or "Contact")}</a>'
                 f'<a href="/about/">{E(ui.get("about") or "About")}</a><a href="mailto:{E(mail())}">{E(ui.get("email") or "Email")}</a>'
-                '<a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="https://www.youtube.com/@sa.editions" rel="noopener">YouTube</a><a href="/privacy/">Privacy</a>')
+                '<a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="https://www.youtube.com/@sa.editions" rel="noopener">YouTube</a><a href="https://www.linkedin.com/in/sa-editions-b8068344b/" rel="noopener">LinkedIn</a><a href="/privacy/">Privacy</a>')
     else:
         fnav = None
     j = "".join(f'<script type="application/ld+json">{json.dumps(o, ensure_ascii=False)}</script>' for o in (jsonld or []))
@@ -130,7 +130,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en", alts=No
 <header class="sb" dir="ltr"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">{E(tag)}</p>
 {body}
-<footer><nav>{fnav if fnav else f'''<a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Collaborations</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="https://www.youtube.com/@sa.editions" rel="noopener">YouTube</a><a href="/#/social">Social media</a><a href="/privacy/">Privacy</a>'''}</nav>
+<footer><nav>{fnav if fnav else f'''<a href="/pieces/">All pieces</a><a href="/collections/">Collections</a><a href="/designers/">Designers</a><a href="/editions/">Editions</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="mailto:{E(mail())}">Email</a><a href="/#/trade">Collaborations</a><a href="/#/download">Download</a><a href="https://www.instagram.com/sa_editions_/" rel="noopener">Instagram</a><a href="https://www.youtube.com/@sa.editions" rel="noopener">YouTube</a><a href="https://www.linkedin.com/in/sa-editions-b8068344b/" rel="noopener">LinkedIn</a><a href="/#/social">Social media</a><a href="/privacy/">Privacy</a>'''}</nav>
 <p>Copyright © 2026 {BRAND}. All rights reserved</p></footer></body></html>"""
 
 
@@ -293,7 +293,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
     org = {"@context": "https://schema.org", "@type": "Organization", "name": BRAND, "alternateName": ALT_NAMES,
            "url": root, "logo": absu(site, "sa-logo.png"), "foundingDate": "2010",
            "founder": [{"@type": "Person", "name": n} for n in FOUNDERS],
-           "email": mail(), "sameAs": ["https://www.instagram.com/sa_editions_/", "https://www.youtube.com/@sa.editions"],
+           "email": mail(), "sameAs": ["https://www.instagram.com/sa_editions_/", "https://www.youtube.com/@sa.editions", "https://www.linkedin.com/in/sa-editions-b8068344b/"],
            "contactPoint": [{"@type": "ContactPoint", "contactType": "sales", "telephone": "+98-939-713-3918", "areaServed": "IR"},
                             {"@type": "ContactPoint", "contactType": "sales", "telephone": "+1-403-922-9905", "areaServed": "CA"}]}
 
@@ -474,7 +474,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
             "and whether you are a private client, an architect or a gallery.</p>"
             f"<dl><dt>Email</dt><dd><a href='mailto:{E(mail())}'>{E(mail())}</a></dd><dt>WhatsApp</dt><dd><a href='https://wa.me/{WHATSAPP}' rel='noopener'>+1 403 922 9905</a></dd>"
             "<dt>Phone (Iran)</dt><dd><a href='tel:+989397133918'>+98 939 713 3918</a></dd><dt>Phone (Canada)</dt><dd><a href='tel:+14039229905'>+1 403 922 9905</a></dd>"
-            "<dt>Instagram</dt><dd><a href='https://www.instagram.com/sa_editions_/' rel='noopener'>@sa_editions_</a></dd><dt>YouTube</dt><dd><a href='https://www.youtube.com/@sa.editions' rel='noopener'>@sa.editions</a></dd></dl>"
+            "<dt>Instagram</dt><dd><a href='https://www.instagram.com/sa_editions_/' rel='noopener'>@sa_editions_</a></dd><dt>YouTube</dt><dd><a href='https://www.youtube.com/@sa.editions' rel='noopener'>@sa.editions</a></dd><dt>LinkedIn</dt><dd><a href='https://www.linkedin.com/in/sa-editions-b8068344b/' rel='noopener'>Sa Editions</a></dd></dl>"
             f'<div class="cta"><a class="p" href="{E(enquiry_href("a piece"))}">Send an enquiry</a><a href="/#/contact">Contact in the catalogue</a></div></main>')
     write(out_dir, "/contact/", page(site, "/contact/", f"Contact — enquiries and prices on request | {BRAND}",
                                      short(f"Contact {BRAND}: enquiries, prices on request, trade and gallery requests by email, WhatsApp or Instagram."),
