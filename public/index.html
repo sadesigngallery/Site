@@ -2513,7 +2513,15 @@ html[lang=fa] .laycode{font-family:var(--fa-body);direction:rtl}
 .socp .sx-soon{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 0;margin:18px 0 0;font:400 .85rem var(--latin,system-ui);color:#a8a8a8}
 .socp .sx-soon span:not(:last-of-type)::after{content:"·";margin:0 10px;color:#cfcfcf}
 .socp .sx-soon em{display:block;width:100%;font-style:normal;margin:10px 0 0;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:#bdbdbd}
-@media (max-width:560px){.socp .sx-subs{grid-template-columns:1fr}.socp .sx-subs .sx-sub:nth-child(n){padding-left:0;padding-right:0;border-left:0}}
+.socp .sx-main{grid-template-columns:auto 1fr auto}
+.socp .sx-main .sx-av{grid-column:1;grid-row:1/3;width:72px;height:72px;border-radius:50%;display:block;margin-right:6px}
+.socp .sx-main .sx-h,.socp .sx-main .sx-n{grid-column:2}
+.socp .sx-main i{grid-column:3}
+.socp .sx-sub.sx-ig{grid-template-columns:auto 1fr auto;column-gap:14px}
+.socp .sx-ig .sx-av{grid-column:1;grid-row:1/3;width:40px;height:40px;border-radius:50%;display:block;box-shadow:0 0 0 1px #e4e4e4}
+.socp .sx-ig .sx-sn,.socp .sx-ig .sx-sh{grid-column:2}
+.socp .sx-ig i{grid-column:3}
+@media (max-width:560px){.socp .sx-main .sx-av{width:58px;height:58px}.socp .sx-subs{grid-template-columns:1fr}.socp .sx-subs .sx-sub:nth-child(n){padding-left:0;padding-right:0;border-left:0}}
 
 .socp h1.pt{text-align:center;font-family:"SA Plex Var","IBM Plex Sans","SA Plex",Arial,sans-serif!important;font-weight:100!important;text-transform:uppercase;font-stretch:85%;letter-spacing:.02em;font-size:clamp(2.2rem,8vw,3.4rem)!important;margin-bottom:8px!important}
 .socp .socg{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:42px 0 0;direction:ltr}
@@ -5194,6 +5202,7 @@ function renderLighting(){
 
 /* ---------- contact ---------- */
 const IGS=[["Sa Editions","sa_editions_"],["Jewelry","sa_editions_jewelry"],["Piano","sa_editions_piano"],["Architecture","sa_editions_architecture"],["Light","sa_editions_light"]];
+const AVM="i/x.d9fd04baebf6.webp",AVS="data:image/webp;base64,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";
 const SXT={main:{en:"Main account",fa:"حساب اصلی",es:"Cuenta principal",it:"Account principale",fr:"Compte principal",de:"Hauptkonto",ja:"メインアカウント",zh:"主账号",ar:"الحساب الرئيسي"},
  sub:{en:"Dedicated accounts",fa:"حساب‌های تخصصی",es:"Cuentas dedicadas",it:"Account dedicati",fr:"Comptes dédiés",de:"Themenkonten",ja:"専門アカウント",zh:"专题账号",ar:"حسابات متخصصة"},
  oth:{en:"Other platforms",fa:"سایر شبکه‌ها",es:"Otras plataformas",it:"Altre piattaforme",fr:"Autres plateformes",de:"Weitere Plattformen",ja:"その他のプラットフォーム",zh:"其他平台",ar:"منصات أخرى"},
@@ -5206,9 +5215,9 @@ function renderSocial(){onIndex=false;const live=(n,u)=>u?`<a href="${u}" target
   view.innerHTML=`<main class="page socp"><h1 class="pt">${SOCN[L]||SOCN.en}</h1>
    <section class="sx">
     <p class="sx-k">Instagram <span>· ${W(SXT.main)}</span></p>
-    <a class="sx-main" href="${ig(main[1])}" target="_blank" rel="noopener"><span class="sx-h">@${main[1]}</span><span class="sx-n">${main[0]}</span><i aria-hidden="true">↗</i></a>
+    <a class="sx-main" href="${ig(main[1])}" target="_blank" rel="noopener"><img class="sx-av" src="${AVM}" alt="" width="72" height="72" decoding="async"><span class="sx-h">@${main[1]}</span><span class="sx-n">${main[0]}</span><i aria-hidden="true">↗</i></a>
     <p class="sx-k sx-k2">${W(SXT.sub)}</p>
-    <div class="sx-subs">${subs.map(([n,h])=>`<a class="sx-sub" href="${ig(h)}" target="_blank" rel="noopener"><span class="sx-sn">${n}</span><span class="sx-sh">@${h}</span><i aria-hidden="true">↗</i></a>`).join("")}</div>
+    <div class="sx-subs">${subs.map(([n,h])=>`<a class="sx-sub sx-ig" href="${ig(h)}" target="_blank" rel="noopener"><img class="sx-av" src="${AVS}" alt="" width="40" height="40" decoding="async"><span class="sx-sn">${n}</span><span class="sx-sh">@${h}</span><i aria-hidden="true">↗</i></a>`).join("")}</div>
    </section>
    <section class="sx">
     <p class="sx-k">${W(SXT.oth)}</p>
