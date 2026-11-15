@@ -2510,9 +2510,9 @@ body.home #bag{display:flex!important}
 #phil{font-weight:300!important}
 .hvtop .intro.onfilm #phil{text-shadow:0 0 22px rgba(0,0,0,.14)}
 /* 2) pause control */
-.hvpause{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 26px);z-index:65;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
-.hvpause svg{width:18px;height:18px}
-@media (max-width:700px){.hvpause{top:calc(env(safe-area-inset-top,0px) + 70px);bottom:auto;width:40px;height:40px}}
+.hvpause{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 2px);z-index:65;width:44px;height:44px;border:0;border-radius:0;background:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;opacity:.85}
+.hvpause svg{width:13px;height:13px}
+
 body:not(.home) .hvpause,body:not(.home) .scue,body:not(.filmon) .hvpause,body:not(.filmon) .scue{display:none!important}
 /* 3) scroll cue + footer on home */
 .scue{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 4px);transform:translateX(-50%);z-index:65;background:none;border:0;color:#fff;opacity:.8;width:44px;height:30px;cursor:pointer;animation:scb 2.4s ease-in-out infinite}
@@ -2522,13 +2522,12 @@ body:not(.home) .hvpause,body:not(.home) .scue,body:not(.filmon) .hvpause,body:n
 html.noscroll:has(body.home):not(:has(#ov.menu)):not(:has(#ov.ss)){overflow-y:auto!important}
 body.home #foot{display:block!important;height:auto!important;visibility:visible!important;opacity:1!important;max-height:none!important;overflow:visible!important}
 /* 9) language on the home page: minimal */
-.tlang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:max(18px,env(safe-area-inset-right));z-index:60;color:#fff;mix-blend-mode:difference;font-family:var(--latin)}
+.tlang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:max(18px,env(safe-area-inset-right));z-index:60;color:#fff;font-family:var(--latin)}
 .tlang>button{background:none;border:0;color:inherit;font:500 .66rem var(--latin);letter-spacing:.16em;padding:12px 6px;min-width:44px;min-height:44px;cursor:pointer}
 .tlang ul{list-style:none;margin:0;padding:4px 6px;display:none;text-align:right}
 .tlang.open ul{display:block}
 .tlang li button{background:none;border:0;color:inherit;font:400 .72rem var(--latin);letter-spacing:.06em;padding:7px 0;cursor:pointer;opacity:.75}
 .tlang li button[aria-current]{opacity:1;font-weight:500}
-.tlang.open{mix-blend-mode:normal}
 .tlang.open>button{color:#fff;text-shadow:0 0 10px rgba(0,0,0,.4)}
 .tlang.open ul{background:rgba(18,18,18,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:12px;padding:6px 14px;margin-top:2px}
 .tlang.open li button{color:#fff}
@@ -5666,10 +5665,13 @@ renderChrome(); route();
   function lang(){
     let w=document.querySelector(".tlang"); if(!w){w=document.createElement("div"); w.className="tlang"; document.body.appendChild(w); document.addEventListener("click",e=>{if(!w.contains(e.target)){w.classList.remove("open");document.body.classList.remove("langopen")}})}
     w.innerHTML='<button type="button" aria-haspopup="true" aria-label="Language">'+String(L).toUpperCase()+'</button><ul>'+CODES.map(k=>'<li><button type="button" data-l="'+k+'"'+(k===L?' aria-current="true"':'')+'>'+LN[k]+'</button></li>').join("")+'</ul>';
-    w.firstChild.onclick=()=>{w.classList.toggle("open");document.body.classList.toggle("langopen",w.classList.contains("open"))};
+    w.firstChild.onclick=()=>{w.classList.toggle("open");w.style.color=w.classList.contains("open")?"#fff":"";document.body.classList.toggle("langopen",w.classList.contains("open"))};
     w.querySelectorAll("li button").forEach(b=>b.onclick=()=>{w.classList.remove("open");document.body.classList.remove("langopen");setLang(b.dataset.l)});
   }
-  const run=()=>{try{decorate();lang()}catch(_){}};
+  function tint(){const ref=document.getElementById("searchB2")||document.getElementById("menuB2");if(!ref)return;const c=getComputedStyle(ref).color;document.querySelectorAll(".tlang,.hvpause,.scue").forEach(e=>{if(!(e.classList.contains("tlang")&&e.classList.contains("open")))e.style.color=c})}
+  if(window.MutationObserver) new MutationObserver(()=>setTimeout(tint,30)).observe(document.body,{attributes:true,attributeFilter:["class"]});
+  setInterval(tint,1500);
+  const run=()=>{try{decorate();lang();tint()}catch(_){}};
   const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>setTimeout(run,50)).observe(v,{childList:true});
   addEventListener("hashchange",()=>setTimeout(run,80)); addEventListener("load",run); setTimeout(run,600); setTimeout(run,2000);
 })();
