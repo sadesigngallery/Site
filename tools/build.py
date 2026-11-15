@@ -154,7 +154,7 @@ def main(app_html, photos, films):
     for n, out in (("favicon.ico", "favicon.ico"), ("favicon-32.png", "favicon-32.png"), ("favicon-512.png", "favicon-512.png"), ("sa-apple180.png", "apple-touch-icon.png")):
         shutil.copy(os.path.join(brand, n), os.path.join(OUT, out))
     s = re.sub(r'<link rel="(?:icon|apple-touch-icon)"[^>]*>', "", s)
-    s = s.replace("</head>", '<link rel="icon" href="/favicon.ico?v=2" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2"><link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"></head>', 1)
+    s = s.replace("</head>", '<link rel="icon" href="/favicon.ico?v=3" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3"><link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png?v=3"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3"></head>', 1)
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(s)
     size = os.path.getsize(os.path.join(OUT, "index.html"))
