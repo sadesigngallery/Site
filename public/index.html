@@ -2529,6 +2529,37 @@ html[dir="rtl"] .cxpage .cx-tile:nth-child(even){padding-right:28px;padding-left
 
 body.aboutd .bios{margin-top:56px}
 body.aboutd .bios+.bios{margin-top:48px}
+/* ===== About, artistic ===== */
+body.aboutd .about{max-width:1080px!important}
+body.aboutd .about h1.caps{font-size:.68rem!important;letter-spacing:.32em!important;font-weight:400!important;opacity:.7;margin-bottom:6px!important}
+body.aboutd .about .dh{font-family:var(--latin);font-weight:100;font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.02;letter-spacing:-.015em;margin:8px 0 40px;text-align:center}
+body.aboutd .about>.lead2{max-width:720px;margin-left:auto;margin-right:auto;font-weight:200;font-size:1.08rem;line-height:2;text-align:start}
+body.aboutd .about>.lead2:first-of-type{font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.8}
+body.aboutd .about .dhx{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:0!important;margin:64px auto!important;max-width:980px;padding:0!important}
+body.aboutd .about .dhx>div{display:flex!important;flex-direction:column;gap:12px;padding:8px 26px!important;border:0!important;border-inline-start:1px solid rgba(255,255,255,.14)!important;text-align:start}
+body.aboutd .about .dhx>div:first-child{border-inline-start:0!important}
+body.aboutd .about .dhx b{font-family:var(--latin);font-weight:100!important;font-size:clamp(1.7rem,3.2vw,2.5rem)!important;letter-spacing:-.01em;line-height:1;color:#fff}
+body.aboutd .about .dhx span{font-size:.92rem!important;line-height:1.8;font-weight:300}
+body.aboutd .abq{margin:96px auto 88px;max-width:900px;text-align:center;padding:0 12px}
+body.aboutd .abq p{font-family:var(--latin);font-weight:100;font-size:clamp(1.7rem,4vw,3.1rem);line-height:1.22;letter-spacing:-.005em;text-transform:uppercase;margin:0;color:#fff}
+html[lang="fa"] body.aboutd .abq p,html[lang="ar"] body.aboutd .abq p{font-family:var(--fa-body);font-weight:300;text-transform:none;line-height:1.7}
+body.aboutd .abq cite{display:block;margin-top:22px;font-style:normal;font-family:var(--latin);font-size:.66rem;letter-spacing:.32em;opacity:.6}
+body.aboutd .abq cite::before{content:"";display:block;width:36px;height:1px;background:currentColor;margin:0 auto 16px;opacity:.6}
+@media (min-width:860px){
+ body.aboutd .bios figure{display:grid!important;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:end;margin:0 0 96px!important}
+ body.aboutd .bios figure img{max-width:none!important;width:100%!important;margin:0!important}
+ body.aboutd .bios figure:nth-child(even){grid-template-columns:minmax(0,6fr) minmax(0,5fr)}
+ body.aboutd .bios figure:nth-child(even) img{order:2}
+ body.aboutd .bios figure figcaption{padding-bottom:12px}
+}
+body.aboutd .bios figcaption b{display:block;font-family:var(--latin);font-weight:100!important;font-size:clamp(1.9rem,3.4vw,2.8rem)!important;letter-spacing:-.01em;line-height:1.05;color:#fff}
+body.aboutd .bios .biot{margin:12px 0 18px!important}
+body.aboutd .about .dhx b{align-self:flex-start;width:auto}
+body.aboutd .bios figcaption b{text-align:start!important;text-align-last:auto!important;word-spacing:normal!important}
+html[lang="fa"] body.aboutd .bios figcaption b,html[lang="ar"] body.aboutd .bios figcaption b{font-family:var(--fa-body);font-weight:300!important;font-size:clamp(1.5rem,3vw,2.2rem)!important}
+body.aboutd .bios figcaption p{font-weight:300!important;line-height:1.95!important;max-width:520px}
+@media (max-width:859px){body.aboutd .about .dhx{grid-template-columns:1fr;margin:48px auto!important}body.aboutd .about .dhx>div{border-inline-start:0!important;border-top:1px solid rgba(255,255,255,.14)!important;padding:20px 0!important}body.aboutd .about .dhx>div:first-child{border-top:0!important}body.aboutd .abq{margin:64px auto 56px}}
+
 /* ===== home: UI/UX round 1 ===== */
 /* 10) search: a full 44px target */
 #searchB2{min-width:44px!important;min-height:44px!important;justify-content:center;align-items:center}
@@ -5292,7 +5323,7 @@ function sjToast(){const T_=SJT[L]||SJT.en;let el=document.querySelector(".sjtoa
 /* ---------- about ---------- */
 function renderAbout(){
   onIndex=false; const T_=t(); const fa=L==="fa"; document.body.classList.add("dark","aboutd");
-  view.innerHTML=`<main class="page about"><h1 class="caps">${TX()?TX().ui.aboutH:"About SA"}</h1>${(A2=>`<p class="dh">${A2.h}</p><p class="lead2">${A2.p1}</p><div class="dhx">${A2.d.map(([k,v])=>`<div><b dir="ltr">${k}</b><span>${v}</span></div>`).join("")}</div><p class="lead2">${A2.p2}</p><p class="lead2">${A2.p3}</p>`)(ABOUT2[L]||ABOUT2.en)}
+  view.innerHTML=`<main class="page about"><h1 class="caps">${TX()?TX().ui.aboutH:"About SA"}</h1>${(A2=>`<p class="dh">${A2.h}</p><p class="lead2">${A2.p1}</p><div class="dhx">${A2.d.map(([k,v])=>`<div><b dir="ltr">${k}</b><span>${v}</span></div>`).join("")}</div><blockquote class="abq"><p>${T_.lead}</p><cite>Sa</cite></blockquote><p class="lead2">${A2.p2}</p><p class="lead2">${A2.p3}</p>`)(ABOUT2[L]||ABOUT2.en)}
    <div class="bios"><figure><img src="${IMG["a-alireza"]}" alt="Alireza Emtiaz" loading="lazy"><figcaption><b>${fa?"Alireza Emtiaz · علیرضا امتیاز":"Alireza Emtiaz"}</b><small class="biot">${FOUNDT.al[L]||FOUNDT.al.en}</small><p>${fa?BIO.alirezaFa:((TX()&&TX().bio.alireza)||BIO.alireza)}</p></figcaption></figure>
    <figure><img src="${IMG["a-saqar"]}" alt="Saqar Khakdan" loading="lazy"><figcaption><b>${fa?"Saqar Khakdan · ساغر خاکدان":"Saqar Khakdan"}</b><small class="biot">${FOUNDT.sa[L]||FOUNDT.sa.en}</small><p>${fa?BIO.saqarFa:((TX()&&TX().bio.saqar)||BIO.saqar)}</p></figcaption></figure></div>
    <div class="bios"><figure><img src="${SOODIMG}" alt="Soodabeh Naderi" loading="lazy"><figcaption><b>${fa?"Soodabeh Naderi · سودابه نادری":L==="ar"?"Soodabeh Naderi · سودابه نادري":"Soodabeh Naderi"}</b><small class="biot">${SOODT[L]||SOODT.en}</small><p>${SOODB[L]||SOODB.en}</p></figcaption></figure></div></main>`;
