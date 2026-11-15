@@ -2525,6 +2525,20 @@ html[dir="rtl"] .cxpage .cx-tile:nth-child(even){padding-right:28px;padding-left
 .cxpage .cx-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
 .cxpage .cx-steps li{display:flex;flex-direction:column;gap:8px}
 .cxpage .cx-form{margin-top:clamp(56px,8vw,96px)!important;scroll-margin-top:110px}
+/* ===== Download ===== */
+.dlx .dl-grp{font-family:var(--latin);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:#999;margin:26px 0 12px}
+html[lang="fa"] .dlx .dl-grp,html[lang="ar"] .dlx .dl-grp{font-family:var(--fa-body);letter-spacing:0;font-size:.85rem}
+.dlx .catl.dl-two{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.dlx .catl.dl-four{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.dlx .dwgl{border-top:1px solid #e3e3e3}
+.dlx .dwgr{display:grid!important;grid-template-columns:180px minmax(0,1fr);gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid #eee;margin:0!important}
+.dlx .dwgr>p{margin:0!important;font-size:.72rem!important;letter-spacing:.12em;text-transform:uppercase;color:#888}
+html[lang="fa"] .dlx .dwgr>p,html[lang="ar"] .dlx .dwgr>p{letter-spacing:0;font-size:.85rem!important}
+.dlx .dl-count{min-height:1.4em;margin:14px 0 0;font-size:.86rem;font-weight:500;color:#111}
+.dlx .dl-more{margin:clamp(48px,7vw,80px) 0 0;padding-top:22px;border-top:1px solid #e3e3e3;font-weight:300;color:#555}
+.dlx .dl-more a{color:#111;font-weight:500;text-decoration:none;border-bottom:1px solid currentColor;margin-inline-start:6px}
+@media (max-width:700px){.dlx .catl.dl-four,.dlx .catl.dl-two{grid-template-columns:repeat(2,minmax(0,1fr))!important}.dlx .dwgr{grid-template-columns:1fr;gap:8px}}
+
 @media (max-width:700px){.cxpage .cx-offer,.cxpage .cx-proj,.cxpage .cx-steps{grid-template-columns:1fr}.cxpage .cx-tile,.cxpage .cx-tile:nth-child(even),html[dir="rtl"] .cxpage .cx-tile,html[dir="rtl"] .cxpage .cx-tile:nth-child(even){padding:22px 0;border-left:0;border-right:0}.cxpage .cx-steps{gap:22px}}
 
 body.aboutd .bios{margin-top:56px}
@@ -3494,6 +3508,16 @@ ar:{purpose:"تعمل Sa مع المعماريين ومصممي الديكور �
  o:[["اعتماد قطع Sa","قطع من المجموعة تُختار لمساحاتكم. تُناقش الألوان والتشطيبات لكل مشروع."],["مشاريع مشتركة","مشاريع داخلية وفضائية تُصمَّم مع SA، من الرسم الأول حتى الغرفة المكتملة."],["رسومات وكتالوجات","رسومات AutoCAD ثنائية الأبعاد لكل قطعة، وكتالوجات PDF من المجموعة الحالية."],["أسعار المهنيين","أسعار للمعماريين والمصممين، عند الطلب."]],
  cStart:"ابدأ مشروعًا",cDl:"إلى التنزيلات",cPrice:"اطلب الأسعار",projH:"تعاونات مختارة",projP:"مع Lotfi House، أصبحت سجادات كليم نُسجت قبل قرن نقطة انطلاق لمجموعات جديدة.",
  stepsH:"كيف نعمل",steps:[["أخبرونا عن المشروع","تكفي بضعة أسطر: الفضاء، الجدول الزمني، والقطع التي في بالكم."],["نردّ شخصيًا","مع رسومات وخيارات وأسعار القطع المناسبة."],["صُنع يدوي","تُصنع كل قطعة في الاستوديو، مرقّمة، مع شهادتها الخاصة."]],formH:"ابدأ مشروعًا"}};
+const DLX={
+en:{purpose:"Everything an architect or designer needs to work with Sa pieces: catalogues to read and share, drawings to place in a plan.",gAll:"The collection",gFam:"By family",reqH:"Request the drawings",reqP:"Tell us who the files are for. We send the DWG files of the pieces you chose by email or WhatsApp.",cnt:"selected",more:"Working on a project with Sa pieces?"},
+fa:{purpose:"هر آنچه یک معمار یا طراح برای کار با آثار سا لازم دارد: کاتالوگ برای خواندن و فرستادن، و نقشه برای قرار دادن در پلان.",gAll:"کل مجموعه",gFam:"بر اساس خانواده",reqH:"درخواست نقشه‌ها",reqP:"بگویید فایل‌ها برای چه کسی است. فایل‌های DWG قطعه‌های انتخاب‌شده را با ایمیل یا واتس‌اپ می‌فرستیم.",cnt:"انتخاب شده",more:"روی پروژه‌ای با آثار سا کار می‌کنید؟"},
+es:{purpose:"Todo lo que un arquitecto o diseñador necesita para trabajar con piezas Sa: catálogos para leer y compartir, planos para colocar en un proyecto.",gAll:"La colección",gFam:"Por familia",reqH:"Solicitar los planos",reqP:"Díganos para quién son los archivos. Enviamos los DWG de las piezas elegidas por correo o WhatsApp.",cnt:"seleccionadas",more:"¿Trabaja en un proyecto con piezas Sa?"},
+it:{purpose:"Tutto ciò che serve a un architetto o designer per lavorare con i pezzi Sa: cataloghi da leggere e condividere, disegni da inserire in pianta.",gAll:"La collezione",gFam:"Per famiglia",reqH:"Richiedi i disegni",reqP:"Diteci per chi sono i file. Inviamo i DWG dei pezzi scelti via email o WhatsApp.",cnt:"selezionati",more:"State lavorando a un progetto con pezzi Sa?"},
+fr:{purpose:"Tout ce dont un architecte ou un designer a besoin pour travailler avec les pièces Sa : des catalogues à lire et partager, des plans à placer dans un projet.",gAll:"La collection",gFam:"Par famille",reqH:"Demander les plans",reqP:"Dites-nous à qui sont destinés les fichiers. Nous envoyons les DWG des pièces choisies par e-mail ou WhatsApp.",cnt:"sélectionnées",more:"Vous travaillez sur un projet avec des pièces Sa ?"},
+de:{purpose:"Alles, was Architekten und Designer für die Arbeit mit Sa-Stücken brauchen: Kataloge zum Lesen und Weitergeben, Zeichnungen für den Grundriss.",gAll:"Die Kollektion",gFam:"Nach Familie",reqH:"Zeichnungen anfragen",reqP:"Sagen Sie uns, für wen die Dateien sind. Wir senden die DWG-Dateien der gewählten Stücke per E-Mail oder WhatsApp.",cnt:"ausgewählt",more:"Arbeiten Sie an einem Projekt mit Sa-Stücken?"},
+ja:{purpose:"建築家やデザイナーが Sa の作品を扱うために必要なものすべて。読んで共有するカタログと、図面に置くためのドローイング。",gAll:"コレクション全体",gFam:"ファミリー別",reqH:"図面を依頼する",reqP:"ファイルの宛先をお知らせください。選んだ作品のDWGファイルをメールまたはWhatsAppでお送りします。",cnt:"件選択",more:"Sa の作品を使うプロジェクトをお考えですか？"},
+zh:{purpose:"建筑师和设计师使用 Sa 作品所需的一切：可阅读和分享的目录，可放入平面图的图纸。",gAll:"整个系列",gFam:"按类别",reqH:"索取图纸",reqP:"告诉我们文件发给谁。我们会通过邮件或 WhatsApp 发送所选作品的 DWG 文件。",cnt:"已选",more:"正在做使用 Sa 作品的项目？"},
+ar:{purpose:"كل ما يحتاجه المعماري أو المصمم للعمل مع قطع Sa: كتالوجات للقراءة والمشاركة، ورسومات لوضعها في المخطط.",gAll:"المجموعة كاملة",gFam:"حسب العائلة",reqH:"اطلب الرسومات",reqP:"أخبرونا لمن الملفات. نرسل ملفات DWG للقطع المختارة عبر البريد أو واتساب.",cnt:"مختارة",more:"تعملون على مشروع بقطع Sa؟"}};
 function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{};
   const sendRow=k=>`<div class="sendopts trsend" data-k="${k}"><a href="mailto:${MAIL}" data-tr="mail">${T_.email}<span dir="ltr">${MAIL}</span></a><a href="https://wa.me/${WA_CA}" data-tr="ca" target="_blank" rel="noopener">${T_.wa2}<span dir="ltr">+1 403 922 9905</span></a><a href="https://wa.me/${WA_IR}" data-tr="ir" target="_blank" rel="noopener">${T_.wa1}<span dir="ltr">+98 939 713 3918</span></a></div>`;
   const num=n=>String(n).padStart(2,"0");
@@ -3504,7 +3528,21 @@ function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT
    <section class="cx-sec"><h2 class="cx-h">${X.offerH}</h2><div class="cx-offer">${X.o.map(([h,p],i)=>`<div class="cx-tile"><i>${N2(i+1)}</i><b>${h}</b><p>${p}</p>${i===2?`<a class="cx-go" href="#/download">${X.cDl} ${(L==="fa"||L==="ar")?"←":"→"}</a>`:i===3?`<a class="cx-go" href="#cxform" data-price="1">${X.cPrice} ${(L==="fa"||L==="ar")?"←":"→"}</a>`:`<a class="cx-go" href="#cxform" data-pt="${i===0?2:1}">${X.cStart} ${(L==="fa"||L==="ar")?"←":"→"}</a>`}</div>`).join("")}</div></section>
    <section class="cx-sec"><h2 class="cx-h">${X.projH}</h2><p class="cx-p">${X.projP}</p><div class="cx-proj">${SETS.filter(s=>s.collab!==0).slice(0,2).map(s=>`<a class="cx-card" href="#/set/${s.id}"><span class="cx-im"><img src="${IMG[s.imgs[0]]}" alt="" loading="lazy"></span><b>${sN(s)}</b><small dir="ltr">Sa Editions × Lotfi House</small></a>`).join("")}</div></section>
    <section class="cx-sec"><h2 class="cx-h">${X.stepsH}</h2><ol class="cx-steps">${X.steps.map(([h,p],i)=>`<li><i>${N2(i+1)}</i><b>${h}</b><p>${p}</p></li>`).join("")}</ol></section>`;
-  view.innerHTML=`<main class="page tradepage${DL?" dlpage":" cxpage"}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1>${DL?`<p class="lead2">${DLLEAD[L]||DLLEAD.en}</p>`:""}${DL?catSec:colx}
+  const Y=DLX[L]||DLX.en, AR_=(L==="fa"||L==="ar")?"←":"→";
+  const tile=k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`};
+  const dlHTML=`<main class="page tradepage dlpage cxpage dlx"><h1 class="pt">${DLN[L]||DLN.en}</h1><p class="cx-purpose">${Y.purpose}</p>
+   <section class="cx-sec"><h2 class="cx-h">${Q.s3}</h2><p class="cx-p">${Q.s3p}</p>
+    <p class="dl-grp">${Y.gAll}</p><div class="catl dl-two">${["full","info"].map(tile).join("")}</div>
+    <p class="dl-grp">${Y.gFam}</p><div class="catl dl-four">${["tables","seating","lighting","piano"].map(tile).join("")}</div></section>
+   <section class="cx-sec"><h2 class="cx-h">${Q.s2}</h2><p class="cx-p">${Q.s2p}</p>
+    <div class="dwgl">${CATS.filter(c=>c[0]!=="mirror").map(c=>`<div class="dwgr"><p>${catName(c)}</p><div>${P.filter(x=>x.cat===c[0]).map(x=>DWG[x.id]?`<a class="dwgc has" href="${DWG[x.id]}" download>${esc(x.en)} ↓</a>`:`<button type="button" class="dwgc" data-id="${x.id}">${esc(x.en)}</button>`).join("")}</div></div>`).join("")}</div>
+    <p class="dl-count" id="dlCount" aria-live="polite"></p></section>
+   <section class="cx-sec trs trme dl-req"><h2 class="cx-h">${Y.reqH}</h2><p class="cx-p">${Y.reqP}</p>
+    <div class="trform"><label>${Q.name} *<input id="trN" autocomplete="name" value="${esc(W.name||"")}"></label><label>${Q.studio}<input id="trS" autocomplete="organization"></label>
+     <label>${Q.prof}<select id="trP">${Q.profs.map(p=>`<option${W.prof===p?" selected":""}>${p}</option>`).join("")}</select></label><label>${Q.city}<input id="trC"></label></div>
+    <p class="wneed" id="trE" hidden>${Q.need}</p><p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>
+   <p class="dl-more">${Y.more} <a href="#/trade">${TRADEN[L]||TRADEN.en} ${AR_}</a></p></main>`;
+  view.innerHTML=DL?dlHTML:`<main class="page tradepage${DL?" dlpage":" cxpage"}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1>${DL?`<p class="lead2">${DLLEAD[L]||DLLEAD.en}</p>`:""}${DL?catSec:colx}
    <section class="trs${DL?" trme":" cx-form"}" ${DL?"":`id="cxform"`}>${DL?"":`<h2 class="cx-h">${X.formH}</h2><p class="trp">${Q.s1p}</p>`}
     <div class="trform"><label>${Q.name} *<input id="trN" autocomplete="name" value="${esc(W.name||"")}"></label><label>${Q.studio}<input id="trS" autocomplete="organization"></label>
      <label>${Q.prof}<select id="trP">${Q.profs.map(p=>`<option${W.prof===p?" selected":""}>${p}</option>`).join("")}</select></label><label>${Q.city}<input id="trC"></label>
@@ -3515,7 +3553,8 @@ function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT
     <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>`:""}
   </main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
-  view.querySelectorAll(".dwgc[data-id]").forEach(b=>b.onclick=()=>b.classList.toggle("on"));
+  const dlc=()=>{const c=$("#dlCount");if(!c)return;const n_=view.querySelectorAll(".dwgc.on").length;c.textContent=n_?`${n(n_)} ${(DLX[L]||DLX.en).cnt}`:"";if(n_)$("#trE2")&&($("#trE2").hidden=true)};
+  view.querySelectorAll(".dwgc[data-id]").forEach(b=>b.onclick=()=>{b.classList.toggle("on");dlc()});
   view.querySelectorAll(".cx-go[href='#cxform']").forEach(a=>a.onclick=e=>{e.preventDefault();const sel=$("#trT");if(sel){sel.selectedIndex=a.dataset.price?sel.options.length-1:+(a.dataset.pt||0)}const f=$("#cxform");if(f)f.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>{const n=$("#trN");if(n)n.focus({preventScroll:true})},500)});
   view.querySelectorAll(".trsend a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();
     const k=a.parentElement.dataset.k,nm=$("#trN").value.trim();$("#trE").hidden=!!nm;if(!nm){$("#trN").scrollIntoView({block:"center",behavior:"smooth"});$("#trN").focus();return}
