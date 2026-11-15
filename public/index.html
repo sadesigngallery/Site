@@ -2497,6 +2497,42 @@ html{overflow-x:hidden}
 .sendopts>a>span{margin-inline-start:auto;text-align:end}
 .hero{overflow:visible!important}
 .mark span{font-weight:500!important;letter-spacing:.04em}
+/* ===== home: UI/UX round 1 ===== */
+/* 10) search: a full 44px target */
+#searchB2{min-width:44px!important;min-height:44px!important;justify-content:center;align-items:center}
+/* 11) heart on the home page too */
+body.home #bag{display:flex!important}
+/* 5) tagline readable */
+.hvtop .intro.onfilm .tagl2{font-size:max(12px,.8rem)!important;letter-spacing:.12em!important}
+/* 6) main sentence less hairline */
+#phil{font-weight:300!important}
+.hvtop .intro.onfilm #phil{text-shadow:0 0 22px rgba(0,0,0,.14)}
+/* 2) pause control */
+.hvpause{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 26px);z-index:65;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(0,0,0,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.hvpause svg{width:18px;height:18px}
+@media (max-width:700px){.hvpause{top:calc(env(safe-area-inset-top,0px) + 70px);bottom:auto;width:40px;height:40px}}
+body:not(.home) .hvpause,body:not(.home) .scue,body:not(.filmon) .hvpause,body:not(.filmon) .scue{display:none!important}
+/* 3) scroll cue + footer on home */
+.scue{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 4px);transform:translateX(-50%);z-index:65;background:none;border:0;color:#fff;opacity:.8;width:44px;height:30px;cursor:pointer;animation:scb 2.4s ease-in-out infinite}
+.scue svg{width:22px;height:22px}
+@keyframes scb{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
+@media (prefers-reduced-motion:reduce){.scue{animation:none}}
+html.noscroll:has(body.home):not(:has(#ov.menu)):not(:has(#ov.ss)){overflow-y:auto!important}
+body.home #foot{display:block!important;height:auto!important;visibility:visible!important;opacity:1!important;max-height:none!important;overflow:visible!important}
+/* 9) language on the home page: minimal */
+.tlang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:max(18px,env(safe-area-inset-right));z-index:60;color:#fff;mix-blend-mode:difference;font-family:var(--latin)}
+.tlang>button{background:none;border:0;color:inherit;font:500 .66rem var(--latin);letter-spacing:.16em;padding:12px 6px;min-width:44px;min-height:44px;cursor:pointer}
+.tlang ul{list-style:none;margin:0;padding:4px 6px;display:none;text-align:right}
+.tlang.open ul{display:block}
+.tlang li button{background:none;border:0;color:inherit;font:400 .72rem var(--latin);letter-spacing:.06em;padding:7px 0;cursor:pointer;opacity:.75}
+.tlang li button[aria-current]{opacity:1;font-weight:500}
+.tlang.open{mix-blend-mode:normal}
+.tlang.open>button{color:#fff;text-shadow:0 0 10px rgba(0,0,0,.4)}
+.tlang.open ul{background:rgba(18,18,18,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:12px;padding:6px 14px;margin-top:2px}
+.tlang.open li button{color:#fff}
+body.langopen .hvpause{opacity:0;pointer-events:none}
+body:not(.home) .tlang,body:not(.filmon) .tlang{display:none}
+
 body.dark.aboutd{--paper:#2a2a2a;--lacquer:#262626;--hair:#424242;--graphite:#a8a8a8;background:#2a2a2a!important}
 html:has(body.aboutd){background:#2a2a2a}
 body.aboutd .dhx span{color:#a8a8a8!important}
@@ -3503,7 +3539,7 @@ function filmChainOld(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv
     setTimeout(()=>{if(!vd.isConnected)return;if(F.po)hv.style.backgroundImage=`url("${F.po}")`;vd.setAttribute("src",F.src);vd._prep=0;filmPrep(vd);vd.playbackRate=F.rate||.6;
       const on=()=>{vd.playbackRate=F.rate||.6;vd.style.opacity="1";vd.removeEventListener("playing",on)};vd.addEventListener("playing",on);setTimeout(on,1500)},600)})}
 /* while the home is on the film, nothing moves the page */
-addEventListener("scroll",()=>{if(document.documentElement.classList.contains("noscroll")&&scrollY>0)scrollTo(0,0)},{passive:true});document.addEventListener("touchmove",e=>{if(document.documentElement.classList.contains("noscroll")&&!(e.target.closest&&e.target.closest(".ov,.sheet,input,textarea,select")))e.preventDefault()},{passive:false});
+addEventListener("scroll",()=>{const de=document.documentElement;if(de.classList.contains("noscroll")&&scrollY>0&&!(document.body.classList.contains("home")&&!document.querySelector("#ov.menu,#ov.ss")))scrollTo(0,0)},{passive:true});document.addEventListener("touchmove",e=>{if(document.documentElement.classList.contains("noscroll")&&!(e.target.closest&&e.target.closest(".ov,.sheet,input,textarea,select")))e.preventDefault()},{passive:false});
 document.addEventListener("wheel",e=>{if(document.documentElement.classList.contains("noscroll")&&!(e.target.closest&&e.target.closest(".ov,.sheet")))e.preventDefault()},{passive:false});
 /* v220: film framing per screen size — the studio drags the handles, presses OK, and the framing is kept */
 const FILMFIT={};let FFEDIT=false,FFLOCAL={};try{FFLOCAL=JSON.parse(localStorage.getItem("sa-filmfit")||"{}")}catch(_){}
@@ -3728,10 +3764,10 @@ function hideIntro(){const it=$("#intro");if(!it)return;if(location.hash.replace
   setTimeout(()=>scrollTo(0,0),30);it.classList.remove("on");document.documentElement.classList.remove("introon");setTimeout(()=>{introOn=false},900)}
 /* full-screen film at the top of the index, with the menu over it */
 function hvMenuHTML(T_){
-  return (APP===3?[[LOVEN[L]||LOVEN.en,"#/sculpture"],[FFC[L]||FFC.en,"#/jewellery"]]:[[WORKN[L]||WORKN.en,"go:dining"],[T_.piano,"go:piano"],[MIXN[L]||MIXN.en,"#/sets"],[SUBJN[L]||SUBJN.en,"#/subjects"]])
+  return (APP===3?[[LOVEN[L]||LOVEN.en,"#/sculpture"],[FFC[L]||FFC.en,"#/jewellery"]]:[[HOMEL.w[L]||HOMEL.w.en,"go:dining"],[HOMEL.p[L]||HOMEL.p.en,"go:piano"],[HOMEL.a[L]||HOMEL.a.en,"#/sets"],[HOMEL.s[L]||HOMEL.s.en,"#/subjects"]])
    .map(([l,h_])=>h_.startsWith("go:")?`<a class="hvt" href="#/c/${h_.slice(3)}" data-go="${h_.slice(3)}"><span>${l}</span></a>`:`<a class="hvt" href="${h_}"><span>${l}</span></a>`).join("")}
 /* v69: one of five films, chosen at random each time the home page opens */
-const FILMS=[{land:1,src:VID,po:""},{land:1,src:"v/film-yellow.mp4",po:"i/x.911296f008ff.jpg"},{land:1,src:"v/film-blue.mp4",po:"i/x.5648ec65599d.jpg"},{land:1,src:"v/film-white.mp4",po:"i/x.f4712bf9f601.jpg"}];
+const FILMS=[{land:1,src:VID,po:"i/x.3314cae56ce8.jpg"},{land:1,src:"v/film-yellow.mp4",po:"i/x.911296f008ff.jpg"},{land:1,src:"v/film-blue.mp4",po:"i/x.5648ec65599d.jpg"},{land:1,src:"v/film-white.mp4",po:"i/x.f4712bf9f601.jpg"}];
 let FILMI=0,FILMN=0;
 function nextFilm(){const n=FILMS.length;if(n<2)return 0;let last=-1;if(!FILMN){try{last=+localStorage.getItem("saFilm");if(isNaN(last))last=-1}catch(_){}}let k;do{k=Math.floor(Math.random()*n)}while((FILMN&&k===FILMI)||k===last);if(!FILMN){try{localStorage.setItem("saFilm",k)}catch(_){}}FILMN++;return k}
 function filmTop(src,brightFrom){const T_=t(),F_=FILMS[FILMI]||FILMS[0];if(src===VID)src=F_.src;const land=F_.land&&src===F_.src;return `<div class="hvid hvtop${land?" vland":""}" data-bright="${brightFrom||""}"><video class="vmain" src="${src}"${F_.po&&src===F_.src?` poster="${F_.po}"`:""} autoplay muted loop playsinline preload="auto" onerror="if(this.getAttribute('src')!==VID){this.removeAttribute('poster');this.src=VID;this.play&&this.play().catch(()=>{})}"></video><nav class="hvmenu">${hvMenuHTML(T_)}</nav></div>`}
@@ -5377,6 +5413,11 @@ function navTxt(k,href){if(k==="back"){k="home";href="#/"}return `<a class="back
 function menuBtn(){const h=location.hash.replace(/^#\/?/,"").split("/"),k=h[0];if(!k||k==="i"||k==="c")return "";if(k==="color"&&h[1])return navTxt("back","#/p/"+h[1]);if(k==="set")return "";if(k==="love")return navTxt("back","#/sculpture");return navTxt("home","#/");return `<button type="button" class="iconbtn menuicon" id="menuB" aria-label="${t().menu}"><svg viewBox="0 0 30 44" fill="currentColor"><circle cx="15" cy="7" r="4.05"/><circle cx="15" cy="22" r="4.05"/><circle cx="15" cy="37" r="4.05"/></svg></button>`}
 document.addEventListener("click",e=>{const b=e.target.closest("#menuB");if(b)openMenu();if(!e.target.closest("#langtab")){const lt=$("#langtab");if(lt)lt.classList.remove("open")}});
 const CATALOGUE=[["dining","design"],["desk","design"],["side","design"],["coffee","design"],["console","design"],["light","light"],["lounge","seat"],["bench","seat"],["chair","seat"],["armchair","seat"],["sofa","seat"],["piano","piano"]];
+const HOMEL={
+ w:{en:"All works",fa:"همهٔ آثار",es:"Todas las obras",it:"Tutte le opere",fr:"Toutes les œuvres",de:"Alle Werke",ja:"全作品",zh:"全部作品",ar:"جميع الأعمال"},
+ p:{en:"Pianos",fa:"پیانوها",es:"Pianos",it:"Pianoforti",fr:"Pianos",de:"Flügel",ja:"ピアノ",zh:"钢琴",ar:"البيانوهات"},
+ a:{en:"Arrangements",fa:"چیدمان‌ها",es:"Composiciones",it:"Composizioni",fr:"Compositions",de:"Arrangements",ja:"アレンジメント",zh:"陈设",ar:"تنسيقات"},
+ s:{en:"Stories",fa:"روایت‌ها",es:"Historias",it:"Storie",fr:"Récits",de:"Geschichten",ja:"ストーリー",zh:"故事",ar:"حكايات"}};
 const WORKN={en:"Works",fa:"آثار",es:"Obras",it:"Opere",fr:"Œuvres",de:"Werke",zh:"作品",ja:"作品",ar:"الأعمال"};
 const TBLN={en:"Tables",fa:"میزها",es:"Mesas",it:"Tavoli",fr:"Tables",de:"Tische",zh:"桌",ja:"テーブル",ar:"طاولات"};
 const ALLW={fa:"همه",en:"All",es:"Todo",it:"Tutti",fr:"Tout",de:"Alle",zh:"全部",ja:"すべて",ar:"الكل"};
@@ -5587,6 +5628,46 @@ renderChrome(); route();
   document.addEventListener("load",ev=>{if(ev.target&&ev.target.tagName==="IMG"&&ev.target.closest("#idx"))q()},true);
   const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>{q();setTimeout(q,400)}).observe(v,{childList:true});
   setTimeout(q,500); setTimeout(q,1500);
+})();
+</script>
+<script>
+/* home: pause, scroll cue, minimal language */
+(function(){
+  const LN={en:"English",fa:"فارسی",ar:"العربية",it:"Italiano",fr:"Français",de:"Deutsch",es:"Español",ja:"日本語",zh:"中文"};
+    let paused=false;
+  const P='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5.5" width="3.4" height="13" rx="1"/><rect x="13.6" y="5.5" width="3.4" height="13" rx="1"/></svg>';
+  const PL='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8v12.4c0 .8.9 1.3 1.6.9l9.6-6.2c.6-.4.6-1.3 0-1.7L9.6 4.9C8.9 4.5 8 5 8 5.8z"/></svg>';
+  function decorate(){
+    const top=document.querySelector(".hvid.hvtop");
+    if(!top) return;
+    // 2) pause / play
+    if(!document.querySelector(".hvpause")){
+      const b=document.createElement("button"); b.type="button"; b.className="hvpause";
+      const set=()=>{b.innerHTML=paused?PL:P; b.setAttribute("aria-label",paused?"Play film":"Pause film")}; set();
+      b.onclick=e=>{e.stopPropagation(); paused=!paused; document.querySelectorAll(".hvtop video").forEach(v=>{paused?v.pause():v.play().catch(()=>{})}); set()};
+      document.body.appendChild(b);
+    }
+    // 3) scroll cue
+    if(!document.querySelector(".scue")){
+      const s=document.createElement("button"); s.type="button"; s.className="scue"; s.setAttribute("aria-label","Scroll down");
+      s.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
+      s.onclick=()=>{const f=document.getElementById("foot"); (f||document.body).scrollIntoView({behavior:"smooth"})}; document.body.appendChild(s);
+    }
+    if(!top._io&&window.IntersectionObserver){top._io=new IntersectionObserver(es=>{const e=es[0];const on=e.isIntersecting&&e.intersectionRect.height/innerHeight>.6;document.body.classList.toggle("filmon",on)},{threshold:[0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]});top._io.observe(top)}
+  }
+  // keep paused across film changes
+  document.addEventListener("play",e=>{if(paused&&e.target.closest&&e.target.closest(".hvtop")) e.target.pause()},true);
+  // 9) minimal language picker
+  const CODES=["en","fa","ar","it","fr","de","es","ja","zh"];
+  function lang(){
+    let w=document.querySelector(".tlang"); if(!w){w=document.createElement("div"); w.className="tlang"; document.body.appendChild(w); document.addEventListener("click",e=>{if(!w.contains(e.target)){w.classList.remove("open");document.body.classList.remove("langopen")}})}
+    w.innerHTML='<button type="button" aria-haspopup="true" aria-label="Language">'+String(L).toUpperCase()+'</button><ul>'+CODES.map(k=>'<li><button type="button" data-l="'+k+'"'+(k===L?' aria-current="true"':'')+'>'+LN[k]+'</button></li>').join("")+'</ul>';
+    w.firstChild.onclick=()=>{w.classList.toggle("open");document.body.classList.toggle("langopen",w.classList.contains("open"))};
+    w.querySelectorAll("li button").forEach(b=>b.onclick=()=>{w.classList.remove("open");document.body.classList.remove("langopen");setLang(b.dataset.l)});
+  }
+  const run=()=>{try{decorate();lang()}catch(_){}};
+  const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>setTimeout(run,50)).observe(v,{childList:true});
+  addEventListener("hashchange",()=>setTimeout(run,80)); addEventListener("load",run); setTimeout(run,600); setTimeout(run,2000);
 })();
 </script>
 </body>
