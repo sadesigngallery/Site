@@ -159,6 +159,16 @@ def main(app_html, photos, films):
         f.write(s)
     size = os.path.getsize(os.path.join(OUT, "index.html"))
     print(f"moved {moved} pictures out of the page; index.html is now {size/1e6:.1f} MB")
+    # a design test page (not indexed), kept between builds: state/testpage/* -> public/
+    tp = os.path.join(STATE, "testpage")
+    if os.path.isdir(tp):
+        for root_, _, files_ in os.walk(tp):
+            for fn in files_:
+                src = os.path.join(root_, fn)
+                dst = os.path.join(OUT, os.path.relpath(src, tp))
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                shutil.copy(src, dst)
+        print("copied the test page (state/testpage) into public/")
 
 
 def seo_pages(s):
