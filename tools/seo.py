@@ -526,7 +526,7 @@ HOME_MARK = ("<!--sa-seo-->", "<!--/sa-seo-->")
 
 def home_head(site, org, pieces):
     title = f"{BRAND} — Sculptural furniture, handmade in limited editions"
-    desc = f"{BRAND}: sculptural furniture, pianos and lighting by architects Alireza Emtiaz and Saqar Khakdan, handmade in limited, numbered editions since 2010."
+    desc = "By designers and founders Alireza Emtiaz and Saqar Khakdan."
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "alternateName": ALT_NAMES, "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
     head = (HOME_MARK[0] + f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
