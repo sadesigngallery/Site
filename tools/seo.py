@@ -125,7 +125,7 @@ def page(site, path, title, desc, body, og=None, jsonld=None, lang="en", alts=No
     return f"""<!doctype html><html lang="{lang}"{' dir="rtl"' if rtl else ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(canon)}">{hl}
 <meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(canon)}">{ogi}<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.ico?v=3" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+<link rel="icon" href="/favicon.ico?v=4" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <style>{CSS}</style>{j}</head><body>
 <header class="sb" dir="ltr"><a href="/" aria-label="{BRAND}"><img src="/sa-logo.png" alt="{BRAND} logo" width="120" height="46"></a><span>EDITIONS</span></header>
 <p class="tg">{E(tag)}</p>
