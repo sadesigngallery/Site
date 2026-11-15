@@ -529,7 +529,7 @@ def home_head(site, org, pieces):
     desc = "By designers and founders Alireza Emtiaz and Saqar Khakdan."
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "alternateName": ALT_NAMES, "url": site.rstrip("/") + "/"}
     links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
-    head = (HOME_MARK[0] + f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
+    head = (HOME_MARK[0] + f'<title>Sa</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}">'
             f'<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(site.rstrip("/") + "/")}"><meta property="og:image" content="{E(absu(site, "og/home.jpg"))}">'
             f'<meta name="twitter:card" content="summary_large_image"><link rel="sitemap" type="application/xml" href="/sitemap.xml">'
