@@ -3687,8 +3687,8 @@ function filmChainOld(){const hv=document.querySelector("#idx>.hvtop"),vd=hv&&hv
     setTimeout(()=>{if(!vd.isConnected)return;if(F.po)hv.style.backgroundImage=`url("${F.po}")`;vd.setAttribute("src",F.src);vd._prep=0;filmPrep(vd);vd.playbackRate=F.rate||.6;
       const on=()=>{vd.playbackRate=F.rate||.6;vd.style.opacity="1";vd.removeEventListener("playing",on)};vd.addEventListener("playing",on);setTimeout(on,1500)},600)})}
 /* while the home is on the film, nothing moves the page */
-addEventListener("scroll",()=>{const de=document.documentElement;if(de.classList.contains("noscroll")&&scrollY>0&&!(document.body.classList.contains("home")&&!document.querySelector("#ov.menu,#ov.ss")))scrollTo(0,0)},{passive:true});document.addEventListener("touchmove",e=>{if(document.documentElement.classList.contains("noscroll")&&!(document.body.classList.contains("home")&&!document.querySelector("#ov.menu,#ov.ss"))&&!(e.target.closest&&e.target.closest(".ov,.sheet,input,textarea,select")))e.preventDefault()},{passive:false});
-document.addEventListener("wheel",e=>{if(document.documentElement.classList.contains("noscroll")&&!(document.body.classList.contains("home")&&!document.querySelector("#ov.menu,#ov.ss"))&&!(e.target.closest&&e.target.closest(".ov,.sheet")))e.preventDefault()},{passive:false});
+addEventListener("scroll",()=>{const de=document.documentElement;if(de.classList.contains("noscroll")&&scrollY>0&&!(document.body.classList.contains("home")&&window.SA_HOMEOPEN))scrollTo(0,0)},{passive:true});document.addEventListener("touchmove",e=>{if(document.documentElement.classList.contains("noscroll")&&!(document.body.classList.contains("home")&&window.SA_HOMEOPEN)&&!(e.target.closest&&e.target.closest(".ov,.sheet,input,textarea,select")))e.preventDefault()},{passive:false});
+document.addEventListener("wheel",e=>{if(document.documentElement.classList.contains("noscroll")&&!(document.body.classList.contains("home")&&window.SA_HOMEOPEN)&&!(e.target.closest&&e.target.closest(".ov,.sheet")))e.preventDefault()},{passive:false});
 /* v220: film framing per screen size, the studio drags the handles, presses OK, and the framing is kept */
 const FILMFIT={};let FFEDIT=false,FFLOCAL={};try{FFLOCAL=JSON.parse(localStorage.getItem("sa-filmfit")||"{}")}catch(_){}
 const FFDEF=()=>{const ph=innerWidth<=700;return {z:1.16,x:0,y:0,ib:ph?118:250,mb:ph?34:64}};
@@ -3987,7 +3987,7 @@ function argoStrip(){const pid=(location.hash.split("/")[2]||"");let keys=(PH[pi
   addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x;moved=Math.max(moved,Math.abs(dx));off=(((drag.o-dx)%setW)+setW)%setW;trk.style.transform=`translate3d(${-off}px,0,0)`});
   const end=e=>{if(drag&&e.pointerId===drag.id){drag=null;box.classList.remove("grab");run(off)}};addEventListener("pointerup",end);addEventListener("pointercancel",end);
   box.addEventListener("click",e=>{if(moved>6){e.preventDefault();e.stopPropagation()}},true)}
-function fbAlign(){view.querySelectorAll(".cphoto,.photos .fsw,.photos .kbw").forEach(w=>{w.style.setProperty("margin-left","0px","important");w.style.setProperty("margin-right","0px","important");const l=w.getBoundingClientRect().left;w.style.setProperty("margin-left",(-l)+"px","important")})}
+function fbAlign(){view.querySelectorAll(".cphoto,.photos .fsw,.photos .kbw").forEach(w=>{w.style.setProperty("margin-left","0px","important");w.style.setProperty("margin-right","0px","important");const k=w.getBoundingClientRect();if(getComputedStyle(w).direction==="rtl")w.style.setProperty("margin-right",(k.right-document.documentElement.clientWidth)+"px","important");else w.style.setProperty("margin-left",(-k.left)+"px","important")})}
 addEventListener("resize",()=>{if(document.body.classList.contains("fsph"))fbAlign()});
 function fsWire(){try{argoStrip()}catch(_){}setTimeout(fbAlign,0);setTimeout(fbAlign,600);view.querySelectorAll(".photos img").forEach(im=>{if(im.closest(".argo"))return;if(!im.parentElement.classList.contains("kbw")&&!im.parentElement.classList.contains("fsw")){const w=document.createElement("div");w.className="fsw";im.before(w);w.appendChild(im)}});
   view.querySelectorAll(".photos img,.cphoto img").forEach(im=>{if(im.closest(".argo"))return;const o=()=>{const w=im.closest(".kbw,.fsw,.cphoto");if(w&&im.naturalWidth)w.classList.toggle("pt",im.naturalHeight>im.naturalWidth*1.05)};if(im.complete)o();else im.addEventListener("load",o,{once:true})})}
@@ -5774,7 +5774,7 @@ renderChrome(); route();
     if(!document.querySelector(".scue")){
       const s=document.createElement("button"); s.type="button"; s.className="scue"; s.setAttribute("aria-label","Scroll down");
       s.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
-      s.onclick=()=>{const f=document.getElementById("foot"); (f||document.body).scrollIntoView({behavior:"smooth"})}; document.body.appendChild(s);
+      s.onclick=()=>{window.SA_HOMEOPEN=true;const f=document.getElementById("foot"); (f||document.body).scrollIntoView({behavior:"smooth"})}; document.body.appendChild(s);
     }
     if(!top._io&&window.IntersectionObserver){top._io=new IntersectionObserver(es=>{const e=es[0];const on=e.isIntersecting&&e.intersectionRect.height/innerHeight>.6;document.body.classList.toggle("filmon",on)},{threshold:[0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1]});top._io.observe(top)}
   }
@@ -5806,7 +5806,7 @@ renderChrome(); route();
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fitTag,50));
   const run=()=>{try{decorate();lang();tint();fitTag();setTimeout(fitTag,400)}catch(_){}};
   const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>setTimeout(run,50)).observe(v,{childList:true});
-  addEventListener("hashchange",()=>setTimeout(run,80)); addEventListener("load",run); setTimeout(run,600); setTimeout(run,2000);
+  addEventListener("hashchange",()=>{window.SA_HOMEOPEN=false;setTimeout(run,80)}); addEventListener("load",run); setTimeout(run,600); setTimeout(run,2000);
 })();
 </script>
 </body>
