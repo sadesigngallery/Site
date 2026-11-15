@@ -2495,6 +2495,8 @@ html{overflow-x:hidden}
 #view,#foot{overflow-x:clip}
 .sendopts>a{justify-content:flex-start!important}
 .sendopts>a>span{margin-inline-start:auto;text-align:end}
+.hero{overflow:visible!important}
+
 
 .socp.ap{--apf:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue","IBM Plex Sans",Arial,sans-serif;max-width:980px;padding-bottom:14vh}
 .socp.ap h1.pt{font-family:var(--apf)!important;font-weight:600!important;text-transform:none!important;font-stretch:100%!important;letter-spacing:-.025em!important;font-size:clamp(2.5rem,7vw,4.2rem)!important;color:#1d1d1f;margin:6px 0 0!important}
@@ -5537,6 +5539,30 @@ renderChrome(); route();
    if(BL[s]){go(BL[s]);return}fetch(s).then(r=>r.blob()).then(b=>{BL[s]=URL.createObjectURL(b);go(BL[s])}).catch(()=>{})};
  new MutationObserver(ms=>ms.forEach(m=>{if(m.type==="attributes"&&m.target.tagName==="VIDEO")toBlob(m.target);else m.addedNodes&&m.addedNodes.forEach(n=>{if(n.nodeType!==1)return;if(n.tagName==="VIDEO")toBlob(n);else n.querySelectorAll&&n.querySelectorAll("video").forEach(toBlob)})})).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["src"]});
  setTimeout(()=>document.querySelectorAll("video").forEach(toBlob),300)})();
+</script>
+<script>
+/* keep every index picture (with its shadow) fully on screen: nudge or shrink the ones that run past the edge */
+(function(){
+  const M=6;
+  function fitIx(){
+    const W=document.documentElement.clientWidth;
+    document.querySelectorAll("#idx .ixc").forEach(e=>{
+      e.style.translate="";e.style.scale="";
+      const k=e.getBoundingClientRect(); if(!k.width) return;
+      let dx=0;
+      if(k.width>W-2*M){ e.style.scale=((W-2*M)/k.width).toFixed(3); const k2=e.getBoundingClientRect(); dx=M-k2.left; }
+      else if(k.left<M) dx=M-k.left;
+      else if(k.right>W-M) dx=W-M-k.right;
+      if(Math.abs(dx)>.5) e.style.translate=dx.toFixed(1)+"px 0";
+    });
+  }
+  let raf=0; const q=()=>{cancelAnimationFrame(raf); raf=requestAnimationFrame(fitIx)};
+  addEventListener("resize",q); addEventListener("load",q);
+  addEventListener("hashchange",()=>{q();setTimeout(q,300);setTimeout(q,1200)});
+  document.addEventListener("load",ev=>{if(ev.target&&ev.target.tagName==="IMG"&&ev.target.closest("#idx"))q()},true);
+  const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>{q();setTimeout(q,400)}).observe(v,{childList:true});
+  setTimeout(q,500); setTimeout(q,1500);
+})();
 </script>
 </body>
 </html>
