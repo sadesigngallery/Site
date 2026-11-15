@@ -2497,6 +2497,36 @@ html{overflow-x:hidden}
 .sendopts>a>span{margin-inline-start:auto;text-align:end}
 .hero{overflow:visible!important}
 .mark span{font-weight:500!important;letter-spacing:.04em}
+/* ===== Collaborations ===== */
+.cxpage{max-width:980px!important}
+.cxpage .cx-purpose{font-family:var(--latin);font-weight:200;font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.45;letter-spacing:-.005em;margin:18px 0 0;max-width:820px;color:#111}
+html[lang="fa"] .cxpage .cx-purpose,html[lang="ar"] .cxpage .cx-purpose{font-family:var(--fa-body);font-weight:300;line-height:1.9}
+.cxpage .cx-sec{margin-top:clamp(56px,8vw,96px)}
+.cxpage .cx-h{font-family:var(--latin);font-weight:500;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:#111;margin:0 0 22px;padding-bottom:12px;border-bottom:1px solid #111}
+html[lang="fa"] .cxpage .cx-h,html[lang="ar"] .cxpage .cx-h{font-family:var(--fa-body);letter-spacing:0;font-size:.95rem}
+.cxpage .cx-p{font-weight:300;line-height:1.8;margin:-6px 0 22px;color:#555;max-width:640px}
+.cxpage .cx-offer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+.cxpage .cx-tile{padding:26px 28px 28px 0;border-bottom:1px solid #e3e3e3;display:flex;flex-direction:column;gap:8px}
+.cxpage .cx-tile:nth-child(even){padding-left:28px;padding-right:0;border-left:1px solid #e3e3e3}
+html[dir="rtl"] .cxpage .cx-tile{padding:26px 0 28px 28px}
+html[dir="rtl"] .cxpage .cx-tile:nth-child(even){padding-right:28px;padding-left:0;border-left:0;border-right:1px solid #e3e3e3}
+.cxpage .cx-tile i,.cxpage .cx-steps i{font-style:normal;font-family:var(--latin);font-size:.66rem;letter-spacing:.14em;color:#999}
+.cxpage .cx-tile b,.cxpage .cx-steps b{font-weight:500;font-size:1.06rem;color:#111}
+.cxpage .cx-tile p,.cxpage .cx-steps p{font-weight:300;line-height:1.75;margin:0;color:#555}
+.cxpage .cx-go{margin-top:auto;padding-top:10px;color:#111;text-decoration:none;font-size:.86rem;font-weight:500;align-self:flex-start;border-bottom:1px solid currentColor;padding-bottom:2px}
+.cxpage .cx-go:hover{opacity:.6}
+.cxpage .cx-proj{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.cxpage .cx-card{text-decoration:none;color:#111;display:flex;flex-direction:column;gap:6px}
+.cxpage .cx-im{display:block;aspect-ratio:4/3;overflow:hidden;background:#f2f2f2}
+.cxpage .cx-im img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.cxpage .cx-card:hover .cx-im img{transform:scale(1.03)}
+.cxpage .cx-card b{font-weight:400;font-size:1rem;margin-top:6px}
+.cxpage .cx-card small{font-size:.72rem;color:#888;letter-spacing:.04em}
+.cxpage .cx-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.cxpage .cx-steps li{display:flex;flex-direction:column;gap:8px}
+.cxpage .cx-form{margin-top:clamp(56px,8vw,96px)!important;scroll-margin-top:110px}
+@media (max-width:700px){.cxpage .cx-offer,.cxpage .cx-proj,.cxpage .cx-steps{grid-template-columns:1fr}.cxpage .cx-tile,.cxpage .cx-tile:nth-child(even),html[dir="rtl"] .cxpage .cx-tile,html[dir="rtl"] .cxpage .cx-tile:nth-child(even){padding:22px 0;border-left:0;border-right:0}.cxpage .cx-steps{gap:22px}}
+
 body.aboutd .bios{margin-top:56px}
 body.aboutd .bios+.bios{margin-top:48px}
 /* ===== home: UI/UX round 1 ===== */
@@ -3396,23 +3426,66 @@ const catPieces=k=>CATS.filter(c=>c[0]!=="mirror"&&(!CATGRP[k]||CATGRP[k].includ
 function tradeMsg(kind,extra){const Q=TRT[L]||TRT.en,f=id=>{const e=document.getElementById(id);return e?e.value.trim():""};
   const who=[`${Q.name}: ${f("trN")}`,f("trS")&&`${Q.studio}: ${f("trS")}`,`${Q.prof}: ${f("trP")}`,f("trC")&&`${Q.city}: ${f("trC")}`,kind===Q.s1&&`${Q.pt}: ${f("trT")}`].filter(Boolean);
   return [`SA EDITIONS · TRADE, ${kind}`,"",...who,"",extra,f("trM")].filter((v,i,a)=>v||(i>0&&a[i-1]&&i<a.length-1)).join("\n").trim()}
+const CXT={
+en:{purpose:"Sa works with architects, interior designers and developers who want sculptural pieces to be part of a space, not added to it afterwards.",offerH:"What we offer",
+ o:[["Specify Sa pieces","Pieces from the collection, chosen for your interiors. Colours and finishes are discussed for each project."],["Joint projects","Interiors and spatial projects designed together with SA, from the first sketch to the finished room."],["Drawings and catalogues","2D AutoCAD drawings of every piece, and PDF catalogues made from the live collection."],["Trade prices","Prices for architects and designers, shared on request."]],
+ cStart:"Start a project",cDl:"Go to downloads",cPrice:"Request prices",projH:"Selected collaborations",projP:"With Lotfi House, kilims woven a century ago became the starting point of new collections.",
+ stepsH:"How it works",steps:[["Tell us about the project","A few lines are enough: the space, the timeline, the pieces you have in mind."],["We reply personally","With drawings, options and prices for the pieces that fit."],["Made by hand","Each piece is made in our studio, numbered, and leaves with its own certificate."]],formH:"Start a project"},
+fa:{purpose:"سا با معماران، طراحان داخلی و سازندگانی کار می‌کند که می‌خواهند آثار مجسمه‌وار بخشی از خودِ فضا باشند، نه چیزی که بعداً به آن اضافه شود.",offerH:"آنچه ارائه می‌دهیم",
+ o:[["آثار سا در پروژهٔ شما","قطعه‌هایی از مجموعه که برای فضای شما انتخاب می‌شوند. رنگ و پرداخت برای هر پروژه جداگانه گفت‌وگو می‌شود."],["پروژهٔ مشترک","پروژه‌های داخلی و فضایی که با SA طراحی می‌شوند، از نخستین طرح تا فضای تمام‌شده."],["نقشه‌ها و کاتالوگ‌ها","نقشه‌های دوبعدی اتوکد هر قطعه و کاتالوگ‌های PDF که از مجموعهٔ زندهٔ سایت ساخته می‌شوند."],["قیمت همکاران","قیمت‌ها برای معماران و طراحان، با درخواست فرستاده می‌شود."]],
+ cStart:"شروع پروژه",cDl:"رفتن به دانلودها",cPrice:"درخواست قیمت",projH:"همکاری‌های منتخب",projP:"در همکاری با خانهٔ لطفی، گلیم‌هایی که یک قرن پیش بافته شده‌اند نقطهٔ شروع مجموعه‌هایی تازه شدند.",
+ stepsH:"روند کار",steps:[["دربارهٔ پروژه بگویید","چند خط کافی است: فضا، زمان‌بندی و قطعه‌هایی که در نظر دارید."],["شخصاً پاسخ می‌دهیم","با نقشه‌ها، گزینه‌ها و قیمت قطعه‌های مناسب."],["ساخت دست","هر قطعه در استودیوی ما ساخته می‌شود، شماره می‌خورد و با شناسنامهٔ خودش تحویل می‌شود."]],formH:"شروع یک پروژه"},
+es:{purpose:"Sa trabaja con arquitectos, interioristas y promotores que quieren que las piezas escultóricas formen parte del espacio, no que se añadan después.",offerH:"Qué ofrecemos",
+ o:[["Especificar piezas Sa","Piezas de la colección elegidas para sus interiores. Colores y acabados se definen en cada proyecto."],["Proyectos conjuntos","Interiores y proyectos espaciales diseñados junto a SA, desde el primer boceto hasta la sala terminada."],["Planos y catálogos","Planos 2D de AutoCAD de cada pieza y catálogos en PDF generados a partir de la colección actual."],["Precios profesionales","Precios para arquitectos y diseñadores, bajo petición."]],
+ cStart:"Iniciar un proyecto",cDl:"Ir a descargas",cPrice:"Solicitar precios",projH:"Colaboraciones destacadas",projP:"Con Lotfi House, kilims tejidos hace un siglo se convirtieron en el punto de partida de nuevas colecciones.",
+ stepsH:"Cómo funciona",steps:[["Cuéntenos el proyecto","Bastan unas líneas: el espacio, los plazos, las piezas que tiene en mente."],["Respondemos personalmente","Con planos, opciones y precios de las piezas adecuadas."],["Hecho a mano","Cada pieza se hace en nuestro estudio, numerada, y sale con su propio certificado."]],formH:"Iniciar un proyecto"},
+it:{purpose:"Sa lavora con architetti, interior designer e sviluppatori che vogliono pezzi scultorei come parte dello spazio, non aggiunti dopo.",offerH:"Cosa offriamo",
+ o:[["Specificare pezzi Sa","Pezzi della collezione scelti per i vostri interni. Colori e finiture si definiscono per ogni progetto."],["Progetti condivisi","Interni e progetti spaziali disegnati insieme a SA, dal primo schizzo alla stanza finita."],["Disegni e cataloghi","Disegni 2D AutoCAD di ogni pezzo e cataloghi PDF generati dalla collezione attuale."],["Prezzi professionali","Prezzi per architetti e designer, su richiesta."]],
+ cStart:"Avvia un progetto",cDl:"Vai ai download",cPrice:"Richiedi i prezzi",projH:"Collaborazioni scelte",projP:"Con Lotfi House, kilim tessuti un secolo fa sono diventati il punto di partenza di nuove collezioni.",
+ stepsH:"Come funziona",steps:[["Raccontateci il progetto","Bastano poche righe: lo spazio, i tempi, i pezzi che avete in mente."],["Rispondiamo personalmente","Con disegni, opzioni e prezzi dei pezzi adatti."],["Fatto a mano","Ogni pezzo nasce nel nostro studio, numerato, con il suo certificato."]],formH:"Avvia un progetto"},
+fr:{purpose:"Sa travaille avec les architectes, architectes d'intérieur et promoteurs qui veulent que des pièces sculpturales fassent partie de l'espace, sans y être ajoutées après coup.",offerH:"Ce que nous proposons",
+ o:[["Prescrire des pièces Sa","Des pièces de la collection choisies pour vos intérieurs. Couleurs et finitions se décident pour chaque projet."],["Projets communs","Intérieurs et projets d'espace conçus avec SA, de la première esquisse à la pièce achevée."],["Plans et catalogues","Plans 2D AutoCAD de chaque pièce et catalogues PDF issus de la collection actuelle."],["Prix professionnels","Prix pour architectes et designers, sur demande."]],
+ cStart:"Démarrer un projet",cDl:"Aller aux téléchargements",cPrice:"Demander les prix",projH:"Collaborations choisies",projP:"Avec Lotfi House, des kilims tissés il y a un siècle sont devenus le point de départ de nouvelles collections.",
+ stepsH:"Comment ça marche",steps:[["Parlez-nous du projet","Quelques lignes suffisent : l'espace, le calendrier, les pièces envisagées."],["Nous répondons personnellement","Avec plans, options et prix des pièces qui conviennent."],["Fait main","Chaque pièce est réalisée dans notre atelier, numérotée, et part avec son certificat."]],formH:"Démarrer un projet"},
+de:{purpose:"Sa arbeitet mit Architekten, Innenarchitekten und Bauherren, die skulpturale Stücke als Teil des Raums wollen, nicht als nachträgliche Ergänzung.",offerH:"Was wir anbieten",
+ o:[["Sa-Stücke einplanen","Stücke aus der Kollektion, ausgewählt für Ihre Räume. Farben und Oberflächen werden je Projekt besprochen."],["Gemeinsame Projekte","Innenräume und Raumprojekte, gemeinsam mit SA entworfen, von der ersten Skizze bis zum fertigen Raum."],["Zeichnungen und Kataloge","2D-AutoCAD-Zeichnungen jedes Stücks und PDF-Kataloge aus der aktuellen Kollektion."],["Händlerpreise","Preise für Architekten und Designer, auf Anfrage."]],
+ cStart:"Projekt beginnen",cDl:"Zu den Downloads",cPrice:"Preise anfragen",projH:"Ausgewählte Kooperationen",projP:"Mit Lotfi House wurden vor einem Jahrhundert gewebte Kelims zum Ausgangspunkt neuer Kollektionen.",
+ stepsH:"So funktioniert es",steps:[["Erzählen Sie vom Projekt","Ein paar Zeilen genügen: der Raum, der Zeitplan, die Stücke, die Sie im Sinn haben."],["Wir antworten persönlich","Mit Zeichnungen, Optionen und Preisen der passenden Stücke."],["Von Hand gefertigt","Jedes Stück entsteht in unserem Studio, nummeriert, mit eigenem Zertifikat."]],formH:"Projekt beginnen"},
+ja:{purpose:"Sa は、彫刻的な作品を後から加えるのではなく、空間の一部にしたい建築家、インテリアデザイナー、デベロッパーと協働します。",offerH:"提供するもの",
+ o:[["Sa の作品を採用する","コレクションからインテリアに合わせて選ぶ作品。色と仕上げはプロジェクトごとに相談します。"],["共同プロジェクト","SA と共に設計するインテリアと空間プロジェクト。最初のスケッチから完成した部屋まで。"],["図面とカタログ","全作品の2D AutoCAD図面と、最新のコレクションから作るPDFカタログ。"],["業者価格","建築家・デザイナー向けの価格を、ご依頼に応じてお送りします。"]],
+ cStart:"プロジェクトを始める",cDl:"ダウンロードへ",cPrice:"価格を依頼する",projH:"主なコラボレーション",projP:"Lotfi House との協働で、一世紀前に織られたキリムが新しいコレクションの出発点となりました。",
+ stepsH:"進め方",steps:[["プロジェクトについて教えてください","数行で十分です。空間、スケジュール、考えている作品。"],["担当者が直接お返事します","合う作品の図面、選択肢、価格とともに。"],["手づくり","各作品は私たちのスタジオで作られ、番号と証明書が付きます。"]],formH:"プロジェクトを始める"},
+zh:{purpose:"Sa 与建筑师、室内设计师和开发商合作，让雕塑般的作品成为空间本身的一部分，而不是事后的添加。",offerH:"我们提供",
+ o:[["在项目中选用 Sa 作品","从系列中为您的室内挑选作品。颜色与饰面按每个项目商定。"],["联合项目","与 SA 共同设计的室内与空间项目，从第一张草图到完成的房间。"],["图纸与目录","每件作品的二维 AutoCAD 图纸，以及由当前系列生成的 PDF 目录。"],["行业价格","面向建筑师和设计师的价格，按需提供。"]],
+ cStart:"开始一个项目",cDl:"前往下载",cPrice:"索取价格",projH:"精选合作",projP:"与 Lotfi House 合作，一个世纪前织成的基里姆成为新系列的起点。",
+ stepsH:"合作方式",steps:[["介绍您的项目","几行就够：空间、时间安排、您想到的作品。"],["我们亲自回复","附上合适作品的图纸、选项和价格。"],["手工制作","每件作品都在我们的工作室制作，编号，并附有证书。"]],formH:"开始一个项目"},
+ar:{purpose:"تعمل Sa مع المعماريين ومصممي الديكور الداخلي والمطوّرين الذين يريدون أن تكون القطع النحتية جزءًا من الفضاء نفسه، لا إضافة لاحقة.",offerH:"ما نقدّمه",
+ o:[["اعتماد قطع Sa","قطع من المجموعة تُختار لمساحاتكم. تُناقش الألوان والتشطيبات لكل مشروع."],["مشاريع مشتركة","مشاريع داخلية وفضائية تُصمَّم مع SA، من الرسم الأول حتى الغرفة المكتملة."],["رسومات وكتالوجات","رسومات AutoCAD ثنائية الأبعاد لكل قطعة، وكتالوجات PDF من المجموعة الحالية."],["أسعار المهنيين","أسعار للمعماريين والمصممين، عند الطلب."]],
+ cStart:"ابدأ مشروعًا",cDl:"إلى التنزيلات",cPrice:"اطلب الأسعار",projH:"تعاونات مختارة",projP:"مع Lotfi House، أصبحت سجادات كليم نُسجت قبل قرن نقطة انطلاق لمجموعات جديدة.",
+ stepsH:"كيف نعمل",steps:[["أخبرونا عن المشروع","تكفي بضعة أسطر: الفضاء، الجدول الزمني، والقطع التي في بالكم."],["نردّ شخصيًا","مع رسومات وخيارات وأسعار القطع المناسبة."],["صُنع يدوي","تُصنع كل قطعة في الاستوديو، مرقّمة، مع شهادتها الخاصة."]],formH:"ابدأ مشروعًا"}};
 function renderTrade(mode){onIndex=false;const DL=mode==="dl";const T_=t(),Q=TRT[L]||TRT.en,W=whoGet()||{};
   const sendRow=k=>`<div class="sendopts trsend" data-k="${k}"><a href="mailto:${MAIL}" data-tr="mail">${T_.email}<span dir="ltr">${MAIL}</span></a><a href="https://wa.me/${WA_CA}" data-tr="ca" target="_blank" rel="noopener">${T_.wa2}<span dir="ltr">+1 403 922 9905</span></a><a href="https://wa.me/${WA_IR}" data-tr="ir" target="_blank" rel="noopener">${T_.wa1}<span dir="ltr">+98 939 713 3918</span></a></div>`;
   const num=n=>String(n).padStart(2,"0");
   const catSec=`<section class="trs"><h2 class="sub"><i>01</i>${Q.s3}</h2><p class="trp">${Q.s3p}</p>
     <div class="catl">${["full","piano","info","tables","lighting","seating"].map(k=>{const xs=k==="info"?[]:catPieces(k),im=xs.length?(heroSrc(xs[0].id)||thumb(xs[0].id)):LOGO;return `<a class="catc" href="#/catalogue/${k}"><span class="catim${k==="info"?" lg":""}"><img src="${im}" alt="" loading="lazy"></span><b>${Q.cats[k]}</b><small class="cta-d">${Q.dl}</small></a>`}).join("")}</div></section>`;
-  view.innerHTML=`<main class="page tradepage${DL?" dlpage":""}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1><p class="lead2">${DL?(DLLEAD[L]||DLLEAD.en):Q.lead}</p>${DL?catSec:""}
-   <section class="trs${DL?" trme":""}">${DL?"":`<h2 class="sub"><i>01</i>${Q.s1}</h2><p class="trp">${Q.s1p}</p>`}
+  const X=CXT[L]||CXT.en, N2=n=>String(n).padStart(2,"0");
+  const colx=DL?"":`<p class="cx-purpose">${X.purpose}</p>
+   <section class="cx-sec"><h2 class="cx-h">${X.offerH}</h2><div class="cx-offer">${X.o.map(([h,p],i)=>`<div class="cx-tile"><i>${N2(i+1)}</i><b>${h}</b><p>${p}</p>${i===2?`<a class="cx-go" href="#/download">${X.cDl} ${(L==="fa"||L==="ar")?"←":"→"}</a>`:i===3?`<a class="cx-go" href="#cxform" data-price="1">${X.cPrice} ${(L==="fa"||L==="ar")?"←":"→"}</a>`:`<a class="cx-go" href="#cxform" data-pt="${i===0?2:1}">${X.cStart} ${(L==="fa"||L==="ar")?"←":"→"}</a>`}</div>`).join("")}</div></section>
+   <section class="cx-sec"><h2 class="cx-h">${X.projH}</h2><p class="cx-p">${X.projP}</p><div class="cx-proj">${SETS.filter(s=>s.collab!==0).slice(0,2).map(s=>`<a class="cx-card" href="#/set/${s.id}"><span class="cx-im"><img src="${IMG[s.imgs[0]]}" alt="" loading="lazy"></span><b>${sN(s)}</b><small dir="ltr">Sa Editions × Lotfi House</small></a>`).join("")}</div></section>
+   <section class="cx-sec"><h2 class="cx-h">${X.stepsH}</h2><ol class="cx-steps">${X.steps.map(([h,p],i)=>`<li><i>${N2(i+1)}</i><b>${h}</b><p>${p}</p></li>`).join("")}</ol></section>`;
+  view.innerHTML=`<main class="page tradepage${DL?" dlpage":" cxpage"}"><h1 class="pt">${DL?(DLN[L]||DLN.en):(TRADEN[L]||TRADEN.en)}</h1>${DL?`<p class="lead2">${DLLEAD[L]||DLLEAD.en}</p>`:""}${DL?catSec:colx}
+   <section class="trs${DL?" trme":" cx-form"}" ${DL?"":`id="cxform"`}>${DL?"":`<h2 class="cx-h">${X.formH}</h2><p class="trp">${Q.s1p}</p>`}
     <div class="trform"><label>${Q.name} *<input id="trN" autocomplete="name" value="${esc(W.name||"")}"></label><label>${Q.studio}<input id="trS" autocomplete="organization"></label>
      <label>${Q.prof}<select id="trP">${Q.profs.map(p=>`<option${W.prof===p?" selected":""}>${p}</option>`).join("")}</select></label><label>${Q.city}<input id="trC"></label>
-     ${DL?"":`<label>${Q.pt}<select id="trT">${Q.pts.map(p=>`<option>${p}</option>`).join("")}</select></label><label>${Q.msg}<textarea id="trM" rows="4"></textarea></label>`}</div>
+     ${DL?"":`<label>${Q.pt}<select id="trT">${Q.pts.concat([Q.s4]).map(p=>`<option>${p}</option>`).join("")}</select></label><label>${Q.msg}<textarea id="trM" rows="4"></textarea></label>`}</div>
     <p class="wneed" id="trE" hidden>${Q.need}</p>${DL?"":sendRow("collab")}</section>
    ${DL?`<section class="trs"><h2 class="sub"><i>02</i>${Q.s2}</h2><p class="trp">${Q.s2p}</p>
     <div class="dwgl">${CATS.filter(c=>c[0]!=="mirror").map(c=>`<div class="dwgr"><p>${catName(c)}</p><div>${P.filter(x=>x.cat===c[0]).map(x=>DWG[x.id]?`<a class="dwgc has" href="${DWG[x.id]}" download>${esc(x.en)} ↓</a>`:`<button type="button" class="dwgc" data-id="${x.id}">${esc(x.en)}</button>`).join("")}</div></div>`).join("")}</div>
-    <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>`:`<section class="trs"><h2 class="sub"><i>02</i>${Q.s4}</h2><p class="trp">${Q.s4p}</p>${sendRow("price")}</section>`}
+    <p class="wneed" id="trE2" hidden>${Q.pick}</p>${sendRow("dwg")}</section>`:""}
   </main>`;
   left.innerHTML=menuBtn(); rail.style.display="none"; langrow.style.display="none";
   view.querySelectorAll(".dwgc[data-id]").forEach(b=>b.onclick=()=>b.classList.toggle("on"));
+  view.querySelectorAll(".cx-go[href='#cxform']").forEach(a=>a.onclick=e=>{e.preventDefault();const sel=$("#trT");if(sel){sel.selectedIndex=a.dataset.price?sel.options.length-1:+(a.dataset.pt||0)}const f=$("#cxform");if(f)f.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>{const n=$("#trN");if(n)n.focus({preventScroll:true})},500)});
   view.querySelectorAll(".trsend a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();
     const k=a.parentElement.dataset.k,nm=$("#trN").value.trim();$("#trE").hidden=!!nm;if(!nm){$("#trN").scrollIntoView({block:"center",behavior:"smooth"});$("#trN").focus();return}
     const W2={name:nm,prof:$("#trP").value,space:$("#trC").value.trim()};window._who=W2;try{localStorage.setItem("sa-who",JSON.stringify(W2))}catch(_){}
