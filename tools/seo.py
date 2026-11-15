@@ -25,7 +25,7 @@ FOUNDERS = ["Alireza Emtiaz", "Saqar Khakdan"]
 WHATSAPP = "14039229905"
 # The contact e-mail is read once from state/site.json ("email") by build().
 CFG = {"email": "Sadesigngallery@gmail.com"}
-ABOUT_LINE = ("Sa Editions — also written Sa-editions, or simply Sa — is the work of SA, "
+ABOUT_LINE = ("Sa Editions, also written Sa-editions or simply Sa, is the work of SA, "
               "a design house founded in 2010 by architects Alireza Emtiaz and Saqar Khakdan.")
 # Persian letter names; a piece whose Persian name is one letter, or one of these names, belongs to "Letters".
 LETTER_NAMES = {"سین", "میم", "نون", "صاد", "واو", "کاف", "عین", "طا", "رِ", "جیم", "شین", "ضاد", "ظا", "غین", "قاف", "گاف", "لام", "دال", "ذال", "الف"}
@@ -197,7 +197,7 @@ def spec_book(out_dir):
     from reportlab.pdfgen import canvas
     os.makedirs(os.path.join(out_dir, "spec"), exist_ok=True)
     c = canvas.Canvas(os.path.join(out_dir, SPEC_PDF), pagesize=A4)
-    c.setTitle(f"{BRAND} — specification sheets"); c.setAuthor(BRAND); c.setSubject("Specification sheets")
+    c.setTitle(f"{BRAND} ·specification sheets"); c.setAuthor(BRAND); c.setSubject("Specification sheets")
     c._sa_font = _pdf_font()
     return c
 
@@ -265,7 +265,7 @@ def enquiry_href(name):
     from urllib.parse import quote
     body = (f"Hello, I would like to enquire about {name}.\n\nName:\nCountry:\n"
             "I am a: private client / architect / gallery\nMessage:\n")
-    return f"mailto:{mail()}?subject={quote(BRAND + ' — enquiry: ' + name)}&body={quote(body)}"
+    return f"mailto:{mail()}?subject={quote(BRAND + ' ·enquiry: ' + name)}&body={quote(body)}"
 
 
 def tile(x):
@@ -319,16 +319,16 @@ def build(out_dir, tools_dir, site, assets, email=None):
         x["spec"] = spec_rows
         spec_page(book, out_dir, x, cat1, site)
         pdf = f"{SPEC_PDF}#page={pno}"
-        title = f"{x['name']} — {cat1} | {BRAND}"
+        title = f"{x['name']} ·{cat1} | {BRAND}"
         d0 = " ".join(x["desc"]) if x["desc"] else ""
         mat = dict(spec_rows).get("Material", "")
         desc = short(f"{x['name']} ({x['fa']}), {cat1.lower()} by {BRAND}. {x['edition']}{'. ' if x['edition'] else ''}{mat + '. ' if mat else ''}{d0}")
         dims = "".join(f"<div><small>{E(k)}</small><b>{E(v)}</b></div>" for k, v in x["dims"])
         spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in spec_rows)
-        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by {BRAND} — photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
-        dr = f'<img src="/{E(x["drawing"])}" alt="{E(x["name"])} — technical drawing" loading="lazy">' if x["drawing"] else ""
+        ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} {E(cat1.lower())} by {BRAND} ·photo {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
+        dr = f'<img src="/{E(x["drawing"])}" alt="{E(x["name"])} ·technical drawing" loading="lazy">' if x["drawing"] else ""
         hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} {E(cat1.lower())} by {BRAND}" width="1600" height="1600">' if x["hero"] else ""
-        yt = (f'<div style="position:relative;aspect-ratio:16/9;margin:6px 0 18px;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/{E(x["yt"])}?rel=0&modestbranding=1&playsinline=1" title="{E(x["name"])} — film" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>') if x.get("yt") else ""
+        yt = (f'<div style="position:relative;aspect-ratio:16/9;margin:6px 0 18px;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/{E(x["yt"])}?rel=0&modestbranding=1&playsinline=1" title="{E(x["name"])} ·film" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>') if x.get("yt") else ""
         ed = (f'<div class="ed">{"<b>" + E(x["edition"]) + "</b>" if x["edition"] else ""}{"<span>" + E(x["editionNote"]) + "</span>" if x["editionNote"] else ""}'
               f'<span class="por">Price on request</span></div>')
         rel = [y for y in pieces if y["catId"] == x["catId"] and y["id"] != pid]
@@ -371,8 +371,8 @@ def build(out_dir, tools_dir, site, assets, email=None):
             return head + "<div class='eq'>" + "".join(eqtile(x) for x in xs) + "</div>"
         return head + "<div class='grid'>" + "".join(tile(x) for x in xs) + "</div>"
     body = "<main><h1>All pieces</h1>" + "".join(block(c, xs) for c, xs in groups.items()) + "</main>"
-    write(out_dir, "/pieces/", page(site, "/pieces/", f"All pieces — sculptural furniture, pianos and lighting | {BRAND}",
-                                    short(f"The full {BRAND} collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos — each handmade in a limited, numbered edition."),
+    write(out_dir, "/pieces/", page(site, "/pieces/", f"All pieces ·sculptural furniture, pianos and lighting | {BRAND}",
+                                    short(f"The full {BRAND} collection: dining tables, desks, side and coffee tables, consoles, lighting, benches, chairs, armchairs, sofas and pianos, each handmade in a limited, numbered edition."),
                                     body, "og/home.jpg", [org, crumbs(("All pieces", "/pieces/"))],
                                     alts=alts_for(site, "/pieces/", [l for l in LANGS if l in data.get("langs", {})]) if data.get("langs") else None))
     # the same piece pages and pieces index in the catalogue's other languages, linked to each other with hreflang
@@ -384,19 +384,19 @@ def build(out_dir, tools_dir, site, assets, email=None):
 
         def ltile(x, L=L, lp=lp):
             y = lp.get(x["id"], {})
-            return (f'<a href="/{L}/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} — {BRAND}" loading="lazy">'
+            return (f'<a href="/{L}/p/{E(x["id"])}/"><img src="/{E(x["thumb"] or x["hero"] or "")}" alt="{E(x["name"])} ·{BRAND}" loading="lazy">'
                     f'<b>{E(x["name"])}</b><small>{E(y.get("edition", ""))}</small></a>')
         for pid, y in lp.items():
             x = by_id[pid]; path = f"/{L}/p/{pid}/"
             fa_first = L in ("fa", "ar")
             nm = f"{x['fa']} ({x['name']})" if fa_first else x["name"]
             d0 = " ".join(y.get("desc") or [])
-            title = f"{nm} — {y.get('cat', '')} | {BRAND}"
+            title = f"{nm} ·{y.get('cat', '')} | {BRAND}"
             desc = short(f"{nm}: {d0}" if d0 else nm)
             dims = "".join(f"<div><small>{E(k)}</small><b>{E(v)}</b></div>" for k, v in y.get("dims", []))
             spec = "".join(f"<dt>{E(k)}</dt><dd>{E(v)}</dd>" for k, v in y.get("spec", []))
-            ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} — {E(y.get("cat", ""))} — {n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
-            hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} — {E(y.get("cat", ""))}" width="1600" height="1600">' if x["hero"] else ""
+            ph = "".join(f'<img src="/{E(i)}" alt="{E(x["name"])} ·{E(y.get("cat", ""))} ·{n + 1}" loading="lazy">' for n, i in enumerate(x["photos"]))
+            hero = f'<img class="hero" src="/{E(x["hero"])}" alt="{E(x["name"])} ·{E(y.get("cat", ""))}" width="1600" height="1600">' if x["hero"] else ""
             ed = (f'<div class="ed">{"<b>" + E(y["edition"]) + "</b>" if y.get("edition") else ""}{"<span>" + E(y["editionNote"]) + "</span>" if y.get("editionNote") else ""}'
                   f'<span class="por">{E(ui["por"])}</span></div>')
             rel = [z for z in pieces if z["catId"] == x["catId"] and z["id"] != pid][:4]
@@ -433,7 +433,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
             + (f"<h2 class='ch'><b>Letters</b></h2><p style='text-align:center'>Pieces named after letters of the Persian alphabet.</p><div class='grid'>{lt}</div>" if letters else "")
             + (f"<h2 class='ch'><b>Pianos</b></h2><div class='grid'>{''.join(tile(x) for x in pianos)}</div>" if pianos else "")
             + '<div class="cta"><a class="p" href="/pieces/">All pieces</a></div></main>')
-    write(out_dir, "/collections/", page(site, "/collections/", f"Collections — Letters and Pianos | {BRAND}",
+    write(out_dir, "/collections/", page(site, "/collections/", f"Collections ·Letters and Pianos | {BRAND}",
                                          short(f"{BRAND} collections: pieces named after letters of the Persian alphabet, and limited-edition pianos."),
                                          body, "og/home.jpg", [org, crumbs(("Collections", "/collections/"))]))
     # about + designers
@@ -444,14 +444,14 @@ def build(out_dir, tools_dir, site, assets, email=None):
     body = (f"<main><h1>{E(a['title'])}</h1><p>{E(ABOUT_LINE)}</p>" + "".join(f"<p>{E(p)}</p>" for p in a["paras"] if p not in btxt)
             + (f"<h2>Founders</h2>{bios}" if bios else "")
             + '<div class="cta"><a class="p" href="/">Enter the catalogue</a><a href="/designers/">Designers</a><a href="/contact/">Contact</a></div></main>')
-    write(out_dir, "/about/", page(site, "/about/", f"About {BRAND} — Alireza Emtiaz & Saqar Khakdan",
+    write(out_dir, "/about/", page(site, "/about/", f"About {BRAND} ·Alireza Emtiaz & Saqar Khakdan",
                                    short(f"{ABOUT_LINE} Every piece is made by hand in a limited edition."),
                                    body, "og/home.jpg", [org, crumbs(("About", "/about/"))]))
     people = [{"@context": "https://schema.org", "@type": "Person", "name": b["name"], "description": b["text"],
                "worksFor": {"@type": "Organization", "name": BRAND}, **({"image": absu(site, b["img"])} if b.get("img") else {})} for b in a["bios"]]
     body = (f"<main><h1>Designers</h1><p style='text-align:center'>Every {BRAND} piece is designed by the studio's two founders.</p>{bios}"
             f"<h2>Pieces</h2><div class='grid'>{''.join(tile(x) for x in pieces)}</div></main>")
-    write(out_dir, "/designers/", page(site, "/designers/", f"Designers — Alireza Emtiaz & Saqar Khakdan | {BRAND}",
+    write(out_dir, "/designers/", page(site, "/designers/", f"Designers ·Alireza Emtiaz & Saqar Khakdan | {BRAND}",
                                        short(f"Alireza Emtiaz and Saqar Khakdan, the architects and designers behind {BRAND}, and the pieces they have designed."),
                                        body, "og/home.jpg", people + [crumbs(("Designers", "/designers/"))]))
     # editions
@@ -466,7 +466,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
     body = (f"<main><h1>Editions</h1><p>Every {BRAND} piece is made by hand under the founders' direct supervision, using a stencil technique developed in-house. "
             "This is what allows each work to exist in a limited, numbered edition, or as a single piece. The size of each edition is fixed and is shown on every piece, "
             "together with how many of the edition have been sold.</p>" + rows + "</main>")
-    write(out_dir, "/editions/", page(site, "/editions/", f"Editions — limited, numbered and one-of-a-kind pieces | {BRAND}",
+    write(out_dir, "/editions/", page(site, "/editions/", f"Editions ·limited, numbered and one-of-a-kind pieces | {BRAND}",
                                       short(f"How {BRAND} editions work: every piece is handmade in a limited, numbered edition or as a single piece. Edition sizes and pieces sold."),
                                       body, "og/home.jpg", [org, crumbs(("Editions", "/editions/"))]))
     # contact
@@ -476,7 +476,7 @@ def build(out_dir, tools_dir, site, assets, email=None):
             "<dt>Phone (Iran)</dt><dd><a href='tel:+989397133918'>+98 939 713 3918</a></dd><dt>Phone (Canada)</dt><dd><a href='tel:+14039229905'>+1 403 922 9905</a></dd>"
             "<dt>Instagram</dt><dd><a href='https://www.instagram.com/sa_editions_/' rel='noopener'>@sa_editions_</a></dd><dt>YouTube</dt><dd><a href='https://www.youtube.com/@sa.editions' rel='noopener'>@sa.editions</a></dd><dt>LinkedIn</dt><dd><a href='https://www.linkedin.com/in/sa-editions-b8068344b/' rel='noopener'>Sa Editions</a></dd></dl>"
             f'<div class="cta"><a class="p" href="{E(enquiry_href("a piece"))}">Send an enquiry</a><a href="/#/contact">Contact in the catalogue</a></div></main>')
-    write(out_dir, "/contact/", page(site, "/contact/", f"Contact — enquiries and prices on request | {BRAND}",
+    write(out_dir, "/contact/", page(site, "/contact/", f"Contact ·enquiries and prices on request | {BRAND}",
                                      short(f"Contact {BRAND}: enquiries, prices on request, trade and gallery requests by email, WhatsApp or Instagram."),
                                      body, "og/home.jpg", [org, crumbs(("Contact", "/contact/"))]))
     # privacy page
@@ -525,10 +525,10 @@ HOME_MARK = ("<!--sa-seo-->", "<!--/sa-seo-->")
 
 
 def home_head(site, org, pieces):
-    title = f"{BRAND} — Sculptural furniture, handmade in limited editions"
+    title = f"{BRAND} ·Sculptural furniture, handmade in limited editions"
     desc = "By designers and founders Alireza Emtiaz and Saqar Khakdan."
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "alternateName": ALT_NAMES, "url": site.rstrip("/") + "/"}
-    links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} — {E(x["cat"])}</a></li>' for x in pieces)
+    links = "".join(f'<li><a href="/p/{E(x["id"])}/">{E(x["name"])} ·{E(x["cat"])}</a></li>' for x in pieces)
     head = (HOME_MARK[0] + f'<title>Sa</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{E(site.rstrip("/") + "/")}">'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{E(title)}">'
             f'<meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{E(site.rstrip("/") + "/")}"><meta property="og:image" content="{E(absu(site, "og/home.jpg"))}">'
