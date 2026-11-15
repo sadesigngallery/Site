@@ -2505,7 +2505,7 @@ body.aboutd .bios+.bios{margin-top:48px}
 /* 11) heart on the home page too */
 body.home #bag{display:flex!important}
 /* 5) tagline readable */
-.hvtop .intro.onfilm .tagl2{font-size:max(12px,.8rem)!important;letter-spacing:.12em!important}
+.hvtop .intro.onfilm .tagl2{white-space:nowrap!important;letter-spacing:.12em!important;text-align:center!important}
 /* 6) main sentence less hairline */
 #phil{font-weight:300!important}
 .hvtop .intro.onfilm #phil{text-shadow:0 0 22px rgba(0,0,0,.14)}
@@ -2523,7 +2523,7 @@ html.noscroll:has(body.home):not(:has(#ov.menu)):not(:has(#ov.ss)){overflow-y:au
 body.home #foot{display:block!important;height:auto!important;visibility:visible!important;opacity:1!important;max-height:none!important;overflow:visible!important}
 /* 9) language on the home page: minimal */
 .tlang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:max(18px,env(safe-area-inset-right));z-index:60;color:#fff;font-family:var(--latin)}
-.tlang>button{background:none;border:0;color:inherit;font:500 1.32rem var(--latin);letter-spacing:.12em;padding:6px 4px;min-width:48px;min-height:48px;cursor:pointer}
+.tlang>button{background:none;border:0;color:inherit;font:300 1.32rem var(--latin);letter-spacing:.12em;padding:6px 4px;min-width:48px;min-height:48px;cursor:pointer}
 .tlang ul{list-style:none;margin:0;padding:4px 6px;display:none;text-align:right}
 .tlang.open ul{display:block}
 .tlang li button{background:none;border:0;color:inherit;font:400 .72rem var(--latin);letter-spacing:.06em;padding:7px 0;cursor:pointer;opacity:.75}
@@ -5648,7 +5648,20 @@ renderChrome(); route();
   function tint(){const ref=document.getElementById("searchB2")||document.getElementById("menuB2");if(!ref)return;const c=getComputedStyle(ref).color;document.querySelectorAll(".tlang,.hvpause,.scue").forEach(e=>{if(!(e.classList.contains("tlang")&&e.classList.contains("open")))e.style.color=c})}
   if(window.MutationObserver) new MutationObserver(()=>setTimeout(tint,30)).observe(document.body,{attributes:true,attributeFilter:["class"]});
   setInterval(tint,1500);
-  const run=()=>{try{decorate();lang();tint()}catch(_){}};
+  function fitTag(){
+    const tg=document.querySelector(".hvtop .intro.onfilm .tagl2"), as=[...document.querySelectorAll(".hvtop .hvmenu a.hvt")].filter(a=>a.offsetParent);
+    if(!tg||as.length<2) return;
+    const l=as[0].getBoundingClientRect().left, r=as[as.length-1].getBoundingClientRect().right, want=r-l; if(want<60) return;
+    tg.style.setProperty("font-size","20px","important");
+    const rg=document.createRange(); rg.selectNodeContents(tg); const have=rg.getBoundingClientRect().width; if(!have) return;
+    const px=Math.max(8,Math.min(30,20*want/have));
+    tg.style.setProperty("font-size",px.toFixed(2)+"px","important");
+    // correct the last fraction caused by letter spacing at the end of the line
+    const have2=rg.getBoundingClientRect().width; if(have2) tg.style.setProperty("font-size",(px*want/have2).toFixed(2)+"px","important");
+  }
+  addEventListener("resize",()=>setTimeout(fitTag,60));
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fitTag,50));
+  const run=()=>{try{decorate();lang();tint();fitTag();setTimeout(fitTag,400)}catch(_){}};
   const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>setTimeout(run,50)).observe(v,{childList:true});
   addEventListener("hashchange",()=>setTimeout(run,80)); addEventListener("load",run); setTimeout(run,600); setTimeout(run,2000);
 })();
