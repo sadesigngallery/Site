@@ -2510,8 +2510,8 @@ body.home #bag{display:flex!important}
 #phil{font-weight:300!important}
 .hvtop .intro.onfilm #phil{text-shadow:0 0 22px rgba(0,0,0,.14)}
 /* 2) pause control */
-.hvpause{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 2px);z-index:65;width:44px;height:44px;border:0;border-radius:0;background:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;opacity:.85}
-.hvpause svg{width:13px;height:13px}
+.hvpause{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 2px);z-index:65;width:52px;height:52px;border:0;border-radius:0;background:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;opacity:.85}
+.hvpause svg{width:26px;height:26px}
 
 body:not(.home) .hvpause,body:not(.home) .scue,body:not(.filmon) .hvpause,body:not(.filmon) .scue{display:none!important}
 /* 3) scroll cue + footer on home */
@@ -2523,7 +2523,7 @@ html.noscroll:has(body.home):not(:has(#ov.menu)):not(:has(#ov.ss)){overflow-y:au
 body.home #foot{display:block!important;height:auto!important;visibility:visible!important;opacity:1!important;max-height:none!important;overflow:visible!important}
 /* 9) language on the home page: minimal */
 .tlang{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:max(18px,env(safe-area-inset-right));z-index:60;color:#fff;font-family:var(--latin)}
-.tlang>button{background:none;border:0;color:inherit;font:500 .66rem var(--latin);letter-spacing:.16em;padding:12px 6px;min-width:44px;min-height:44px;cursor:pointer}
+.tlang>button{background:none;border:0;color:inherit;font:500 1.32rem var(--latin);letter-spacing:.12em;padding:6px 4px;min-width:48px;min-height:48px;cursor:pointer}
 .tlang ul{list-style:none;margin:0;padding:4px 6px;display:none;text-align:right}
 .tlang.open ul{display:block}
 .tlang li button{background:none;border:0;color:inherit;font:400 .72rem var(--latin);letter-spacing:.06em;padding:7px 0;cursor:pointer;opacity:.75}
@@ -5609,30 +5609,7 @@ renderChrome(); route();
  new MutationObserver(ms=>ms.forEach(m=>{if(m.type==="attributes"&&m.target.tagName==="VIDEO")toBlob(m.target);else m.addedNodes&&m.addedNodes.forEach(n=>{if(n.nodeType!==1)return;if(n.tagName==="VIDEO")toBlob(n);else n.querySelectorAll&&n.querySelectorAll("video").forEach(toBlob)})})).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["src"]});
  setTimeout(()=>document.querySelectorAll("video").forEach(toBlob),300)})();
 </script>
-<script>
-/* keep every index picture (with its shadow) fully on screen: nudge or shrink the ones that run past the edge */
-(function(){
-  const M=6;
-  function fitIx(){
-    const W=document.documentElement.clientWidth;
-    document.querySelectorAll("#idx .ixc").forEach(e=>{
-      e.style.translate="";e.style.scale="";
-      const k=e.getBoundingClientRect(); if(!k.width) return;
-      let dx=0;
-      if(k.width>W-2*M){ e.style.scale=((W-2*M)/k.width).toFixed(3); const k2=e.getBoundingClientRect(); dx=M-k2.left; }
-      else if(k.left<M) dx=M-k.left;
-      else if(k.right>W-M) dx=W-M-k.right;
-      if(Math.abs(dx)>.5) e.style.translate=dx.toFixed(1)+"px 0";
-    });
-  }
-  let raf=0; const q=()=>{cancelAnimationFrame(raf); raf=requestAnimationFrame(fitIx)};
-  addEventListener("resize",q); addEventListener("load",q);
-  addEventListener("hashchange",()=>{q();setTimeout(q,300);setTimeout(q,1200)});
-  document.addEventListener("load",ev=>{if(ev.target&&ev.target.tagName==="IMG"&&ev.target.closest("#idx"))q()},true);
-  const v=document.getElementById("view"); if(v&&window.MutationObserver) new MutationObserver(()=>{q();setTimeout(q,400)}).observe(v,{childList:true});
-  setTimeout(q,500); setTimeout(q,1500);
-})();
-</script>
+
 <script>
 /* home: pause, scroll cue, minimal language */
 (function(){
