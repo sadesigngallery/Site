@@ -3976,7 +3976,7 @@ function argoStrip(){const pid=(location.hash.split("/")[2]||"");let keys=(PH[pi
   const H=Math.round(Math.min(640,Math.max(240,innerHeight*.6))),G=6,ws=keys.map(k=>Math.round(H*asp(k))),setW=ws.reduce((a,b)=>a+b+G,0),copies=Math.max(2,Math.ceil(innerWidth/setW)+1),SP=matchMedia("(prefers-reduced-motion: reduce)").matches?25:70,D=setW/SP;
   const one=keys.map((k,i)=>`<img src="${IMG[k]}" alt="" data-k="${k}" decoding="async" draggable="false" width="${ws[i]}" height="${H}" style="width:${ws[i]}px;height:${H}px">`).join("");
   const box=document.createElement("div");box.className="argo";box.style.setProperty("--mqw",setW+"px");box.style.setProperty("--mqd",D.toFixed(2)+"s");box.innerHTML=`<div class="mqt">${Array(copies).fill(one).join("")}</div>`;
-  const cap=document.createElement("p");cap.className="phcap phloc";cap.textContent=L==="fa"?"کارخانهٔ آرگو، تهران":"Argo Factory, Tehran";
+  const cap=document.createElement("p");cap.className="phcap phloc";cap.textContent=L==="fa"?"کارخانهٔ آرگو، بنیاد پژمان":"Argo Factory, Pejman Foundation";
   const olds=[...ph.querySelectorAll("img")].filter(im=>PHLOC[im.dataset.k]);(olds[0]||ph.firstChild)?ph.insertBefore(box,olds[0]||ph.firstChild):ph.appendChild(box);box.after(cap);
   olds.forEach(im=>{const nx=im.nextElementSibling;if(nx&&nx.classList.contains("phloc"))nx.remove();im.remove()});
   const cp=view.querySelector(".cphoto img");if(cp&&keys.some(k=>IMG[k]===cp.getAttribute("src")))cp.closest(".cphoto").remove();
@@ -4248,7 +4248,7 @@ function renderPiece(id){
       <button type="button" class="addbtn${inSel?" on":""}" id="addBtn">${inSel?"♥ "+T_.added:T_.add}</button><div class="inpick" id="inpick"></div>
     </div>
     <div class="media m-photos">${ednHTML(x)}
-            <div class="photos">${list.map((k,j)=>`<img src="${IMG[k]}" alt="${esc(x.en)}" loading="lazy" width="${DIM[k][0]}" height="${DIM[k][1]}" data-j="${j}" data-k="${k}">${PHLOC[k]?`<p class="phcap phloc">${L==="fa"?"کارخانهٔ آرگو، تهران":"Argo Factory, Tehran"}</p>`:""}${PHCAP[k]?`<p class="phcap" dir="ltr">${PHCAP[k].map(([nm,pid],i)=>`${i?`<i class="dot"></i>`:""}<a href="#/p/${pid}">${nm}</a>`).join("")}</p>`:""}`).join("")}</div>
+            <div class="photos">${list.map((k,j)=>`<img src="${IMG[k]}" alt="${esc(x.en)}" loading="lazy" width="${DIM[k][0]}" height="${DIM[k][1]}" data-j="${j}" data-k="${k}">${PHLOC[k]?`<p class="phcap phloc">${L==="fa"?"کارخانهٔ آرگو، بنیاد پژمان":"Argo Factory, Pejman Foundation"}</p>`:""}${PHCAP[k]?`<p class="phcap" dir="ltr">${PHCAP[k].map(([nm,pid],i)=>`${i?`<i class="dot"></i>`:""}<a href="#/p/${pid}">${nm}</a>`).join("")}</p>`:""}`).join("")}</div>
       ${DR[x.id]?`<figure class="drawing"><img src="${IMG["d-"+x.id]}" alt="${esc(x.en)} drawing" loading="lazy" width="${DR[x.id][0]}" height="${DR[x.id][1]}">${DRI[x.id]?`${driCap(x)}`:""}</figure>`:""}
       <section class="colourbox"><p class="cwt">${CWT[L]||CWT.en}</p><a class="pickc" href="#/color/${x.id}">${T_.pick}</a><div class="sw3"><a href="#/color/${x.id}" class="cwheel2" aria-label="${T_.pick}">${wheelSVG(T_)}</a></div></section>
       ${sets.length?`<div class="setlink2">${sets.map(s=>`<a href="#/set/${s.id}"><img src="${IMG[s.imgs[1]]}" alt=""><span>${T_.seeIn(x,s)}</span></a>`).join("")}</div>`:""}
