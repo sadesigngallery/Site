@@ -6,6 +6,12 @@
   Cache-Control: public, max-age=86400
 /v/*
   Cache-Control: public, max-age=604800
+/catalogues/list.json
+  Cache-Control: no-cache
+  Access-Control-Allow-Origin: *
+/catalogues/*
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
 /
   Cache-Control: no-cache
 /index.html

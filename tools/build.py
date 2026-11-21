@@ -141,6 +141,8 @@ def main(app_html, photos, films):
                 "/a/*\n  Cache-Control: public, max-age=31536000, immutable\n"
                 "/p/*\n  Cache-Control: public, max-age=86400\n"
                 "/v/*\n  Cache-Control: public, max-age=604800\n"
+                "/catalogues/list.json\n  Cache-Control: no-cache\n  Access-Control-Allow-Origin: *\n"
+                "/catalogues/*\n  Cache-Control: public, max-age=3600\n  Access-Control-Allow-Origin: *\n"
                 "/\n  Cache-Control: no-cache\n"
                 "/index.html\n  Cache-Control: no-cache\n"
                 "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n"
@@ -159,6 +161,9 @@ def main(app_html, photos, films):
         f.write(s)
     size = os.path.getsize(os.path.join(OUT, "index.html"))
     print(f"moved {moved} pictures out of the page; index.html is now {size/1e6:.1f} MB")
+    # downloadable catalogues published from Sa hub: state/catalogues/* -> public/catalogues/ (see tools/catalogues.py)
+    from catalogues import mirror
+    print(mirror())
     # a design test page (not indexed), kept between builds: state/testpage/* -> public/
     tp = os.path.join(STATE, "testpage")
     if os.path.isdir(tp):

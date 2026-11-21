@@ -1,0 +1,17 @@
+{
+ "items": [
+  {
+   "id": "cat",
+   "title": "Sa Editions Catalogue",
+   "fa": "کاتالوگ سا ادیشنز",
+   "g": "collection",
+   "pdf": "/catalogues/Sa-Editions-Catalogue.pdf",
+   "cover": "/catalogues/cat-cover-2026-11-21.jpg",
+   "pages": 425,
+   "bytes": 23531717,
+   "date": "2026-11-21",
+   "cw": 720,
+   "ch": 1019
+  }
+ ]
+}
